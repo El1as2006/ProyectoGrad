@@ -2,7 +2,7 @@
 session_start();
 
 $host = 'localhost'; 
-$dbname = 'biblioteca';
+$dbname = 'bibliotecachaleca';
 $username = 'root'; 
 $password = 'Info2025/*-'; 
 

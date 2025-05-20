@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $username = "root";
-$password = "";
+$password = "Info2025/*-";
 $dbname = "bibliotecachaleca";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
