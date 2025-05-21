@@ -4,7 +4,7 @@ session_start();
 $host = 'localhost'; 
 $dbname = 'bibliotecachaleca';
 $username = 'root'; 
-$password = 'Info2025/*-'; 
+$password = ''; 
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);

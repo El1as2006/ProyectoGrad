@@ -1,75 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta charset="utf-8" />
+    <title>Log In</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
 
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            background-color: #f8f9fa;
-        }
-        .myform {
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
-        }
-        .logo img {
-            height: 80px;
-            width: auto;
-            margin-bottom: 20px;
-        }
-        .login-container {
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .btn-primary {
-            border-radius: 50px;
-        }
-        .google.btn {
-            background-color: #db4a39;
-            color: white;
-            border-radius: 50px;
-            text-align: center;
-            width: 100%;
-        }
-        .google.btn:hover {
-            background-color: #c23321;
-            color: white;
-        }
-        .login-or {
-            position: relative;
-            text-align: center;
-            margin: 20px 0;
-        }
-        .hr-or {
-            height: 1px;
-            margin: 0;
-            background-color: #ccc;
-        }
-        .span-or {
-            background: white;
-            padding: 0 10px;
-            position: absolute;
-            top: -13px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            color: #999;
-        }
-    </style>
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+    <!-- Theme Config Js -->
+    <script src="../assets/js/hyper-config.js"></script>
+
+    <!-- Vendor css -->
+    <link href="../assets/css/vendor.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- App css -->
+    <link href="../assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
+
+    <!-- Icons css -->
+    <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 </head>
 <?php
 require "../conexion.php";
@@ -113,43 +64,95 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-<body>
-    <div class="container login-container">
-        <div class="myform text-center">
-            <div class="logo">
-                <a href="index.html" class="logo-light">
-                    <span class="logo-lg">
-                        <img src="../assets/images/logo_chaleco.png" alt="logo">
-                    </span>
-                </a>
-            </div>
-            <form action="" method="post" name="login">
-                <div class="form-group">
-                    <label for="email">Correo Institucional</label>
-                    <input type="email" name="email" class="form-control" id="email" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" name="pass" class="form-control" id="pass" placeholder="Enter Password">
-                </div>
-                <!-- <div class="form-group">
-                    <p class="text-center mb-1">By signing up you accept our <a href="#">Terms Of Use</a></p>
-                </div> -->
-                <button type="submit" class="btn btn-primary btn-block">Login</button>
-
-                <!-- <div class="login-or">
-                    <hr class="hr-or">
-                    <span class="span-or">or</span>
-                </div>
-
-                <div class="form-group">
-                    <a href="javascript:void();" class="google btn"><i class="fa fa-google-plus"></i> Signup using Google</a>
-                </div> -->
-                <div class="form-group">
-                    <p class="text-center mb-0">Don't have an account? <a href="register.php">Sign up here</a></p>
-                </div>
-            </form>
-        </div>
+<body class="authentication-bg position-relative">
+    <div class="position-absolute start-0 end-0 start-0 bottom-0 w-100 h-100">
+        <svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 800 800'>
+            <g fill-opacity='0.22'>
+                <circle style="fill: rgba(var(--ct-primary-rgb), 0.1);" cx='400' cy='400' r='600' />
+                <circle style="fill: rgba(var(--ct-primary-rgb), 0.2);" cx='400' cy='400' r='500' />
+                <circle style="fill: rgba(var(--ct-primary-rgb), 0.3);" cx='400' cy='400' r='300' />
+                <circle style="fill: rgba(var(--ct-primary-rgb), 0.4);" cx='400' cy='400' r='200' />
+                <circle style="fill: rgba(var(--ct-primary-rgb), 0.5);" cx='400' cy='400' r='100' />
+            </g>
+        </svg>
     </div>
+    <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5 position-relative">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-4 col-lg-5">
+                    <div class="card">
+
+                        <!-- Logo -->
+                        <div class="card-header py-4 text-center bg-primary">
+                            <a href="index.html">
+                                <span><img src="../assets/images/logo.png" alt="logo" height="22"></span>
+                            </a>
+                        </div>
+
+                        <div class="card-body p-4">
+
+                            <div class="text-center w-75 m-auto">
+                                <h4 class="text-dark-50 text-center pb-0 fw-bold">Sign In</h4>
+                                <p class="text-muted mb-4">Enter your email address and password to access admin panel.</p>
+                            </div>
+
+                            <form action="login.php" method="post">
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email address</label>
+                                    <input class="form-control" type="email" id="email" name="email" placeholder="Enter your email"required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <a href="pages-recoverpw.html" class="text-muted float-end"><small>Forgot your password?</small></a>
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id="pass" name="pass" class="form-control" placeholder="Enter your password"required>
+                                        <div class="input-group-text" data-password="false">
+                                            <span class="password-eye"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="mb-3 mb-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="checkbox-signin" checked>
+                                        <label class="form-check-label" for="checkbox-signin">Remember me</label>
+                                    </div>
+                                </div> -->
+
+                                <div class="mb-3 mb-0 text-center">
+                                    <button class="btn btn-primary" type="submit"> Log In </button>
+                                </div>
+
+                            </form>
+                        </div> <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+
+                    <!-- <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <p class="text-muted">Don't have an account? <a href="pages-register.html" class="text-muted ms-1"><b>Sign Up</b></a></p>
+                        </div> 
+                    </div> -->
+                    <!-- end row -->
+
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container -->
+    </div>
+    <!-- end page -->
+
+    <footer class="footer footer-alt">
+        2025 - © Chaleco - Proyecto Graduacion
+    </footer>
+    <!-- Vendor js -->
+    <script src="assets/js/vendor.min.js"></script>
+
+    <!-- App js -->
+    <script src="assets/js/app.min.js"></script>
+
 </body>
 </html>

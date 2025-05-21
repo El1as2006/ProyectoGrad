@@ -1,14 +1,17 @@
 <?php
+$host = 'localhost';
+$dbname = 'bibliotecachaleca';
+$user = 'root';
+$pass = '';
+$charset = 'utf8mb4';
 
-$servername = "localhost";
-$username = "root";
-$password = "Info2025/*-";
-$dbname = "bibliotecachaleca";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+];
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=$charset", $user, $pass, $options);
+} catch (PDOException $e) {
+    die("Error de conexión: " . $e->getMessage());
 }
-
-return $conn; 
