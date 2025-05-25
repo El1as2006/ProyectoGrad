@@ -85,27 +85,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <!-- Logo -->
                         <div class="card-header py-4 text-center bg-primary">
                             <a href="index.html">
-                                <span><img src="../assets/images/logo.png" alt="logo" height="22"></span>
+                                <span><img src="../assets/images/logo_chaleco.png" alt="logo" height="100"></span>
                             </a>
                         </div>
 
                         <div class="card-body p-4">
 
                             <div class="text-center w-75 m-auto">
-                                <h4 class="text-dark-50 text-center pb-0 fw-bold">Sign In</h4>
-                                <p class="text-muted mb-4">Enter your email address and password to access admin panel.</p>
+                                <h4 class="text-dark-50 text-center pb-0 fw-bold">Log In</h4>
+                                <p class="text-muted mb-4">Ingrese su correo y contraseña</p>
                             </div>
 
                             <form action="login.php" method="post">
 
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email address</label>
+                                    <label for="email" class="form-label">Correo Electronico</label>
                                     <input class="form-control" type="email" id="email" name="email" placeholder="Enter your email"required>
                                 </div>
 
                                 <div class="mb-3">
-                                    <a href="pages-recoverpw.html" class="text-muted float-end"><small>Forgot your password?</small></a>
-                                    <label for="password" class="form-label">Password</label>
+                                    <a href="pages-recoverpw.html" class="text-muted float-end"><small>Olvidaste tu contraseña?</small></a>
+                                    <label for="password" class="form-label">Contraseña</label>
                                     <div class="input-group input-group-merge">
                                         <input type="password" id="pass" name="pass" class="form-control" placeholder="Enter your password"required>
                                         <div class="input-group-text" data-password="false">

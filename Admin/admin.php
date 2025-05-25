@@ -1,3 +1,11 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+$conn = include_once "../conexion.php";
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -163,24 +171,13 @@
 
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item">
-                                <img src="../assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
-                                <img src="../assets/images/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
                                 <img src="../assets/images/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
                             </a>
 
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item">
-                                <img src="../assets/images/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                <img src="../assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
                             </a>
-
                         </div>
                     </li>
 
@@ -367,11 +364,11 @@
                         </div>
                     </li>
 
-                    <li class="d-none d-sm-inline-block">
+                    <!-- <li class="d-none d-sm-inline-block">
                         <a class="nav-link" data-bs-toggle="offcanvas" href="#theme-settings-offcanvas">
                             <i class="ri-settings-3-line font-22"></i>
                         </a>
-                    </li>
+                    </li> -->
 
                     <li class="d-none d-sm-inline-block">
                         <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left" title="Theme Mode">
@@ -379,12 +376,11 @@
                         </div>
                     </li>
 
-
-                    <li class="d-none d-md-inline-block">
+                    <!-- <li class="d-none d-md-inline-block">
                         <a class="nav-link" href="#" data-toggle="fullscreen">
                             <i class="ri-fullscreen-line font-22"></i>
                         </a>
-                    </li>
+                    </li> -->
 
                     <li class="dropdown">
                         <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
@@ -392,8 +388,8 @@
                                 <img src="../assets/images/users/avatar-1.jpg" alt="user-image" width="32" class="rounded-circle">
                             </span>
                             <span class="d-lg-flex flex-column gap-1 d-none">
-                                <h5 class="my-0">Dominic Keller</h5>
-                                <h6 class="my-0 fw-normal">Founder</h6>
+                                <h5 class="my-0"><?php
+                    //echo ($_SESSION['username']); ?></h5>                           
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
@@ -1232,7 +1228,12 @@
                                                 <i class="mdi mdi-account-multiple widget-icon"></i>
                                             </div>
                                             <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Estudiantes</h5>
-                                            <h3 class="mt-3 mb-3">36,254</h3>
+                                            <?php
+                                            $stmt = $conn->prepare("SELECT COUNT(id_user) FROM usuarios WHERE user_type = 1");
+                                            $stmt->execute();
+                                            $estudiantes = $stmt->fetch(PDO::FETCH_COLUMN);
+                                            ?>
+                                            <h3 class="mt-3 mb-3"><?php echo "$estudiantes"?></h3>
                                             <p class="mb-0 text-muted">
                                                 <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
                                                 <span class="text-nowrap">Since last month</span>
