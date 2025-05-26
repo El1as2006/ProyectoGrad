@@ -12,7 +12,7 @@ $options = [
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=$charset", $user, $pass, $options);
-    return $pdo; // 👈 ESTA LÍNEA ES CLAVE
+    return $pdo; 
 } catch (PDOException $e) {
     die("Error de conexión: " . $e->getMessage());
 }
