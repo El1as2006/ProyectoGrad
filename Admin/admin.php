@@ -279,7 +279,7 @@ $conn = include_once "../conexion.php";
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item">
                                 <i class="mdi mdi-lifebuoy me-1"></i>
-                                <span>Support</span>
+                                <span>Vista Usuario</span>
                             </a>
 
                             <!-- item-->
