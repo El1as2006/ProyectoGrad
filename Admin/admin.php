@@ -1095,7 +1095,7 @@ $conn = include_once "../conexion.php";
                                             </div>
                                             <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Estudiantes</h5>
                                             <?php
-                                            $stmt = $conn->prepare("SELECT COUNT(id_user) FROM usuarios WHERE user_type = 1");
+                                            $stmt = $conn->prepare("SELECT COUNT(id_user) FROM usuarios WHERE user_type = 0");
                                             $stmt->execute();
                                             $estudiantes = $stmt->fetch(PDO::FETCH_COLUMN);
                                             ?>
@@ -1115,7 +1115,12 @@ $conn = include_once "../conexion.php";
                                                 <i class="mdi mdi-cart-plus widget-icon"></i>
                                             </div>
                                             <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Docentes</h5>
-                                            <h3 class="mt-3 mb-3">5,543</h3>
+                                            <?php
+                                            $stmt = $conn->prepare("SELECT COUNT(id_user) FROM usuarios WHERE user_type = 1");
+                                            $stmt->execute();
+                                            $docentes = $stmt->fetch(PDO::FETCH_COLUMN);
+                                            ?>
+                                            <h3 class="mt-3 mb-3"><?php echo "$docentes"?></h3>
                                             <p class="mb-0 text-muted">
                                                 <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
                                                 <span class="text-nowrap">Since last month</span>
@@ -1133,7 +1138,12 @@ $conn = include_once "../conexion.php";
                                                 <i class="mdi mdi-currency-usd widget-icon"></i>
                                             </div>
                                             <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Libros Disponibles</h5>
-                                            <h3 class="mt-3 mb-3">$6,254</h3>
+                                            <?php
+                                            $stmt = $conn->prepare("SELECT COUNT(id_book) FROM libros WHERE estado = 1");
+                                            $stmt->execute();
+                                            $libros_disponibles = $stmt->fetch(PDO::FETCH_COLUMN);
+                                            ?>
+                                            <h3 class="mt-3 mb-3"><?php echo "$libros_disponibles"?></h3>
                                             <p class="mb-0 text-muted">
                                                 <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
                                                 <span class="text-nowrap">Since last month</span>
@@ -1149,7 +1159,12 @@ $conn = include_once "../conexion.php";
                                                 <i class="mdi mdi-pulse widget-icon"></i>
                                             </div>
                                             <h5 class="text-muted fw-normal mt-0" title="Growth">Libros Prestados</h5>
-                                            <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                                            <?php
+                                            $stmt = $conn->prepare("SELECT COUNT(id_book) FROM libros WHERE estado = 0");
+                                            $stmt->execute();
+                                            $libros_prestados = $stmt->fetch(PDO::FETCH_COLUMN);
+                                            ?>
+                                            <h3 class="mt-3 mb-3"><?php echo "$libros_prestados"?></h3>
                                             <p class="mb-0 text-muted">
                                                 <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
                                                 <span class="text-nowrap">Since last month</span>
