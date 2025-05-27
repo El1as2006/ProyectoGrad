@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2025 at 05:51 PM
+-- Generation Time: May 27, 2025 at 03:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -39,6 +39,14 @@ CREATE TABLE `libros` (
   `estado` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+--
+-- Dumping data for table `libros`
+--
+
+INSERT INTO `libros` (`id_book`, `book_name`, `description`, `image_cover`, `author`, `category`, `estado`) VALUES
+(1, 'librito', 'Libro para leer', 'e.png', 'fonso', 'estudio', 1),
+(2, 'Las tres mosqueteras', 'Libro de lenguaje', 'e.png', 'pruebita', 'estudio', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -50,7 +58,7 @@ CREATE TABLE `usuarios` (
   `name` varchar(200) NOT NULL,
   `pass` varchar(256) NOT NULL,
   `email` varchar(200) NOT NULL,
-  `user_type` varchar(25) NOT NULL
+  `user_type` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
@@ -58,7 +66,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_user`, `name`, `pass`, `email`, `user_type`) VALUES
-(2, 'elias', '$2y$10$lPQS3ZRq2TpQl2D4o/zshewCf1CeIXg3IAmLya22DWjMcWQ8oN2UW', 'elias@gmail.com', 'super_admin');
+(2, 'elias', '$2y$10$lPQS3ZRq2TpQl2D4o/zshewCf1CeIXg3IAmLya22DWjMcWQ8oN2UW', 'elias@gmail.com', 1),
+(3, 'fonso', '$2y$10$lPQS3ZRq2TpQl2D4o/zshewCf1CeIXg3IAmLya22DWjMcWQ8oN2UW', 'fonso@gmail.com', 0);
 
 --
 -- Indexes for dumped tables
@@ -84,13 +93,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT for table `libros`
 --
 ALTER TABLE `libros`
-  MODIFY `id_book` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_book` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
