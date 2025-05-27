@@ -1078,7 +1078,6 @@
                 <!-- Start Content-->
                 <div class="container-fluid">
 <?php
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn = include_once("../conexion.php");
 
@@ -1088,231 +1087,151 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $book = $_FILES["book"];
     $autor = htmlspecialchars(trim($_POST["author"]));
     $category = htmlspecialchars(trim($_POST["category"]));
-   
 
-
-    if (empty($book_name) || empty($description) || empty($autor) || empty($category) || empty($cover)) {
+    // Validación de campos vacíos
+    if (empty($book_name) || empty($description) || empty($autor) || empty($category) || $cover['error'] != 0 || $book['error'] != 0) {
         echo "<script>
-                Swal.fire({ 
-                    title: 'Todos los campos son necesario', 
-                    text: 'Por favor llenar todos los campos', 
-                    icon: 'error', 
-                    button: 'Cerrar' 
-                }).then(function() {
-                    window.location = 'uploadbook.php';
-                });
-              </script>";
-        exit;
-    }
-    
-    if (!preg_match("/^[a-zA-Z ]*$/", $book_name) || !preg_match("/^[a-zA-Z ]*$/", $description) || !preg_match("/^[a-zA-Z ]*$/", $autor)) {
-        echo "<script>
-                Swal.fire({ 
-                    title: 'Texto Inválido', 
-                    text: 'Por favor ingrese texto (Solo letras)', 
-                    icon: 'error', 
-                    button: 'Cerrar' 
-                }).then(function() {
-                    window.location = 'uploadbook.php';
-                });
-              </script>";
+            Swal.fire({ 
+                title: 'Todos los campos son necesarios', 
+                text: 'Por favor llenar todos los campos y subir archivos.', 
+                icon: 'error' 
+            }).then(() => window.location = 'uploadbook.php');
+        </script>";
         exit;
     }
 
-    $sql = "SELECT * FROM libros WHERE book_name = :book_name";
-    $stmt = $conn->prepare($sql);
+    // Validar que solo haya texto
+    if (!preg_match("/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ.,]+$/u", $book_name) || !preg_match("/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ.,]+$/u", $description) || !preg_match("/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ.,]+$/u", $autor)) {
+        echo "<script>
+            Swal.fire({ 
+                title: 'Texto Inválido', 
+                text: 'Por favor ingrese texto válido (solo letras).', 
+                icon: 'error' 
+            }).then(() => window.location = 'uploadbook.php');
+        </script>";
+        exit;
+    }
+
+    // Verificar si ya existe
+    $stmt = $conn->prepare("SELECT * FROM libros WHERE book_name = :book_name");
     $stmt->execute([':book_name' => $book_name]);
-    $existing_book = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($existing_book) {
-        if ($existing_book['book_name'] === $book_name) {
-            echo "<script>
-                    Swal.fire({ 
-                        title: 'Libro Registrado', 
-                        text: 'Este Libro ya fue registrado', 
-                        icon: 'error', 
-                        button: 'Cerrar' 
-                    }).then(function() {
-                        window.location = 'uploadbook.php';
-                    });
-                  </script>";
-        }
+    if ($stmt->fetch()) {
+        echo "<script>
+            Swal.fire({ 
+                title: 'Libro Duplicado', 
+                text: 'Este libro ya ha sido registrado.', 
+                icon: 'error' 
+            }).then(() => window.location = 'uploadbook.php');
+        </script>";
         exit;
-        
     }
 
-//-------------------------------------------------------------------
+    // Mover archivos
+    move_uploaded_file($cover['tmp_name'], "uploads/covers/" . $cover['name']);
+    move_uploaded_file($book['tmp_name'], "uploads/books/" . $book['name']);
 
-    $sql = "INSERT INTO libros (book_name, description, image_cover, author, category) VALUES (:book_name, :description, :image_cover, :author, :category)";
-    $stmt = $conn->prepare($sql);
-    $params = [
-        ':book_name' => $book_name,
-        ':description' => $descripcion,
-        ':image_cover' => $cover,
-        ':author' => $autor,
-        ':category' => $category,
-    ];
+    if (move_uploaded_file($cover["tmp_name"], $coverPath) && move_uploaded_file($book["tmp_name"], $bookPath)) {
+        // Guardar en la base de datos
+        $sql = "INSERT INTO libros (book_name, description, image_cover, pdf_file, author, category) 
+                VALUES (:book_name, :description, :image_cover, :pdf_file, :author, :category)";
+        $stmt = $conn->prepare($sql);
+        $params = [
+            ':book_name' => $book_name,
+            ':description' => $description,
+            ':image_cover' => $coverPath,
+            ':pdf_file' => $bookPath,
+            ':author' => $autor,
+            ':category' => $category,
+        ];
 
-    if ($stmt->execute($params)) {
-        echo "<script>Swal.fire({ title: 'Registro Exitoso', text: 'Libro Registrado exitosamente', icon: 'success', button: 'Close' });</script>";
+        if ($stmt->execute($params)) {
+            echo "<script>
+                Swal.fire({ 
+                    title: 'Éxito', 
+                    text: 'Libro registrado correctamente.', 
+                    icon: 'success' 
+                }).then(() => window.location = 'uploadbook.php');
+            </script>";
+        } else {
+            echo "<script>
+                Swal.fire({ 
+                    title: 'Error', 
+                    text: 'Hubo un error al guardar en la base de datos.', 
+                    icon: 'error' 
+                });
+            </script>";
+        }
     } else {
-        echo "<script>            swal({ 
-            ({ title: 'Registro Fallido', text: 'Hubo un problema registrando el libro.', icon: 'error', button: 'Close' });</script>";
+        echo "<script>
+            Swal.fire({ 
+                title: 'Error de Archivos', 
+                text: 'No se pudieron subir los archivos.', 
+                icon: 'error' 
+            });
+        </script>";
     }
 }
 ?>
+
+<!-- FORMULARIO HTML (dejas igual el diseño pero con input name correcto) -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <form method="post" action="uploadbook.php" enctype="multipart/form-data">
+                <div class="card-body">
                     <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <form method="post" action="uploadbook.php">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-xl-6">
-                                                <div class="mb-3">
-                                                    <label for="projectname" class="form-label">Nombre</label>
-                                                    <input type="text" id="book_name" class="form-control" name="book_name"
-                                                        placeholder="Ingrese nombre del libro.">
-                                                </div>
+                        <div class="col-xl-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" name="book_name" placeholder="Ingrese nombre del libro">
+                            </div>
 
-                                                <div class="mb-3">
-                                                    <label for="project-overview" class="form-label">Descripción</label>
-                                                    <textarea class="form-control" id="description" rows="5"name="description"
-                                                        placeholder="Ingrese descripción del libro."></textarea>
-                                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <textarea class="form-control" rows="5" name="description" placeholder="Ingrese descripción del libro."></textarea>
+                            </div>
 
-                                                <div class="mb-3">
-                                                    <label for="project-budget" class="form-label">Autor</label>
-                                                    <input type="text" id="author" class="form-control" name="author"
-                                                        placeholder="Enter project budget">
-                                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Autor</label>
+                                <input type="text" class="form-control" name="author" placeholder="Nombre del autor">
+                            </div>
 
-                                                <div class="mb-0">
-                                                    <label for="project-overview" class="form-label">Categoria</label>
+                            <div class="mb-0">
+                                <label class="form-label">Categoría</label>
+                                <select class="form-control" name="category">
+                                    <option value="">Seleccionar</option>
+                                    <option value="Educación">Educación</option>
+                                    <option value="Historia">Historia</option>
+                                    <option value="Ciencia Ficción">Ciencia Ficción</option>
+                                    <option value="Misterio">Misterio</option>
+                                    <option value="Fantasía">Fantasía</option>
+                                    <option value="Autoayuda">Autoayuda</option>
+                                </select>
+                            </div>
+                        </div>
 
-                                                    <select class="form-control select2" data-toggle="category" id="category" name="category">
-                                                        <option>Seleccionar</option>
-                                                        <option value="AZ">Educación</option>
-                                                        <option value="CO">Historia</option>
-                                                        <option value="ID">Ciencia Ficción</option>
-                                                        <option value="MT">Misterio</option>
-                                                        <option value="NE">Fantasía</option>
-                                                        <option value="NM">Autoayuda</option>
-                                                    </select>
-                                                </div>
+                        <div class="col-xl-6">
+                            <div class="mb-3 mt-3">
+                                <label class="form-label">Portada del libro</label>
+                                <input type="file" class="form-control" name="image_cover" accept="image/*" required>
+                            </div>
 
-                                            </div> <!-- end col-->
+                            <div class="mb-3 mt-3">
+                                <label class="form-label">Archivo PDF del libro</label>
+                                <input type="file" class="form-control" name="book" accept=".pdf" required>
+                            </div>
 
-                                            <div class="col-xl-6">
+                            <div class="mb-0 mt-4">
+                                <button class="btn btn-primary" type="submit">Registrar Libro</button>
+                            </div>
+                        </div>
+                    </div> <!-- end row -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-                                                <div class="mb-3 mt-3 mt-xl-0">
-                                                    <label for="projectname" class="mb-0">Portada del libro</label>
-                                                    <p class="text-muted font-14">Recommended thumbnail size 800x400
-                                                        (px).</p>
-
-                                                    <form action="https://coderthemes.com/" method="post"
-                                                        class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone"
-                                                        data-previews-container="#file-previews"
-                                                        data-upload-preview-template="#uploadPreviewTemplate">
-                                                        <div class="fallback">
-                                                            <input name="file" type="file" name="image_cover" id="image_cover"/>
-                                                        </div>
-
-                                                        <div class="dz-message needsclick">
-                                                            <i class="h3 text-muted ri-upload-cloud-2-line"></i>
-                                                            <h4>Drop files here or click to upload.</h4>
-                                                        </div>
-                                                    </form>
-
-                                                    <!-- Preview -->
-                                                    <div class="dropzone-previews mt-3" id="file-previews"></div>
-
-                                                    <!-- file preview template -->
-                                                    <div class="d-none" id="uploadPreviewTemplate">
-                                                        <div class="card mt-1 mb-0 shadow-none border">
-                                                            <div class="p-2">
-                                                                <div class="row align-items-center">
-                                                                    <div class="col-auto">
-                                                                        <img data-dz-thumbnail src="#"
-                                                                            class="avatar-sm rounded bg-light" alt="">
-                                                                    </div>
-                                                                    <div class="col ps-0">
-                                                                        <a href="javascript:void(0);"
-                                                                            class="text-muted fw-bold" data-dz-name></a>
-                                                                        <p class="mb-0" data-dz-size></p>
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <!-- Button -->
-                                                                        <a href="#"
-                                                                            class="btn btn-link btn-lg text-muted"
-                                                                            data-dz-remove>
-                                                                            <i class="ri-close-line"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- end file preview template -->
-                                                     
-                                                </div>
-
-                                                <div class="mb-3 mt-3 mt-xl-0">
-                                                    <label for="projectname" class="mb-0">PDF del libro</label>
-                                                    <p class="text-muted font-14">Recommended thumbnail size 800x400
-                                                        (px).</p>
-
-                                                    <form action="https://coderthemes.com/" method="post"
-                                                        class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone"
-                                                        data-previews-container="#file-previews"
-                                                        data-upload-preview-template="#uploadPreviewTemplate">
-                                                        <div class="fallback">
-                                                            <input name="file" type="file" />
-                                                        </div>
-
-                                                        <div class="dz-message needsclick">
-                                                            <i class="h3 text-muted ri-upload-cloud-2-line"></i>
-                                                            <h4>Drop files here or click to upload.</h4>
-                                                        </div>
-                                                    </form>
-
-                                                    <!-- Preview -->
-                                                    <div class="dropzone-previews mt-3" id="file-previews"></div>
-
-                                                    <!-- file preview template -->
-                                                    <div class="d-none" id="uploadPreviewTemplate">
-                                                        <div class="card mt-1 mb-0 shadow-none border">
-                                                            <div class="p-2">
-                                                                <div class="row align-items-center">
-                                                                    <div class="col-auto">
-                                                                        <img data-dz-thumbnail src="#"
-                                                                            class="avatar-sm rounded bg-light" alt="">
-                                                                    </div>
-                                                                    <div class="col ps-0">
-                                                                        <a href="javascript:void(0);"
-                                                                            class="text-muted fw-bold" data-dz-name></a>
-                                                                        <p class="mb-0" data-dz-size></p>
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <!-- Button -->
-                                                                        <a href="#"
-                                                                            class="btn btn-link btn-lg text-muted"
-                                                                            data-dz-remove>
-                                                                            <i class="ri-close-line"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <button class="input-group-text btn btn-primary" type="submit">Registrar</button>
-                                                    <!-- end file preview template -->
-                                                </div>
-                                            </div> <!-- end col-->
-                                        </div>
-                                        <!-- end row -->
-
-                                    </div>
-                                </form>
                                 <!-- end card-body -->
                             </div> <!-- end card-->
                         </div> <!-- end col-->
