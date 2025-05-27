@@ -1265,7 +1265,7 @@ $conn = include_once "../conexion.php";
                                                                 class="table table-centered table-nowrap table-hover mb-0">
                                                                 <tbody>
                                                                     <?php
-                                                                    $stmt = $conn->prepare("SELECT book_name, description, author, category, estado FROM libros WHERE estado = 1");
+                                                                    $stmt = $conn->prepare("SELECT book_name, description, author, category, estado FROM libros");
                                                                     $stmt->execute();
                                                                     $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

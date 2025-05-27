@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2025 at 03:56 AM
+-- Generation Time: May 27, 2025 at 04:09 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -45,7 +45,8 @@ CREATE TABLE `libros` (
 
 INSERT INTO `libros` (`id_book`, `book_name`, `description`, `image_cover`, `author`, `category`, `estado`) VALUES
 (1, 'librito', 'Libro para leer', 'e.png', 'fonso', 'estudio', 1),
-(2, 'Las tres mosqueteras', 'Libro de lenguaje', 'e.png', 'pruebita', 'estudio', 1);
+(2, 'Las tres mosqueteras', 'Libro de lenguaje', 'e.png', 'pruebita', 'estudio', 1),
+(3, 'craazy coaster', 'Libro mitologico', 'e.png', 'fonsito', 'estudio', 0);
 
 -- --------------------------------------------------------
 
@@ -93,7 +94,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT for table `libros`
 --
 ALTER TABLE `libros`
-  MODIFY `id_book` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_book` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `usuarios`
@@ -104,4 +105,3 @@ COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
