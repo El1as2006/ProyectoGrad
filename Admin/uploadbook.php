@@ -1127,21 +1127,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Mover archivos
-    move_uploaded_file($cover['tmp_name'], "uploads/covers/" . $cover['name']);
-    move_uploaded_file($book['tmp_name'], "uploads/books/" . $book['name']);
+    $coverPath = "../uploads/covers/" . basename($cover["name"]);
+    $bookPath = "../uploads/books/" . basename($book["name"]);
 
     if (move_uploaded_file($cover["tmp_name"], $coverPath) && move_uploaded_file($book["tmp_name"], $bookPath)) {
         // Guardar en la base de datos
-        $sql = "INSERT INTO libros (book_name, description, image_cover, pdf_file, author, category) 
-                VALUES (:book_name, :description, :image_cover, :pdf_file, :author, :category)";
+        $sql = "INSERT INTO libros (book_name, description, image_cover, content, author, category, estado) 
+                VALUES (:book_name, :description, :image_cover, :content, :author, :category, :estado)";
         $stmt = $conn->prepare($sql);
         $params = [
             ':book_name' => $book_name,
             ':description' => $description,
             ':image_cover' => $coverPath,
-            ':pdf_file' => $bookPath,
+            ':content' => $bookPath,
             ':author' => $autor,
             ':category' => $category,
+            ':estado' => 1,
         ];
 
         if ($stmt->execute($params)) {
@@ -1231,6 +1232,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </div>
+
 
                                 <!-- end card-body -->
                             </div> <!-- end card-->
