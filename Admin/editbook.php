@@ -230,12 +230,6 @@
                     </li>
 
 
-                    <li class="d-none d-md-inline-block">
-                        <a class="nav-link" href="#" data-toggle="fullscreen">
-                            <i class="ri-fullscreen-line font-22"></i>
-                        </a>
-                    </li>
-
                     <li class="dropdown">
                         <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#"
                             role="button" aria-haspopup="false" aria-expanded="false">
@@ -348,9 +342,9 @@
                     <li class="side-nav-title">Apps</li>
 
                     <li class="side-nav-item">
-                        <a href="apps-calendar.html" class="side-nav-link">
+                        <a href="books.php" class="side-nav-link">
                             <i class="uil-calender"></i>
-                            <span> Calendar </span>
+                            <span> Libros </span>
                         </a>
                     </li>
 
@@ -1132,7 +1126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (move_uploaded_file($cover["tmp_name"], $coverPath) && move_uploaded_file($book["tmp_name"], $bookPath)) {
         // Guardar en la base de datos
-        $sql = "INSERT INTO libros (book_name, description, image_cover, content, author, category, estado) 
+        $sql = "UPDATE INTO libros (book_name, description, image_cover, content, author, category, estado) 
                 VALUES (:book_name, :description, :image_cover, :content, :author, :category, :estado)";
         $stmt = $conn->prepare($sql);
         $params = [
@@ -1178,44 +1172,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="row">
     <div class="col-12">
         <div class="card">
-<?php
-$_SESSION = 
-$conn = require_once "../conexion.php" ;
-$stmt = $conn->prepare("SELECT * FROM libros WHERE id_book = 0");
-$stmt->execute();
-$book_name = $stmt->fetch(PDO::FETCH_COLUMN);
+<?php 
+$conn = require "../conexion.php";
 
+if (isset($_GET["id"])) {
+    $id = (int) $_GET["id"];
+
+    $stmt = $conn->prepare("SELECT * FROM libros WHERE id_book = :id");
+    $stmt->execute([':id' => $id]);
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+} else {
+    $data = null;
+}
 ?>
+
             <form method="post" action="uploadbook.php" enctype="multipart/form-data">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-xl-6">
                             <div class="mb-3">
                                 <label class="form-label">Nombre</label>
-                                <input type="text" class="form-control" name="book_name" placeholder="Ingrese nombre del libro" 
-                                value="<?php echo isset($data) ? htmlspecialchars($data['book_name']) : ''; ?>">
+                                <input type="text" class="form-control" name="book_name" placeholder=<?php echo $data["book_name"] ?>>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Descripción</label>
-                                <textarea class="form-control" rows="5" name="description" placeholder="Ingrese descripción del libro."></textarea>
+                                <textarea class="form-control" rows="5" name="description" placeholder="Ingrese descripción del libro.">
+                                    <?php echo isset($data) ? htmlspecialchars($data['description']) : ''; ?>
+                                </textarea>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Autor</label>
-                                <input type="text" class="form-control" name="author" placeholder="Nombre del autor">
+                                <input type="text" class="form-control" name="author" placeholder="Nombre del autor"
+                                value="<?php echo isset($data) ? htmlspecialchars($data['author']) : ''; ?>">
                             </div>
 
                             <div class="mb-0">
                                 <label class="form-label">Categoría</label>
                                 <select class="form-control" name="category">
-                                    <option value="">Seleccionar</option>
-                                    <option value="Educación">Educación</option>
-                                    <option value="Historia">Historia</option>
-                                    <option value="Ciencia Ficción">Ciencia Ficción</option>
-                                    <option value="Misterio">Misterio</option>
-                                    <option value="Fantasía">Fantasía</option>
-                                    <option value="Autoayuda">Autoayuda</option>
+                                    <?php 
+                                        $categorias = ["Educación", "Historia", "Ciencia Ficción", "Misterio", "Fantasía", "Autoayuda"];
+                                        foreach ($categorias as $cat) {
+                                        $selected = (isset($data) && $data['category'] == $cat) ? "selected" : "";
+                                        echo "<option value=\"$cat\" $selected>$cat</option>";
+                                        }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -1294,5 +1296,4 @@ $book_name = $stmt->fetch(PDO::FETCH_COLUMN);
     <script src="../assets/js/app.min.js"></script>
 
 </body>
-
 </html>
