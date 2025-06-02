@@ -292,7 +292,7 @@ body {
     line-height: var(--ct-body-line-height);
     color: var(--ct-body-color);
     text-align: var(--ct-body-text-align);
-    background-color: var(--ct-body-bg);
+    background-color: #dcce4420;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent
 }
@@ -5657,7 +5657,7 @@ fieldset:disabled .btn {
     height: var(--ct-card-height);
     color: var(--ct-body-color);
     word-wrap: break-word;
-    background-color: var(--ct-card-bg);
+    background-color: #ffffff;
     background-clip: border-box;
     border: var(--ct-card-border-width) solid var(--ct-card-border-color);
     border-radius: var(--ct-card-border-radius)
@@ -19986,7 +19986,7 @@ input[data-switch=dark]:checked+label {
 }
 
 .widget-icon {
-    color: #000000;
+    color: #FFD700;
     font-size: 20px;
     background-color: rgb(238 241 10 / 69%);
     height: 40px;
