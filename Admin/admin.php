@@ -305,7 +305,7 @@ $conn = include_once "../conexion.php";
                             </a>
 
                             <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
+                            <a href="logout.php" class="dropdown-item">
                                 <i class="mdi mdi-logout me-1"></i>
                                 <span>Logout</span>
                             </a>

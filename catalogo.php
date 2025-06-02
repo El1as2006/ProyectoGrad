@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/ProyectoGrad/assets/css/indexstyle.css">
 
-    <title>Catálogo - Biblioteca Digital</title>
+    <title>Catálogo - Bilioteca Chaleca</title>
     <style>
         * {
             margin: 0;
