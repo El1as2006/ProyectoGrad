@@ -53,20 +53,20 @@ $conn = include_once "../conexion.php";
                         <!-- Logo light -->
                         <a href="index.html" class="logo-light">
                             <span class="logo-lg">
-                                <img src="../assets/images/logo.png" alt="logo">
+                                <img src="../assets/images/Recurso_23.png" alt="logo">
                             </span>
                             <span class="logo-sm">
-                                <img src="../assets/images/logo-sm.png" alt="small logo">
+                                <img src="../assets/images/Recurso_9.png" alt="small logo">
                             </span>
                         </a>
 
                         <!-- Logo Dark -->
                         <a href="index.html" class="logo-dark">
                             <span class="logo-lg">
-                                <img src="../assets/images/logo-dark.png" alt="dark logo">
+                                <img src="../assets/images/Recurso_23.png" alt="dark logo">
                             </span>
                             <span class="logo-sm">
-                                <img src="../assets/images/logo-dark-sm.png" alt="small logo">
+                                <img src="../assets/images/Recurso_9.png" alt="small logo">
                             </span>
                         </a>
                     </div>
@@ -87,14 +87,6 @@ $conn = include_once "../conexion.php";
 
                     <!-- Topbar Search Form -->
                     <div class="app-search dropdown d-none d-lg-block">
-                        <form>
-                            <div class="input-group">
-                                <input type="search" class="form-control dropdown-toggle" placeholder="Search..."
-                                    id="top-search">
-                                <span class="mdi mdi-magnify search-icon"></span>
-                                <button class="input-group-text btn btn-primary" type="submit">Search</button>
-                            </div>
-                        </form>
 
                         <div class="dropdown-menu dropdown-menu-animated dropdown-lg" id="search-dropdown">
                             <!-- item-->
@@ -305,7 +297,7 @@ $conn = include_once "../conexion.php";
                             </a>
 
                             <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
+                            <a href="../index.php" class="dropdown-item">
                                 <i class="mdi mdi-logout me-1"></i>
                                 <span>Logout</span>
                             </a>
@@ -322,20 +314,20 @@ $conn = include_once "../conexion.php";
             <!-- Brand Logo Light -->
             <a href="index.html" class="logo logo-light">
                 <span class="logo-lg">
-                    <img src="../assets/images/logo.png" alt="logo">
+                    <img src="../assets/images/Recurso_23.png" alt="logo">
                 </span>
                 <span class="logo-sm">
-                    <img src="../assets/images/logo-sm.png" alt="small logo">
+                    <img src="../assets/images/Recurso_9.png" alt="small logo">
                 </span>
             </a>
 
             <!-- Brand Logo Dark -->
             <a href="index.html" class="logo logo-dark">
                 <span class="logo-lg">
-                    <img src="../assets/images/logo-dark.png" alt="dark logo">
+                    <img src="../assets/images/Recurso_23.png" alt="dark logo">
                 </span>
                 <span class="logo-sm">
-                    <img src="../assets/images/logo-dark-sm.png" alt="small logo">
+                    <img src="../assets/images/Recurso_9.png" alt="small logo">
                 </span>
             </a>
 
@@ -676,99 +668,7 @@ $conn = include_once "../conexion.php";
                         </div>
                     </li>
 
-                    <li class="side-nav-title">Components</li>
-
-                    <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarBaseUI" aria-expanded="false"
-                            aria-controls="sidebarBaseUI" class="side-nav-link">
-                            <i class="uil-box"></i>
-                            <span> Base UI </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="sidebarBaseUI">
-                            <ul class="side-nav-second-level">
-                                <li>
-                                    <a href="ui-accordions.html">Accordions & Collapse</a>
-                                </li>
-                                <li>
-                                    <a href="ui-alerts.html">Alerts</a>
-                                </li>
-                                <li>
-                                    <a href="ui-avatars.html">Avatars</a>
-                                </li>
-                                <li>
-                                    <a href="ui-badges.html">Badges</a>
-                                </li>
-                                <li>
-                                    <a href="ui-breadcrumb.html">Breadcrumb</a>
-                                </li>
-                                <li>
-                                    <a href="ui-buttons.html">Buttons</a>
-                                </li>
-                                <li>
-                                    <a href="ui-cards.html">Cards</a>
-                                </li>
-                                <li>
-                                    <a href="ui-carousel.html">Carousel</a>
-                                </li>
-                                <li>
-                                    <a href="ui-dropdowns.html">Dropdowns</a>
-                                </li>
-                                <li>
-                                    <a href="ui-embed-video.html">Embed Video</a>
-                                </li>
-                                <li>
-                                    <a href="ui-grid.html">Grid</a>
-                                </li>
-                                <li>
-                                    <a href="ui-list-group.html">List Group</a>
-                                </li>
-                                <li>
-                                    <a href="ui-modals.html">Modals</a>
-                                </li>
-                                <li>
-                                    <a href="ui-notifications.html">Notifications</a>
-                                </li>
-                                <li>
-                                    <a href="ui-offcanvas.html">Offcanvas</a>
-                                </li>
-                                <li>
-                                    <a href="ui-placeholders.html">Placeholders</a>
-                                </li>
-                                <li>
-                                    <a href="ui-pagination.html">Pagination</a>
-                                </li>
-                                <li>
-                                    <a href="ui-popovers.html">Popovers</a>
-                                </li>
-                                <li>
-                                    <a href="ui-progress.html">Progress</a>
-                                </li>
-                                <li>
-                                    <a href="ui-ribbons.html">Ribbons</a>
-                                </li>
-                                <li>
-                                    <a href="ui-spinners.html">Spinners</a>
-                                </li>
-                                <li>
-                                    <a href="ui-tabs.html">Tabs</a>
-                                </li>
-                                <li>
-                                    <a href="ui-tooltips.html">Tooltips</a>
-                                </li>
-                                <li>
-                                    <a href="ui-links.html">Links</a>
-                                </li>
-                                <li>
-                                    <a href="ui-typography.html">Typography</a>
-                                </li>
-                                <li>
-                                    <a href="ui-utilities.html">Utilities</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
+                    
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarExtendedUI" aria-expanded="false"
                             aria-controls="sidebarExtendedUI" class="side-nav-link">
@@ -1374,20 +1274,7 @@ $conn = include_once "../conexion.php";
 
             <!-- Footer Start -->
             <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
-                        </div>
-                        <div class="col-md-6">
-                            <div class="text-md-end footer-links d-none d-md-block">
-                                <a href="javascript: void(0);">About</a>
-                                <a href="javascript: void(0);">Support</a>
-                                <a href="javascript: void(0);">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </footer>
             <!-- end Footer -->
 

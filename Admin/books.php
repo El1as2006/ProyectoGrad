@@ -68,13 +68,6 @@
 
                     <!-- Topbar Search Form -->
                     <div class="app-search dropdown d-none d-lg-block">
-                        <form>
-                            <div class="input-group">
-                                <input type="search" class="form-control dropdown-toggle" placeholder="Search..." id="top-search">
-                                <span class="mdi mdi-magnify search-icon"></span>
-                                <button class="input-group-text btn btn-primary" type="submit">Search</button>
-                            </div>
-                        </form>
 
                         <div class="dropdown-menu dropdown-menu-animated dropdown-lg" id="search-dropdown">
                             <!-- item-->
