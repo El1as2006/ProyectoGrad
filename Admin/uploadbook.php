@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>Registrar Libros</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
-
-    <!-- App favicon -->
     <link rel="shortcut icon" href="../assets/images/favicon.ico">
-
-    <!-- Theme Config Js -->
     <script src="../assets/js/hyper-config.js"></script>
-
-    <!-- Vendor css -->
     <link href="../assets/css/vendor.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- App css -->
     <link href="../assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
-
-    <!-- Icons css -->
     <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="../package/dist/sweetalert2.css">
+    <script src="../package/dist/sweetalert2.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body>
     <!-- Begin page -->
     <div class="wrapper">
 
-        
+
         <!-- ========== Topbar Start ========== -->
         <div class="navbar-custom">
             <div class="topbar container-fluid">
@@ -74,7 +69,8 @@
                     <div class="app-search dropdown d-none d-lg-block">
                         <form>
                             <div class="input-group">
-                                <input type="search" class="form-control dropdown-toggle" placeholder="Search..." id="top-search">
+                                <input type="search" class="form-control dropdown-toggle" placeholder="Search..."
+                                    id="top-search">
                                 <span class="mdi mdi-magnify search-icon"></span>
                                 <button class="input-group-text btn btn-primary" type="submit">Search</button>
                             </div>
@@ -113,7 +109,9 @@
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                                     <div class="d-flex">
-                                        <img class="d-flex me-2 rounded-circle" src="../assets/images/users/avatar-2.jpg" alt="Generic placeholder image" height="32">
+                                        <img class="d-flex me-2 rounded-circle"
+                                            src="../assets/images/users/avatar-2.jpg" alt="Generic placeholder image"
+                                            height="32">
                                         <div class="w-100">
                                             <h5 class="m-0 font-14">Erwin Brown</h5>
                                             <span class="font-12 mb-0">UI Designer</span>
@@ -124,7 +122,9 @@
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                                     <div class="d-flex">
-                                        <img class="d-flex me-2 rounded-circle" src="../assets/images/users/avatar-5.jpg" alt="Generic placeholder image" height="32">
+                                        <img class="d-flex me-2 rounded-circle"
+                                            src="../assets/images/users/avatar-5.jpg" alt="Generic placeholder image"
+                                            height="32">
                                         <div class="w-100">
                                             <h5 class="m-0 font-14">Jacob Deo</h5>
                                             <span class="font-12 mb-0">Developer</span>
@@ -138,25 +138,30 @@
 
                 <ul class="topbar-menu d-flex align-items-center gap-3">
                     <li class="dropdown d-lg-none">
-                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="false" aria-expanded="false">
                             <i class="ri-search-line font-22"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0">
                             <form class="p-3">
-                                <input type="search" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
+                                <input type="search" class="form-control" placeholder="Search ..."
+                                    aria-label="Recipient's username">
                             </form>
                         </div>
                     </li>
 
                     <li class="dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="false" aria-expanded="false">
                             <img src="../assets/images/flags/us.jpg" alt="user-image" class="me-0 me-sm-1" height="12">
-                            <span class="align-middle d-none d-lg-inline-block">English</span> <i class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle"></i>
+                            <span class="align-middle d-none d-lg-inline-block">English</span> <i
+                                class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated">
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item">
-                                <img src="/ProyectoGrad/assets/images/flags/spain.jpg"  class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                <img src="/ProyectoGrad/assets/images/flags/spain.jpg" class="me-1" height="12"> <span
+                                    class="align-middle">Spanish</span>
                             </a>
                         </div>
                     </li>
@@ -164,7 +169,8 @@
 
 
                     <li class="dropdown d-none d-sm-inline-block">
-                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="false" aria-expanded="false">
                             <i class="ri-apps-2-line font-22"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg p-0">
@@ -217,7 +223,8 @@
                     </li>
 
                     <li class="d-none d-sm-inline-block">
-                        <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left" title="Theme Mode">
+                        <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left"
+                            title="Theme Mode">
                             <i class="ri-moon-line font-22"></i>
                         </div>
                     </li>
@@ -230,9 +237,11 @@
                     </li>
 
                     <li class="dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#"
+                            role="button" aria-haspopup="false" aria-expanded="false">
                             <span class="account-user-avatar">
-                                <img src="../assets/images/users/avatar-1.jpg" alt="user-image" width="32" class="rounded-circle">
+                                <img src="../assets/images/users/avatar-1.jpg" alt="user-image" width="32"
+                                    class="rounded-circle">
                             </span>
                             <span class="d-lg-flex flex-column gap-1 d-none">
                                 <h5 class="my-0">Dominic Keller</h5>
@@ -291,7 +300,7 @@
                 </span>
                 <span class="logo-sm">
                     <img src="../assets/images/Recurso_9.png" height="45">
-                </span>            </a>
+                </span> </a>
 
             <!-- Brand Logo Dark -->
             <a href="index.html" class="logo logo-dark">
@@ -318,7 +327,8 @@
                 <!-- Leftbar User -->
                 <div class="leftbar-user">
                     <a href="pages-profile.html">
-                        <img src="../assets/images/users/avatar-1.jpg" alt="user-image" height="42" class="rounded-circle shadow-sm">
+                        <img src="../assets/images/users/avatar-1.jpg" alt="user-image" height="42"
+                            class="rounded-circle shadow-sm">
                         <span class="leftbar-user-name mt-2">Dominic Keller</span>
                     </a>
                 </div>
@@ -352,7 +362,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarCrm" aria-expanded="false" aria-controls="sidebarCrm" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarCrm" aria-expanded="false" aria-controls="sidebarCrm"
+                            class="side-nav-link">
                             <i class="uil uil-tachometer-fast"></i>
                             <span class="badge bg-danger text-white float-end">New</span>
                             <span> CRM </span>
@@ -376,7 +387,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false" aria-controls="sidebarEcommerce" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false"
+                            aria-controls="sidebarEcommerce" class="side-nav-link">
                             <i class="uil-store"></i>
                             <span> Ecommerce </span>
                             <span class="menu-arrow"></span>
@@ -412,7 +424,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarEmail" aria-expanded="false" aria-controls="sidebarEmail" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarEmail" aria-expanded="false"
+                            aria-controls="sidebarEmail" class="side-nav-link">
                             <i class="uil-envelope"></i>
                             <span> Email </span>
                             <span class="menu-arrow"></span>
@@ -430,7 +443,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarProjects" aria-expanded="false" aria-controls="sidebarProjects" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarProjects" aria-expanded="false"
+                            aria-controls="sidebarProjects" class="side-nav-link">
                             <i class="uil-briefcase"></i>
                             <span> Projects </span>
                             <span class="menu-arrow"></span>
@@ -444,7 +458,8 @@
                                     <a href="apps-projects-details.html">Details</a>
                                 </li>
                                 <li>
-                                    <a href="apps-projects-gantt.html">Gantt <span class="badge rounded-pill bg-light text-dark font-10 float-end">New</span></a>
+                                    <a href="apps-projects-gantt.html">Gantt <span
+                                            class="badge rounded-pill bg-light text-dark font-10 float-end">New</span></a>
                                 </li>
                                 <li>
                                     <a href="apps-projects-add.html">Create Project</a>
@@ -461,7 +476,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarTasks" aria-expanded="false" aria-controls="sidebarTasks" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarTasks" aria-expanded="false"
+                            aria-controls="sidebarTasks" class="side-nav-link">
                             <i class="uil-clipboard-alt"></i>
                             <span> Tasks </span>
                             <span class="menu-arrow"></span>
@@ -491,7 +507,8 @@
                     <li class="side-nav-title">Custom</li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false"
+                            aria-controls="sidebarPages" class="side-nav-link">
                             <i class="uil-copy-alt"></i>
                             <span> Pages </span>
                             <span class="menu-arrow"></span>
@@ -517,7 +534,8 @@
                                     <a href="pages-maintenance.html">Maintenance</a>
                                 </li>
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarPagesAuth" aria-expanded="false" aria-controls="sidebarPagesAuth">
+                                    <a data-bs-toggle="collapse" href="#sidebarPagesAuth" aria-expanded="false"
+                                        aria-controls="sidebarPagesAuth">
                                         <span> Authentication </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -563,7 +581,8 @@
                                     </div>
                                 </li>
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarPagesError" aria-expanded="false" aria-controls="sidebarPagesError">
+                                    <a data-bs-toggle="collapse" href="#sidebarPagesError" aria-expanded="false"
+                                        aria-controls="sidebarPagesError">
                                         <span> Error </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -603,7 +622,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarLayouts" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarLayouts" aria-expanded="false"
+                            aria-controls="sidebarLayouts" class="side-nav-link">
                             <i class="uil-window"></i>
                             <span> Layouts </span>
                             <span class="menu-arrow"></span>
@@ -638,7 +658,8 @@
                     <li class="side-nav-title">Components</li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarBaseUI" aria-expanded="false" aria-controls="sidebarBaseUI" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarBaseUI" aria-expanded="false"
+                            aria-controls="sidebarBaseUI" class="side-nav-link">
                             <i class="uil-box"></i>
                             <span> Base UI </span>
                             <span class="menu-arrow"></span>
@@ -728,7 +749,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarExtendedUI" aria-expanded="false" aria-controls="sidebarExtendedUI" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarExtendedUI" aria-expanded="false"
+                            aria-controls="sidebarExtendedUI" class="side-nav-link">
                             <i class="uil-package"></i>
                             <span> Extended UI </span>
                             <span class="menu-arrow"></span>
@@ -765,7 +787,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarIcons" aria-expanded="false" aria-controls="sidebarIcons" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarIcons" aria-expanded="false"
+                            aria-controls="sidebarIcons" class="side-nav-link">
                             <i class="uil-streering"></i>
                             <span> Icons </span>
                             <span class="menu-arrow"></span>
@@ -789,7 +812,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarCharts" aria-expanded="false" aria-controls="sidebarCharts" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarCharts" aria-expanded="false"
+                            aria-controls="sidebarCharts" class="side-nav-link">
                             <i class="uil-chart"></i>
                             <span> Charts </span>
                             <span class="menu-arrow"></span>
@@ -797,7 +821,8 @@
                         <div class="collapse" id="sidebarCharts">
                             <ul class="side-nav-second-level">
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarApexCharts" aria-expanded="false" aria-controls="sidebarApexCharts">
+                                    <a data-bs-toggle="collapse" href="#sidebarApexCharts" aria-expanded="false"
+                                        aria-controls="sidebarApexCharts">
                                         <span> Apex Charts </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -858,7 +883,8 @@
                                     </div>
                                 </li>
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarChartJSCharts" aria-expanded="false" aria-controls="sidebarChartJSCharts">
+                                    <a data-bs-toggle="collapse" href="#sidebarChartJSCharts" aria-expanded="false"
+                                        aria-controls="sidebarChartJSCharts">
                                         <span> ChartJS </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -891,7 +917,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarForms" aria-expanded="false" aria-controls="sidebarForms" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarForms" aria-expanded="false"
+                            aria-controls="sidebarForms" class="side-nav-link">
                             <i class="uil-document-layout-center"></i>
                             <span> Forms </span>
                             <span class="menu-arrow"></span>
@@ -921,7 +948,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarTables" aria-expanded="false" aria-controls="sidebarTables" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarTables" aria-expanded="false"
+                            aria-controls="sidebarTables" class="side-nav-link">
                             <i class="uil-table"></i>
                             <span> Tables </span>
                             <span class="menu-arrow"></span>
@@ -939,7 +967,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarMaps" aria-expanded="false" aria-controls="sidebarMaps" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarMaps" aria-expanded="false"
+                            aria-controls="sidebarMaps" class="side-nav-link">
                             <i class="uil-location-point"></i>
                             <span> Maps </span>
                             <span class="menu-arrow"></span>
@@ -957,7 +986,8 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarMultiLevel" aria-expanded="false" aria-controls="sidebarMultiLevel" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarMultiLevel" aria-expanded="false"
+                            aria-controls="sidebarMultiLevel" class="side-nav-link">
                             <i class="uil-folder-plus"></i>
                             <span> Multi Level </span>
                             <span class="menu-arrow"></span>
@@ -965,7 +995,8 @@
                         <div class="collapse" id="sidebarMultiLevel">
                             <ul class="side-nav-second-level">
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarSecondLevel" aria-expanded="false" aria-controls="sidebarSecondLevel">
+                                    <a data-bs-toggle="collapse" href="#sidebarSecondLevel" aria-expanded="false"
+                                        aria-controls="sidebarSecondLevel">
                                         <span> Second Level </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -981,7 +1012,8 @@
                                     </div>
                                 </li>
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarThirdLevel" aria-expanded="false" aria-controls="sidebarThirdLevel">
+                                    <a data-bs-toggle="collapse" href="#sidebarThirdLevel" aria-expanded="false"
+                                        aria-controls="sidebarThirdLevel">
                                         <span> Third Level </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -991,7 +1023,8 @@
                                                 <a href="javascript: void(0);">Item 1</a>
                                             </li>
                                             <li class="side-nav-item">
-                                                <a data-bs-toggle="collapse" href="#sidebarFourthLevel" aria-expanded="false" aria-controls="sidebarFourthLevel">
+                                                <a data-bs-toggle="collapse" href="#sidebarFourthLevel"
+                                                    aria-expanded="false" aria-controls="sidebarFourthLevel">
                                                     <span> Item 2 </span>
                                                     <span class="menu-arrow"></span>
                                                 </a>
@@ -1044,142 +1077,164 @@
 
                 <!-- Start Content-->
                 <div class="container-fluid">
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $conn = include_once("../conexion.php");
 
+    $book_name = htmlspecialchars(trim($_POST["book_name"]));
+    $description = htmlspecialchars(trim($_POST["description"]));
+    $cover = $_FILES["image_cover"];
+    $book = $_FILES["book"];
+    $autor = htmlspecialchars(trim($_POST["author"]));
+    $category = htmlspecialchars(trim($_POST["category"]));
+
+    // Validación de campos vacíos
+    if (empty($book_name) || empty($description) || empty($autor) || empty($category) || $cover['error'] != 0 || $book['error'] != 0) {
+        echo "<script>
+            Swal.fire({ 
+                title: 'Todos los campos son necesarios', 
+                text: 'Por favor llenar todos los campos y subir archivos.', 
+                icon: 'error' 
+            }).then(() => window.location = 'uploadbook.php');
+        </script>";
+        exit;
+    }
+
+    // Validar que solo haya texto
+    if (!preg_match("/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ.,]+$/u", $book_name) || !preg_match("/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ.,]+$/u", $description) || !preg_match("/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ.,]+$/u", $autor)) {
+        echo "<script>
+            Swal.fire({ 
+                title: 'Texto Inválido', 
+                text: 'Por favor ingrese texto válido (solo letras).', 
+                icon: 'error' 
+            }).then(() => window.location = 'uploadbook.php');
+        </script>";
+        exit;
+    }
+
+    // Verificar si ya existe
+    $stmt = $conn->prepare("SELECT * FROM libros WHERE book_name = :book_name");
+    $stmt->execute([':book_name' => $book_name]);
+    if ($stmt->fetch()) {
+        echo "<script>
+            Swal.fire({ 
+                title: 'Libro Duplicado', 
+                text: 'Este libro ya ha sido registrado.', 
+                icon: 'error' 
+            }).then(() => window.location = 'uploadbook.php');
+        </script>";
+        exit;
+    }
+
+    // Mover archivos
+    $coverPath = "../uploads/covers/" . basename($cover["name"]);
+    $bookPath = "../uploads/books/" . basename($book["name"]);
+
+    if (move_uploaded_file($cover["tmp_name"], $coverPath) && move_uploaded_file($book["tmp_name"], $bookPath)) {
+        // Guardar en la base de datos
+        $sql = "INSERT INTO libros (book_name, description, image_cover, content, author, category, estado) 
+                VALUES (:book_name, :description, :image_cover, :content, :author, :category, :estado)";
+        $stmt = $conn->prepare($sql);
+        $params = [
+            ':book_name' => $book_name,
+            ':description' => $description,
+            ':image_cover' => $coverPath,
+            ':content' => $bookPath,
+            ':author' => $autor,
+            ':category' => $category,
+            ':estado' => 1,
+        ];
+
+        if ($stmt->execute($params)) {
+            echo "<script>
+                Swal.fire({ 
+                    title: 'Éxito', 
+                    text: 'Libro registrado correctamente.', 
+                    icon: 'success' 
+                }).then(() => window.location = 'uploadbook.php');
+            </script>";
+        } else {
+            echo "<script>
+                Swal.fire({ 
+                    title: 'Error', 
+                    text: 'Hubo un error al guardar en la base de datos.', 
+                    icon: 'error' 
+                });
+            </script>";
+        }
+    } else {
+        echo "<script>
+            Swal.fire({ 
+                title: 'Error de Archivos', 
+                text: 'No se pudieron subir los archivos.', 
+                icon: 'error' 
+            });
+        </script>";
+    }
+}
+?>
+
+<!-- FORMULARIO HTML (dejas igual el diseño pero con input name correcto) -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <form method="post" action="uploadbook.php" enctype="multipart/form-data">
+                <div class="card-body">
                     <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
+                        <div class="col-xl-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" name="book_name" placeholder="Ingrese nombre del libro">
+                            </div>
 
-                                    <div class="row">
-                                        <div class="col-xl-6">
-                                            <div class="mb-3">
-                                                <label for="projectname" class="form-label">Nombre</label>
-                                                <input type="text" id="projectname" class="form-control" placeholder="Enter project name">
-                                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <textarea class="form-control" rows="5" name="description" placeholder="Ingrese descripción del libro."></textarea>
+                            </div>
 
-                                            <div class="mb-3">
-                                                <label for="project-overview" class="form-label">Descripción</label>
-                                                <textarea class="form-control" id="project-overview" rows="5" placeholder="Enter some brief about project.."></textarea>
-                                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Autor</label>
+                                <input type="text" class="form-control" name="author" placeholder="Nombre del autor">
+                            </div>
 
-                                            <!-- Date View -->
-                                            <div class="mb-3 position-relative" id="datepicker1">
-                                                <label class="form-label">Fecha de publicación</label>
-                                                <input type="text" class="form-control" data-provide="datepicker" data-date-container="#datepicker1" data-date-format="d-M-yyyy" data-date-autoclose="true">
-                                            </div>
+                            <div class="mb-0">
+                                <label class="form-label">Categoría</label>
+                                <select class="form-control" name="category">
+                                    <option value="">Seleccionar</option>
+                                    <option value="Educación">Educación</option>
+                                    <option value="Historia">Historia</option>
+                                    <option value="Ciencia Ficción">Ciencia Ficción</option>
+                                    <option value="Misterio">Misterio</option>
+                                    <option value="Fantasía">Fantasía</option>
+                                    <option value="Autoayuda">Autoayuda</option>
+                                </select>
+                            </div>
+                        </div>
 
-                                            <div class="mb-3">
-                                                <label for="project-budget" class="form-label">Autor</label>
-                                                <input type="text" id="project-budget" class="form-control" placeholder="Enter project budget">
-                                            </div>
+                        <div class="col-xl-6">
+                            <div class="mb-3 mt-3">
+                                <label class="form-label">Portada del libro</label>
+                                <input type="file" class="form-control" name="image_cover" accept="image/*" required>
+                            </div>
 
-                                            <div class="mb-0">
-                                                <label for="project-overview" class="form-label">Categoria</label>
+                            <div class="mb-3 mt-3">
+                                <label class="form-label">Archivo PDF del libro</label>
+                                <input type="file" class="form-control" name="book" accept=".pdf" required>
+                            </div>
 
-                                                <select class="form-control select2" data-toggle="select2">
-                                                    <option>Seleccionar</option>
-                                                    <option value="AZ">Educación</option>
-                                                    <option value="CO">Historia</option>
-                                                    <option value="ID">Ciencia Ficción</option>
-                                                    <option value="MT">Misterio</option>
-                                                    <option value="NE">Fantasía</option>
-                                                    <option value="NM">Autoayuda</option>
-                                                </select>
-                                            </div>
+                            <div class="mb-0 mt-4">
+                                <button class="btn btn-primary" type="submit">Registrar Libro</button>
+                            </div>
+                        </div>
+                    </div> <!-- end row -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-                                        </div> <!-- end col-->
 
-                                        <div class="col-xl-6">
-                                            <div class="mb-3 mt-3 mt-xl-0">
-                                                <label for="projectname" class="mb-0">Portada del libro</label>
-                                                <p class="text-muted font-14">Recommended thumbnail size 800x400 (px).</p>
-
-                                                <form action="https://coderthemes.com/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                                                    <div class="fallback">
-                                                        <input name="file" type="file" />
-                                                    </div>
-
-                                                    <div class="dz-message needsclick">
-                                                        <i class="h3 text-muted ri-upload-cloud-2-line"></i>
-                                                        <h4>Drop files here or click to upload.</h4>
-                                                    </div>
-                                                </form>
-
-                                                <!-- Preview -->
-                                                <div class="dropzone-previews mt-3" id="file-previews"></div>
-
-                                                <!-- file preview template -->
-                                                <div class="d-none" id="uploadPreviewTemplate">
-                                                    <div class="card mt-1 mb-0 shadow-none border">
-                                                        <div class="p-2">
-                                                            <div class="row align-items-center">
-                                                                <div class="col-auto">
-                                                                    <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
-                                                                </div>
-                                                                <div class="col ps-0">
-                                                                    <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>
-                                                                    <p class="mb-0" data-dz-size></p>
-                                                                </div>
-                                                                <div class="col-auto">
-                                                                    <!-- Button -->
-                                                                    <a href="#" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                                                                        <i class="ri-close-line"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end file preview template -->
-                                            </div>
-
-                                            <div class="mb-3 mt-3 mt-xl-0">
-                                                <label for="projectname" class="mb-0">PDF del libro</label>
-                                                <p class="text-muted font-14">Recommended thumbnail size 800x400 (px).</p>
-
-                                                <form action="https://coderthemes.com/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                                                    <div class="fallback">
-                                                        <input name="file" type="file" />
-                                                    </div>
-
-                                                    <div class="dz-message needsclick">
-                                                        <i class="h3 text-muted ri-upload-cloud-2-line"></i>
-                                                        <h4>Drop files here or click to upload.</h4>
-                                                    </div>
-                                                </form>
-
-                                                <!-- Preview -->
-                                                <div class="dropzone-previews mt-3" id="file-previews"></div>
-
-                                                <!-- file preview template -->
-                                                <div class="d-none" id="uploadPreviewTemplate">
-                                                    <div class="card mt-1 mb-0 shadow-none border">
-                                                        <div class="p-2">
-                                                            <div class="row align-items-center">
-                                                                <div class="col-auto">
-                                                                    <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
-                                                                </div>
-                                                                <div class="col ps-0">
-                                                                    <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>
-                                                                    <p class="mb-0" data-dz-size></p>
-                                                                </div>
-                                                                <div class="col-auto">
-                                                                    <!-- Button -->
-                                                                    <a href="#" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                                                                        <i class="ri-close-line"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end file preview template -->
-                                            </div>
-                                        </div> <!-- end col-->                    
-                                    </div>
-                                    <!-- end row -->
-
-                                </div> <!-- end card-body -->
+                                <!-- end card-body -->
                             </div> <!-- end card-->
                         </div> <!-- end col-->
                     </div>
@@ -1230,4 +1285,5 @@
     <script src="../assets/js/app.min.js"></script>
 
 </body>
+
 </html>

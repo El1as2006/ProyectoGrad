@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 20-05-2025 a las 22:11:52
--- Versión del servidor: 10.1.37-MariaDB
--- Versión de PHP: 7.3.1
+-- Host: 127.0.0.1
+-- Generation Time: May 27, 2025 at 04:09 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `bibliotecachaleca`
+-- Database: `bibliotecachaleca`
 --
 CREATE DATABASE IF NOT EXISTS `bibliotecachaleca` DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci;
 USE `bibliotecachaleca`;
@@ -27,72 +26,82 @@ USE `bibliotecachaleca`;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `libros`
+-- Table structure for table `libros`
 --
 
 CREATE TABLE `libros` (
   `id_book` int(11) NOT NULL,
-  `book_name` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `description` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `image_cover` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `author` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `category` varchar(200) COLLATE utf8_spanish_ci NOT NULL
+  `book_name` varchar(200) NOT NULL,
+  `description` varchar(200) NOT NULL,
+  `image_cover` varchar(200) NOT NULL,
+  `author` varchar(200) NOT NULL,
+  `category` varchar(200) NOT NULL,
+  `estado` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Dumping data for table `libros`
+--
+
+INSERT INTO `libros` (`id_book`, `book_name`, `description`, `image_cover`, `author`, `category`, `estado`) VALUES
+(1, 'librito', 'Libro para leer', 'e.png', 'fonso', 'estudio', 1),
+(2, 'Las tres mosqueteras', 'Libro de lenguaje', 'e.png', 'pruebita', 'estudio', 1),
+(3, 'craazy coaster', 'Libro mitologico', 'e.png', 'fonsito', 'estudio', 0);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios`
+-- Table structure for table `usuarios`
 --
 
 CREATE TABLE `usuarios` (
   `id_user` int(11) NOT NULL,
-  `name` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `pass` varchar(256) COLLATE utf8_spanish_ci NOT NULL,
-  `email` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `user_type` varchar(25) COLLATE utf8_spanish_ci NOT NULL
+  `name` varchar(200) NOT NULL,
+  `pass` varchar(256) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `user_type` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Volcado de datos para la tabla `usuarios`
+-- Dumping data for table `usuarios`
 --
 
 INSERT INTO `usuarios` (`id_user`, `name`, `pass`, `email`, `user_type`) VALUES
-(2, 'elias', '$2y$10$lPQS3ZRq2TpQl2D4o/zshewCf1CeIXg3IAmLya22DWjMcWQ8oN2UW', 'elias@gmail.com', 'super_admin');
+(2, 'elias', '$2y$10$lPQS3ZRq2TpQl2D4o/zshewCf1CeIXg3IAmLya22DWjMcWQ8oN2UW', 'elias@gmail.com', 1),
+(3, 'fonso', '$2y$10$lPQS3ZRq2TpQl2D4o/zshewCf1CeIXg3IAmLya22DWjMcWQ8oN2UW', 'fonso@gmail.com', 0);
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `libros`
+-- Indexes for table `libros`
 --
 ALTER TABLE `libros`
   ADD PRIMARY KEY (`id_book`);
 
 --
--- Indices de la tabla `usuarios`
+-- Indexes for table `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `libros`
+-- AUTO_INCREMENT for table `libros`
 --
 ALTER TABLE `libros`
-  MODIFY `id_book` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_book` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `usuarios`
+-- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

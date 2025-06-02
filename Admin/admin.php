@@ -8,6 +8,7 @@ $conn = include_once "../conexion.php";
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>Admin Dashboard</title>
@@ -41,7 +42,7 @@ $conn = include_once "../conexion.php";
     <!-- Begin page -->
     <div class="wrapper">
 
-        
+
         <!-- ========== Topbar Start ========== -->
         <div class="navbar-custom">
             <div class="topbar container-fluid">
@@ -88,7 +89,8 @@ $conn = include_once "../conexion.php";
                     <div class="app-search dropdown d-none d-lg-block">
                         <form>
                             <div class="input-group">
-                                <input type="search" class="form-control dropdown-toggle" placeholder="Search..." id="top-search">
+                                <input type="search" class="form-control dropdown-toggle" placeholder="Search..."
+                                    id="top-search">
                                 <span class="mdi mdi-magnify search-icon"></span>
                                 <button class="input-group-text btn btn-primary" type="submit">Search</button>
                             </div>
@@ -127,7 +129,9 @@ $conn = include_once "../conexion.php";
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                                     <div class="d-flex">
-                                        <img class="d-flex me-2 rounded-circle" src="../assets/images/users/avatar-2.jpg" alt="Generic placeholder image" height="32">
+                                        <img class="d-flex me-2 rounded-circle"
+                                            src="../assets/images/users/avatar-2.jpg" alt="Generic placeholder image"
+                                            height="32">
                                         <div class="w-100">
                                             <h5 class="m-0 font-14">Erwin Brown</h5>
                                             <span class="font-12 mb-0">UI Designer</span>
@@ -138,7 +142,9 @@ $conn = include_once "../conexion.php";
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                                     <div class="d-flex">
-                                        <img class="d-flex me-2 rounded-circle" src="../assets/images/users/avatar-5.jpg" alt="Generic placeholder image" height="32">
+                                        <img class="d-flex me-2 rounded-circle"
+                                            src="../assets/images/users/avatar-5.jpg" alt="Generic placeholder image"
+                                            height="32">
                                         <div class="w-100">
                                             <h5 class="m-0 font-14">Jacob Deo</h5>
                                             <span class="font-12 mb-0">Developer</span>
@@ -152,39 +158,46 @@ $conn = include_once "../conexion.php";
 
                 <ul class="topbar-menu d-flex align-items-center gap-3">
                     <li class="dropdown d-lg-none">
-                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="false" aria-expanded="false">
                             <i class="ri-search-line font-22"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0">
                             <form class="p-3">
-                                <input type="search" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
+                                <input type="search" class="form-control" placeholder="Search ..."
+                                    aria-label="Recipient's username">
                             </form>
                         </div>
                     </li>
 
                     <li class="dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="false" aria-expanded="false">
                             <img src="../assets/images/flags/us.jpg" alt="user-image" class="me-0 me-sm-1" height="12">
-                            <span class="align-middle d-none d-lg-inline-block">English</span> <i class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle"></i>
+                            <span class="align-middle d-none d-lg-inline-block">English</span> <i
+                                class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated">
 
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item">
-                                <img src="../assets/images/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                <img src="../assets/images/flags/spain.jpg" alt="user-image" class="me-1" height="12">
+                                <span class="align-middle">Spanish</span>
                             </a>
 
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item">
-                                <img src="../assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                <img src="../assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12">
+                                <span class="align-middle">German</span>
                             </a>
                         </div>
                     </li>
 
-                    
+
 
                     <li class="dropdown d-none d-sm-inline-block">
-                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="false" aria-expanded="false">
                             <i class="ri-apps-2-line font-22"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg p-0">
@@ -237,7 +250,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="d-none d-sm-inline-block">
-                        <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left" title="Theme Mode">
+                        <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left"
+                            title="Theme Mode">
                             <i class="ri-moon-line font-22"></i>
                         </div>
                     </li>
@@ -249,13 +263,15 @@ $conn = include_once "../conexion.php";
                     </li> -->
 
                     <li class="dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#"
+                            role="button" aria-haspopup="false" aria-expanded="false">
                             <span class="account-user-avatar">
-                                <img src="../assets/images/users/avatar-1.jpg" alt="user-image" width="32" class="rounded-circle">
+                                <img src="../assets/images/users/avatar-1.jpg" alt="user-image" width="32"
+                                    class="rounded-circle">
                             </span>
                             <span class="d-lg-flex flex-column gap-1 d-none">
                                 <h5 class="my-0"><?php
-                    //echo ($_SESSION['username']); ?></h5>                           
+                                //echo ($_SESSION['username']); ?></h5>
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
@@ -338,7 +354,8 @@ $conn = include_once "../conexion.php";
                 <!-- Leftbar User -->
                 <div class="leftbar-user">
                     <a href="pages-profile.html">
-                        <img src="../assets/images/users/avatar-1.jpg" alt="user-image" height="42" class="rounded-circle shadow-sm">
+                        <img src="../assets/images/users/avatar-1.jpg" alt="user-image" height="42"
+                            class="rounded-circle shadow-sm">
                         <span class="leftbar-user-name mt-2">Dominic Keller</span>
                     </a>
                 </div>
@@ -366,7 +383,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarCrm" aria-expanded="false" aria-controls="sidebarCrm" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarCrm" aria-expanded="false" aria-controls="sidebarCrm"
+                            class="side-nav-link">
                             <i class="uil uil-tachometer-fast"></i>
                             <span class="badge bg-danger text-white float-end">New</span>
                             <span> CRM </span>
@@ -390,7 +408,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false" aria-controls="sidebarEcommerce" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false"
+                            aria-controls="sidebarEcommerce" class="side-nav-link">
                             <i class="uil-store"></i>
                             <span> Ecommerce </span>
                             <span class="menu-arrow"></span>
@@ -426,7 +445,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarEmail" aria-expanded="false" aria-controls="sidebarEmail" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarEmail" aria-expanded="false"
+                            aria-controls="sidebarEmail" class="side-nav-link">
                             <i class="uil-envelope"></i>
                             <span> Email </span>
                             <span class="menu-arrow"></span>
@@ -444,7 +464,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarProjects" aria-expanded="false" aria-controls="sidebarProjects" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarProjects" aria-expanded="false"
+                            aria-controls="sidebarProjects" class="side-nav-link">
                             <i class="uil-briefcase"></i>
                             <span> Projects </span>
                             <span class="menu-arrow"></span>
@@ -458,7 +479,8 @@ $conn = include_once "../conexion.php";
                                     <a href="apps-projects-details.html">Details</a>
                                 </li>
                                 <li>
-                                    <a href="apps-projects-gantt.html">Gantt <span class="badge rounded-pill bg-light text-dark font-10 float-end">New</span></a>
+                                    <a href="apps-projects-gantt.html">Gantt <span
+                                            class="badge rounded-pill bg-light text-dark font-10 float-end">New</span></a>
                                 </li>
                                 <li>
                                     <a href="apps-projects-add.html">Create Project</a>
@@ -475,7 +497,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarTasks" aria-expanded="false" aria-controls="sidebarTasks" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarTasks" aria-expanded="false"
+                            aria-controls="sidebarTasks" class="side-nav-link">
                             <i class="uil-clipboard-alt"></i>
                             <span> Tasks </span>
                             <span class="menu-arrow"></span>
@@ -505,7 +528,8 @@ $conn = include_once "../conexion.php";
                     <li class="side-nav-title">Custom</li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false"
+                            aria-controls="sidebarPages" class="side-nav-link">
                             <i class="uil-copy-alt"></i>
                             <span> Pages </span>
                             <span class="menu-arrow"></span>
@@ -531,7 +555,8 @@ $conn = include_once "../conexion.php";
                                     <a href="pages-maintenance.html">Maintenance</a>
                                 </li>
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarPagesAuth" aria-expanded="false" aria-controls="sidebarPagesAuth">
+                                    <a data-bs-toggle="collapse" href="#sidebarPagesAuth" aria-expanded="false"
+                                        aria-controls="sidebarPagesAuth">
                                         <span> Authentication </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -577,7 +602,8 @@ $conn = include_once "../conexion.php";
                                     </div>
                                 </li>
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarPagesError" aria-expanded="false" aria-controls="sidebarPagesError">
+                                    <a data-bs-toggle="collapse" href="#sidebarPagesError" aria-expanded="false"
+                                        aria-controls="sidebarPagesError">
                                         <span> Error </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -617,7 +643,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarLayouts" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarLayouts" aria-expanded="false"
+                            aria-controls="sidebarLayouts" class="side-nav-link">
                             <i class="uil-window"></i>
                             <span> Layouts </span>
                             <span class="menu-arrow"></span>
@@ -652,7 +679,8 @@ $conn = include_once "../conexion.php";
                     <li class="side-nav-title">Components</li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarBaseUI" aria-expanded="false" aria-controls="sidebarBaseUI" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarBaseUI" aria-expanded="false"
+                            aria-controls="sidebarBaseUI" class="side-nav-link">
                             <i class="uil-box"></i>
                             <span> Base UI </span>
                             <span class="menu-arrow"></span>
@@ -742,7 +770,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarExtendedUI" aria-expanded="false" aria-controls="sidebarExtendedUI" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarExtendedUI" aria-expanded="false"
+                            aria-controls="sidebarExtendedUI" class="side-nav-link">
                             <i class="uil-package"></i>
                             <span> Extended UI </span>
                             <span class="menu-arrow"></span>
@@ -779,7 +808,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarIcons" aria-expanded="false" aria-controls="sidebarIcons" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarIcons" aria-expanded="false"
+                            aria-controls="sidebarIcons" class="side-nav-link">
                             <i class="uil-streering"></i>
                             <span> Icons </span>
                             <span class="menu-arrow"></span>
@@ -803,7 +833,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarCharts" aria-expanded="false" aria-controls="sidebarCharts" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarCharts" aria-expanded="false"
+                            aria-controls="sidebarCharts" class="side-nav-link">
                             <i class="uil-chart"></i>
                             <span> Charts </span>
                             <span class="menu-arrow"></span>
@@ -811,7 +842,8 @@ $conn = include_once "../conexion.php";
                         <div class="collapse" id="sidebarCharts">
                             <ul class="side-nav-second-level">
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarApexCharts" aria-expanded="false" aria-controls="sidebarApexCharts">
+                                    <a data-bs-toggle="collapse" href="#sidebarApexCharts" aria-expanded="false"
+                                        aria-controls="sidebarApexCharts">
                                         <span> Apex Charts </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -872,7 +904,8 @@ $conn = include_once "../conexion.php";
                                     </div>
                                 </li>
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarChartJSCharts" aria-expanded="false" aria-controls="sidebarChartJSCharts">
+                                    <a data-bs-toggle="collapse" href="#sidebarChartJSCharts" aria-expanded="false"
+                                        aria-controls="sidebarChartJSCharts">
                                         <span> ChartJS </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -905,7 +938,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarForms" aria-expanded="false" aria-controls="sidebarForms" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarForms" aria-expanded="false"
+                            aria-controls="sidebarForms" class="side-nav-link">
                             <i class="uil-document-layout-center"></i>
                             <span> Forms </span>
                             <span class="menu-arrow"></span>
@@ -935,7 +969,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarTables" aria-expanded="false" aria-controls="sidebarTables" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarTables" aria-expanded="false"
+                            aria-controls="sidebarTables" class="side-nav-link">
                             <i class="uil-table"></i>
                             <span> Tables </span>
                             <span class="menu-arrow"></span>
@@ -953,7 +988,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarMaps" aria-expanded="false" aria-controls="sidebarMaps" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarMaps" aria-expanded="false"
+                            aria-controls="sidebarMaps" class="side-nav-link">
                             <i class="uil-location-point"></i>
                             <span> Maps </span>
                             <span class="menu-arrow"></span>
@@ -971,7 +1007,8 @@ $conn = include_once "../conexion.php";
                     </li>
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarMultiLevel" aria-expanded="false" aria-controls="sidebarMultiLevel" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#sidebarMultiLevel" aria-expanded="false"
+                            aria-controls="sidebarMultiLevel" class="side-nav-link">
                             <i class="uil-folder-plus"></i>
                             <span> Multi Level </span>
                             <span class="menu-arrow"></span>
@@ -979,7 +1016,8 @@ $conn = include_once "../conexion.php";
                         <div class="collapse" id="sidebarMultiLevel">
                             <ul class="side-nav-second-level">
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarSecondLevel" aria-expanded="false" aria-controls="sidebarSecondLevel">
+                                    <a data-bs-toggle="collapse" href="#sidebarSecondLevel" aria-expanded="false"
+                                        aria-controls="sidebarSecondLevel">
                                         <span> Second Level </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -995,7 +1033,8 @@ $conn = include_once "../conexion.php";
                                     </div>
                                 </li>
                                 <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarThirdLevel" aria-expanded="false" aria-controls="sidebarThirdLevel">
+                                    <a data-bs-toggle="collapse" href="#sidebarThirdLevel" aria-expanded="false"
+                                        aria-controls="sidebarThirdLevel">
                                         <span> Third Level </span>
                                         <span class="menu-arrow"></span>
                                     </a>
@@ -1005,7 +1044,8 @@ $conn = include_once "../conexion.php";
                                                 <a href="javascript: void(0);">Item 1</a>
                                             </li>
                                             <li class="side-nav-item">
-                                                <a data-bs-toggle="collapse" href="#sidebarFourthLevel" aria-expanded="false" aria-controls="sidebarFourthLevel">
+                                                <a data-bs-toggle="collapse" href="#sidebarFourthLevel"
+                                                    aria-expanded="false" aria-controls="sidebarFourthLevel">
                                                     <span> Item 2 </span>
                                                     <span class="menu-arrow"></span>
                                                 </a>
@@ -1026,21 +1066,6 @@ $conn = include_once "../conexion.php";
                             </ul>
                         </div>
                     </li>
-
-
-                    <!-- Help Box -->
-                    <div class="help-box text-white text-center">
-                        <a href="javascript: void(0);" class="float-end close-btn text-white">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                        <img src="../assets/images/svg/help-icon.svg" height="90" alt="Helper Icon Image" />
-                        <h5 class="mt-3">Unlimited Access</h5>
-                        <p class="mb-3">Upgrade to plan to get access to unlimited reports</p>
-                        <a href="javascript: void(0);" class="btn btn-secondary btn-sm">Upgrade</a>
-                    </div>
-                    <!-- end Help Box -->
-
-
                 </ul>
                 <!--- End Sidemenu -->
 
@@ -1065,7 +1090,8 @@ $conn = include_once "../conexion.php";
                                 <div class="page-title-right">
                                     <form class="d-flex">
                                         <div class="input-group">
-                                            <input type="text" class="form-control form-control-light" id="dash-daterange">
+                                            <input type="text" class="form-control form-control-light"
+                                                id="dash-daterange">
                                             <span class="input-group-text bg-primary border-primary text-white">
                                                 <i class="mdi mdi-calendar-range font-13"></i>
                                             </span>
@@ -1093,16 +1119,15 @@ $conn = include_once "../conexion.php";
                                             <div class="float-end">
                                                 <i class="mdi mdi-account-multiple widget-icon"></i>
                                             </div>
-                                            <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Estudiantes</h5>
+                                            <h5 class="text-muted fw-normal mt-0" title="Number of Customers">
+                                                Estudiantes</h5>
                                             <?php
-                                            $stmt = $conn->prepare("SELECT COUNT(id_user) FROM usuarios WHERE user_type = 1");
+                                            $stmt = $conn->prepare("SELECT COUNT(id_user) FROM usuarios WHERE user_type = 0");
                                             $stmt->execute();
                                             $estudiantes = $stmt->fetch(PDO::FETCH_COLUMN);
                                             ?>
-                                            <h3 class="mt-3 mb-3"><?php echo "$estudiantes"?></h3>
+                                            <h3 class="mt-3 mb-3"><?php echo "$estudiantes" ?></h3>
                                             <p class="mb-0 text-muted">
-                                                <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                                <span class="text-nowrap">Since last month</span>
                                             </p>
                                         </div> <!-- end card-body-->
                                     </div> <!-- end card-->
@@ -1115,10 +1140,13 @@ $conn = include_once "../conexion.php";
                                                 <i class="mdi mdi-cart-plus widget-icon"></i>
                                             </div>
                                             <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Docentes</h5>
-                                            <h3 class="mt-3 mb-3">5,543</h3>
+                                            <?php
+                                            $stmt = $conn->prepare("SELECT COUNT(id_user) FROM usuarios WHERE user_type = 1");
+                                            $stmt->execute();
+                                            $docentes = $stmt->fetch(PDO::FETCH_COLUMN);
+                                            ?>
+                                            <h3 class="mt-3 mb-3"><?php echo "$docentes" ?></h3>
                                             <p class="mb-0 text-muted">
-                                                <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                                <span class="text-nowrap">Since last month</span>
                                             </p>
                                         </div> <!-- end card-body-->
                                     </div> <!-- end card-->
@@ -1132,11 +1160,15 @@ $conn = include_once "../conexion.php";
                                             <div class="float-end">
                                                 <i class="mdi mdi-currency-usd widget-icon"></i>
                                             </div>
-                                            <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Libros Disponibles</h5>
-                                            <h3 class="mt-3 mb-3">$6,254</h3>
+                                            <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Libros
+                                                Disponibles</h5>
+                                            <?php
+                                            $stmt = $conn->prepare("SELECT COUNT(id_book) FROM libros WHERE estado = 1");
+                                            $stmt->execute();
+                                            $libros_disponibles = $stmt->fetch(PDO::FETCH_COLUMN);
+                                            ?>
+                                            <h3 class="mt-3 mb-3"><?php echo "$libros_disponibles" ?></h3>
                                             <p class="mb-0 text-muted">
-                                                <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                                <span class="text-nowrap">Since last month</span>
                                             </p>
                                         </div> <!-- end card-body-->
                                     </div> <!-- end card-->
@@ -1149,10 +1181,13 @@ $conn = include_once "../conexion.php";
                                                 <i class="mdi mdi-pulse widget-icon"></i>
                                             </div>
                                             <h5 class="text-muted fw-normal mt-0" title="Growth">Libros Prestados</h5>
-                                            <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                                            <?php
+                                            $stmt = $conn->prepare("SELECT COUNT(id_book) FROM libros WHERE estado = 0");
+                                            $stmt->execute();
+                                            $libros_prestados = $stmt->fetch(PDO::FETCH_COLUMN);
+                                            ?>
+                                            <h3 class="mt-3 mb-3"><?php echo "$libros_prestados" ?></h3>
                                             <p class="mb-0 text-muted">
-                                                <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                                <span class="text-nowrap">Since last month</span>
                                             </p>
                                         </div> <!-- end card-body-->
                                     </div> <!-- end card-->
@@ -1166,7 +1201,8 @@ $conn = include_once "../conexion.php";
                                 <div class="d-flex card-header justify-content-between align-items-center">
                                     <h4 class="header-title">Projections Vs Actuals</h4>
                                     <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="mdi mdi-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -1183,7 +1219,8 @@ $conn = include_once "../conexion.php";
                                 </div>
                                 <div class="card-body pt-0">
                                     <div dir="ltr">
-                                        <div id="high-performing-product" class="apex-charts" data-colors="#727cf5,#91a6bd40"></div>
+                                        <div id="high-performing-product" class="apex-charts"
+                                            data-colors="#727cf5,#91a6bd40"></div>
                                     </div>
 
                                 </div> <!-- end card-body-->
@@ -1194,130 +1231,12 @@ $conn = include_once "../conexion.php";
                     <!-- end row -->
 
                     <div class="row">
-                        <div class="col-lg-8">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Revenue</h4>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="chart-content-bg">
-                                        <div class="row text-center">
-                                            <div class="col-sm-6">
-                                                <p class="text-muted mb-0 mt-3">Current Week</p>
-                                                <h2 class="fw-normal mb-3">
-                                                    <small class="mdi mdi-checkbox-blank-circle text-primary align-middle me-1"></small>
-                                                    <span>$58,254</span>
-                                                </h2>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p class="text-muted mb-0 mt-3">Previous Week</p>
-                                                <h2 class="fw-normal mb-3">
-                                                    <small class="mdi mdi-checkbox-blank-circle text-success align-middle me-1"></small>
-                                                    <span>$69,524</span>
-                                                </h2>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="dash-item-overlay d-none d-md-block" dir="ltr">
-                                        <h5>Today's Earning: $2,562.30</h5>
-                                        <p class="text-muted font-13 mb-3 mt-2">Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
-                                            Etiam rhoncus...</p>
-                                        <a href="javascript: void(0);" class="btn btn-outline-primary">View Statements
-                                            <i class="mdi mdi-arrow-right ms-2"></i>
-                                        </a>
-                                    </div>
-                                    <div dir="ltr">
-                                        <div id="revenue-chart" class="apex-charts mt-3" data-colors="#727cf5,#0acf97"></div>
-                                    </div>
-                                </div> <!-- end card-body-->
-                            </div> <!-- end card-->
-                        </div> <!-- end col-->
-
-                        <div class="col-lg-4">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Revenue By Location</h4>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-body pt-0">
-                                    <div class="mb-4 mt-3">
-                                        <div id="world-map-markers" style="height: 217px"></div>
-                                    </div>
-
-                                    <h5 class="mb-1 mt-0 fw-normal">New York</h5>
-                                    <div class="progress-w-percent">
-                                        <span class="progress-value fw-bold">72k </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar" role="progressbar" style="width: 72%;" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-
-                                    <h5 class="mb-1 mt-0 fw-normal">San Francisco</h5>
-                                    <div class="progress-w-percent">
-                                        <span class="progress-value fw-bold">39k </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar" role="progressbar" style="width: 39%;" aria-valuenow="39" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-
-                                    <h5 class="mb-1 mt-0 fw-normal">Sydney</h5>
-                                    <div class="progress-w-percent">
-                                        <span class="progress-value fw-bold">25k </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar" role="progressbar" style="width: 39%;" aria-valuenow="39" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-
-                                    <h5 class="mb-1 mt-0 fw-normal">Singapore</h5>
-                                    <div class="progress-w-percent mb-0">
-                                        <span class="progress-value fw-bold">61k </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar" role="progressbar" style="width: 61%;" aria-valuenow="61" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div> <!-- end card-body-->
-                            </div> <!-- end card-->
-                        </div> <!-- end col-->
-                    </div>
-                    <!-- end row -->
-
-                    <div class="row">
                         <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
                             <div class="card">
                                 <div class="d-flex card-header justify-content-between align-items-center">
                                     <h4 class="header-title">Top Selling Products</h4>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-light">Export <i class="mdi mdi-download ms-1"></i></a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-light">Export <i
+                                            class="mdi mdi-download ms-1"></i></a>
                                 </div>
 
                                 <div class="card-body pt-0">
@@ -1325,96 +1244,48 @@ $conn = include_once "../conexion.php";
                                         <table class="table table-centered table-nowrap table-hover mb-0">
                                             <tbody>
                                                 <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">ASOS Ridley High Waist</h5>
-                                                        <span class="text-muted font-13">07 April 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$79.49</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">82</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$6,518.18</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">Marco Lightweight Shirt</h5>
-                                                        <span class="text-muted font-13">25 March 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$128.50</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">37</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$4,754.50</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">Half Sleeve Shirt</h5>
-                                                        <span class="text-muted font-13">17 March 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$39.99</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">64</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$2,559.36</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">Lightweight Jacket</h5>
-                                                        <span class="text-muted font-13">12 March 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$20.00</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">184</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$3,680.00</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">Marco Shoes</h5>
-                                                        <span class="text-muted font-13">05 March 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$28.49</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">69</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$1,965.81</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
+                                                    <div class="card-body pt-0">
+                                                        <div class="table-responsive">
+                                                            <table
+                                                                class="table table-centered table-nowrap table-hover mb-0">
+                                                                <tbody>
+                                                                    <?php
+                                                                    $stmt = $conn->prepare("SELECT book_name, description, author, category, estado FROM libros");
+                                                                    $stmt->execute();
+                                                                    $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+                                                                    if ($libros) {
+                                                                        foreach ($libros as $libro) {
+                                                                            // Calcular el monto total
+                                                                            //$total = $libro['precio'] * $libro['cantidad'];
+                                                                            $estado = $libro["estado"] == 1 ? "Disponible" : "No disponible";
+                                                                            echo '<tr>';
+                                                                            echo '<td>';
+                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($libro["book_name"]) . '</h5>';
+                                                                            echo '</td>';
+                                                                            echo '<td>';
+                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($libro["description"]) . '</h5>';
+                                                                            echo '<span class="text-muted font-13">Description</span>';
+                                                                            echo '</td>';
+                                                                            echo '<td>';
+                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($libro["author"]) . '</h5>';
+                                                                            echo '<span class="text-muted font-13">Author</span>';
+                                                                            echo '</td>';
+                                                                            echo '<td>';
+                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($libro["category"]) . '</h5>';
+                                                                            echo '<span class="text-muted font-13">Category</span>';
+                                                                            echo '</td>';
+                                                                            echo '<td>';
+                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($estado) . '</h5>';
+                                                                            echo '<span class="text-muted font-13">Book Status</span>';
+                                                                            echo '</td>';
+                                                                            
+                                                                        }
+                                                                    } else {
+                                                                        echo '<tr><td colspan="4">No hay libros disponibles.</td></tr>';
+                                                                    }
+                                                                    ?>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div> <!-- end table-responsive-->
@@ -1427,7 +1298,8 @@ $conn = include_once "../conexion.php";
                                 <div class="d-flex card-header justify-content-between align-items-center">
                                     <h4 class="header-title">Total Sales</h4>
                                     <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="mdi mdi-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -1444,7 +1316,8 @@ $conn = include_once "../conexion.php";
                                 </div>
 
                                 <div class="card-body pt-0">
-                                    <div id="average-sales" class="apex-charts mb-4 mt-2" data-colors="#727cf5,#0acf97,#fa5c7c,#ffbc00"></div>
+                                    <div id="average-sales" class="apex-charts mb-4 mt-2"
+                                        data-colors="#727cf5,#0acf97,#fa5c7c,#ffbc00"></div>
 
 
                                     <div class="chart-widget-list">
@@ -1474,7 +1347,8 @@ $conn = include_once "../conexion.php";
                                 <div class="d-flex card-header justify-content-between align-items-center">
                                     <h4 class="header-title">Recent Activity</h4>
                                     <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="mdi mdi-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -1495,7 +1369,8 @@ $conn = include_once "../conexion.php";
                                         <div class="timeline-item">
                                             <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
                                             <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You sold an item</a>
+                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You
+                                                    sold an item</a>
                                                 <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
                                                 <p class="mb-0 pb-2">
                                                     <small class="text-muted">5 minutes ago</small>
@@ -1504,9 +1379,12 @@ $conn = include_once "../conexion.php";
                                         </div>
 
                                         <div class="timeline-item">
-                                            <i class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
+                                            <i
+                                                class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
                                             <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap Market</a>
+                                                <a href="javascript:void(0);"
+                                                    class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap
+                                                    Market</a>
                                                 <small>Dave Gamache added
                                                     <span class="fw-bold">Admin Dashboard</span>
                                                 </small>
@@ -1519,7 +1397,8 @@ $conn = include_once "../conexion.php";
                                         <div class="timeline-item">
                                             <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
                                             <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
+                                                <a href="javascript:void(0);"
+                                                    class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
                                                 <small>Send you message
                                                     <span class="fw-bold">"Are you there?"</span>
                                                 </small>
@@ -1532,7 +1411,8 @@ $conn = include_once "../conexion.php";
                                         <div class="timeline-item">
                                             <i class="mdi mdi-upload bg-primary-lighten text-primary timeline-icon"></i>
                                             <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-primary fw-bold mb-1 d-block">Audrey Tobey</a>
+                                                <a href="javascript:void(0);"
+                                                    class="text-primary fw-bold mb-1 d-block">Audrey Tobey</a>
                                                 <small>Uploaded a photo
                                                     <span class="fw-bold">"Error.jpg"</span>
                                                 </small>
@@ -1545,7 +1425,8 @@ $conn = include_once "../conexion.php";
                                         <div class="timeline-item">
                                             <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
                                             <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You sold an item</a>
+                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You
+                                                    sold an item</a>
                                                 <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
                                                 <p class="mb-0 pb-2">
                                                     <small class="text-muted">16 hours ago</small>
@@ -1554,9 +1435,12 @@ $conn = include_once "../conexion.php";
                                         </div>
 
                                         <div class="timeline-item">
-                                            <i class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
+                                            <i
+                                                class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
                                             <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap Market</a>
+                                                <a href="javascript:void(0);"
+                                                    class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap
+                                                    Market</a>
                                                 <small>Dave Gamache added
                                                     <span class="fw-bold">Admin Dashboard</span>
                                                 </small>
@@ -1569,7 +1453,8 @@ $conn = include_once "../conexion.php";
                                         <div class="timeline-item">
                                             <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
                                             <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
+                                                <a href="javascript:void(0);"
+                                                    class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
                                                 <small>Send you message
                                                     <span class="fw-bold">"Are you there?"</span>
                                                 </small>
@@ -1645,4 +1530,5 @@ $conn = include_once "../conexion.php";
     <script src="../assets/js/app.min.js"></script>
 
 </body>
+
 </html>

@@ -211,7 +211,7 @@
                     <h3>Enlaces Rápidos</h3>
                     <ul>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Inicio</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Catálogo</a></li>
+                        <li><a href="catalogo.php"><i class="fas fa-chevron-right"></i> Catálogo</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> E-books</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Audiolibros</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Eventos</a></li>
