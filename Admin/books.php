@@ -6,25 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
-
-    <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
-
-    <!-- Datatable css -->
     <link href="../assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- Theme Config Js -->
     <script src="../assets/js/hyper-config.js"></script>
-
-    <!-- Vendor css -->
     <link href="../assets/css/vendor.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- App css -->
     <link href="../assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
-
-    <!-- Icons css -->
     <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" href="../package/dist/sweetalert2.css">
+    <script src="../package/dist/sweetalert2.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body>
@@ -1106,9 +1098,10 @@ try {
                                                         <a href="editbook.php?id=<?php echo $row['id_book']; ?>" class="action-icon">
                                                             <i class="mdi mdi-square-edit-outline"></i>
                                                         </a>
-                                                        <a href="deletebook.php?id=<?php echo $row['id_book']; ?>" class="action-icon">
+                                                        <a href="#" onclick="confirmarEliminacion(<?php echo $row['id_book']; ?>)" class="action-icon">
                                                             <i class="mdi mdi-delete"></i>
                                                         </a>
+
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -1173,6 +1166,26 @@ try {
 
     <!-- App js -->
     <script src="../assets/js/app.min.js"></script>
+
+    <script>
+function confirmarEliminacion(id) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡Esta acción desactivará el libro!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = `deletebook.php?id=${id}`;
+        }
+    });
+}
+</script>
+
 
 </body>
 </html>
