@@ -23,7 +23,7 @@
                 <nav class="nav-menu">
                     <ul>
                         <li><a href="#"><i class="fas fa-home"></i> Inicio</a></li>
-                        <li><a href="#"><i class="fas fa-book"></i> Catálogo</a></li>
+                        <li><a href="catalogo.php"><i class="fas fa-book"></i> Catálogo</a></li>
                         <li><a href="#"><i class="fas fa-bookmark"></i> Mis Libros</a></li>
                         <li><a href="#"><i class="fas fa-calendar-alt"></i> Eventos</a></li>
                         <li><a href="#"><i class="fas fa-info-circle"></i> Acerca de</a></li>

@@ -2,7 +2,7 @@
 $host = 'localhost';
 $dbname = 'bibliotecachaleca';
 $user = 'root';
-$pass = '';
+$pass = 'Info2025/*-';
 $charset = 'utf8mb4';
 
 $options = [
