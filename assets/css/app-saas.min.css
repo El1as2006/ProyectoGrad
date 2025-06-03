@@ -18,7 +18,7 @@
 }
 
 html[data-menu-color=dark] {
-    --ct-menu-bg: #FFD700; /* Fondo amarillo dorado */
+    --ct-menu-bg: rgb(0 0 0 / 60%); /* Fondo amarillo dorado */
     --ct-menu-item-color: #000000; /* Texto negro */
     --ct-menu-item-hover-color: #333333; /* Negro más suave al hacer hover */
     --ct-menu-item-active-color: #000000; /* Ítem activo también en negro */
@@ -26,7 +26,7 @@ html[data-menu-color=dark] {
 }
 
 html[data-topbar-color=light] {
-    --ct-topbar-bg: #FFD700; /* Fondo amarillo */
+    --ct-topbar-bg: #f5d84cc2; /* Fondo amarillo */
     --ct-topbar-item-color: #000000; /* Ítems del topbar en negro */
     --ct-topbar-item-hover-color: #333333; /* Hover en gris oscuro */
     --ct-topbar-search-bg: #FFFACD; /* Fondo claro para buscador */
@@ -46,24 +46,24 @@ html[data-menu-color=brand] {
 html[data-bs-theme=dark][data-menu-color=dark],
 html[data-bs-theme=dark][data-menu-color=light] {
     --ct-menu-bg: #000000; /* Negro */
-    --ct-menu-item-color: #FFD700; /* Amarillo */
-    --ct-menu-item-hover-color: #fff176;
+    --ct-menu-item-color: #f5d84cc2; /* Amarillo */
+    --ct-menu-item-hover-color: #f5d84cc2;
     --ct-menu-item-active-color: #ffffff;
     --ct-help-box-bg: rgba(255, 255, 0, 0.1);
 }
 
 html[data-topbar-color=light] {
-    --ct-topbar-bg: #FFD700;
+    --ct-topbar-bg: #f5d84cc2;
     --ct-topbar-item-color: #000000;
     --ct-topbar-item-hover-color: #000000;
     --ct-topbar-search-bg: #f0f3f8;
-    --ct-topbar-user-bg: #FFD700;
+    --ct-topbar-user-bg: #f5d84cc2;
     --ct-topbar-user-border: #eef2f7
 }
 
 html[data-topbar-color=dark] {
     --ct-topbar-bg: #313a46;
-    --ct-topbar-item-color: #FFD700;
+    --ct-topbar-item-color: #f5d84cc2;
     --ct-topbar-item-hover-color: #bccee4;
     --ct-topbar-search-bg: #464f5b;
     --ct-topbar-user-bg: #3c4655;
@@ -82,7 +82,7 @@ html[data-topbar-color=brand] {
 html[data-bs-theme=dark][data-topbar-color=dark],
 html[data-bs-theme=dark][data-topbar-color=light] {
     --ct-topbar-bg: #000000;
-    --ct-topbar-item-color: #FFD700;
+    --ct-topbar-item-color: #f5d84cc2;
     --ct-topbar-item-hover-color: #bccee4;
     --ct-topbar-search-bg: #464f5b;
     --ct-topbar-user-bg: #000000;
@@ -3989,8 +3989,8 @@ fieldset:disabled .btn {
 }
 
 .btn-primary {
-    --ct-btn-color: #fff;
-    --ct-btn-bg: #020403;
+    --ct-btn-color: #ffd300;
+    --ct-btn-bg: rgb(0 0 0 / 60%);
     --ct-btn-border-color: #727cf5;
     --ct-btn-hover-color: #fff;
     --ct-btn-hover-bg: #6973e3;
@@ -10899,7 +10899,7 @@ fieldset:disabled .btn {
 
 .bg-primary {
     --ct-bg-opacity: 1;
-    background-color: rgba(19 20 29) !important
+    background-color: rgb(0 0 0 / 60%)
 }
 
 .bg-secondary {
@@ -19986,9 +19986,9 @@ input[data-switch=dark]:checked+label {
 }
 
 .widget-icon {
-    color: #FFD700;
+    color: #ffd300;
     font-size: 20px;
-    background-color: rgb(238 241 10 / 69%);
+    background-color: rgb(0 0 0 / 60%);
     height: 40px;
     width: 40px;
     text-align: center;
