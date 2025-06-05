@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "biblioteca";
+$dbname = "bibliotecachaleca";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
