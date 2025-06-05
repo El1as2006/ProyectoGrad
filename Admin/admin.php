@@ -1230,280 +1230,250 @@ $conn = include_once "../conexion.php";
                     </div>
                     <!-- end row -->
 
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Top Selling Products</h4>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-light">Export <i
-                                            class="mdi mdi-download ms-1"></i></a>
-                                </div>
+                    <!--Grafica de PASTEL-->
+                    <?php
+                    $stmt = $conn->prepare("
+    SELECT category, SUM(stock) AS cantidad 
+    FROM libros 
+    WHERE estado = 1 
+    GROUP BY category
+");
+                    $stmt->execute();
+                    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                                <div class="card-body pt-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-centered table-nowrap table-hover mb-0">
-                                            <tbody>
-                                                <tr>
-                                                    <div class="card-body pt-0">
-                                                        <div class="table-responsive">
-                                                            <table
-                                                                class="table table-centered table-nowrap table-hover mb-0">
-                                                                <tbody>
-                                                                    <?php
-                                                                    $stmt = $conn->prepare("SELECT book_name, description, author, category, estado FROM libros");
-                                                                    $stmt->execute();
-                                                                    $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    // Preparar datos para la gráfica
+                    $labels = [];
+                    $data = [];
 
-                                                                    if ($libros) {
-                                                                        foreach ($libros as $libro) {
-                                                                            // Calcular el monto total
-                                                                            //$total = $libro['precio'] * $libro['cantidad'];
-                                                                            $estado = $libro["estado"] == 1 ? "Disponible" : "No disponible";
-                                                                            echo '<tr>';
-                                                                            echo '<td>';
-                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($libro["book_name"]) . '</h5>';
-                                                                            echo '</td>';
-                                                                            echo '<td>';
-                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($libro["description"]) . '</h5>';
-                                                                            echo '<span class="text-muted font-13">Description</span>';
-                                                                            echo '</td>';
-                                                                            echo '<td>';
-                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($libro["author"]) . '</h5>';
-                                                                            echo '<span class="text-muted font-13">Author</span>';
-                                                                            echo '</td>';
-                                                                            echo '<td>';
-                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($libro["category"]) . '</h5>';
-                                                                            echo '<span class="text-muted font-13">Category</span>';
-                                                                            echo '</td>';
-                                                                            echo '<td>';
-                                                                            echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($estado) . '</h5>';
-                                                                            echo '<span class="text-muted font-13">Book Status</span>';
-                                                                            echo '</td>';
-                                                                            
-                                                                        }
-                                                                    } else {
-                                                                        echo '<tr><td colspan="4">No hay libros disponibles.</td></tr>';
-                                                                    }
-                                                                    ?>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div> <!-- end table-responsive-->
-                                </div> <!-- end card-body-->
-                            </div> <!-- end card-->
-                        </div> <!-- end col-->
+                    foreach ($categorias as $cat) {
+                        $labels[] = $cat['category'];
+                        $data[] = (int) $cat['cantidad'];
+                    }
+                    ?>
 
-                        <div class="col-xl-3 col-lg-6 order-lg-1">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Total Sales</h4>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
+                    <div class="col-xl-3 col-lg-6 order-lg-1">
+                        <div class="card">
+                            <div class="d-flex card-header justify-content-between align-items-center">
+                                <h4 class="header-title">Stock por Categoría</h4>
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <i class="mdi mdi-dots-vertical"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a href="javascript:void(0);" class="dropdown-item">Ver Detalles</a>
+                                        <a href="javascript:void(0);" class="dropdown-item">Exportar</a>
                                     </div>
                                 </div>
-
-                                <div class="card-body pt-0">
-                                    <div id="average-sales" class="apex-charts mb-4 mt-2"
-                                        data-colors="#727cf5,#0acf97,#fa5c7c,#ffbc00"></div>
-
-
-                                    <div class="chart-widget-list">
-                                        <p>
-                                            <i class="mdi mdi-square text-primary"></i> Direct
-                                            <span class="float-end">$300.56</span>
-                                        </p>
-                                        <p>
-                                            <i class="mdi mdi-square text-danger"></i> Affilliate
-                                            <span class="float-end">$135.18</span>
-                                        </p>
-                                        <p>
-                                            <i class="mdi mdi-square text-success"></i> Sponsored
-                                            <span class="float-end">$48.96</span>
-                                        </p>
-                                        <p class="mb-0">
-                                            <i class="mdi mdi-square text-warning"></i> E-mail
-                                            <span class="float-end">$154.02</span>
-                                        </p>
-                                    </div>
-                                </div> <!-- end card-body-->
-                            </div> <!-- end card-->
-                        </div> <!-- end col-->
-
-                        <div class="col-xl-3 col-lg-6 order-lg-1">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Recent Activity</h4>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-body py-0 mb-3" data-simplebar style="max-height: 403px;">
-                                    <div class="timeline-alt py-0">
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You
-                                                    sold an item</a>
-                                                <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">5 minutes ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i
-                                                class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);"
-                                                    class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap
-                                                    Market</a>
-                                                <small>Dave Gamache added
-                                                    <span class="fw-bold">Admin Dashboard</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">30 minutes ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);"
-                                                    class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
-                                                <small>Send you message
-                                                    <span class="fw-bold">"Are you there?"</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">2 hours ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-upload bg-primary-lighten text-primary timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);"
-                                                    class="text-primary fw-bold mb-1 d-block">Audrey Tobey</a>
-                                                <small>Uploaded a photo
-                                                    <span class="fw-bold">"Error.jpg"</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">14 hours ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You
-                                                    sold an item</a>
-                                                <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">16 hours ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i
-                                                class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);"
-                                                    class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap
-                                                    Market</a>
-                                                <small>Dave Gamache added
-                                                    <span class="fw-bold">Admin Dashboard</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">22 hours ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);"
-                                                    class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
-                                                <small>Send you message
-                                                    <span class="fw-bold">"Are you there?"</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">2 days ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end timeline -->
-                                </div> <!-- end simplebar -->
                             </div>
-                            <!-- end card-->
-                        </div>
-                        <!-- end col -->
 
+                            <div class="card-body pt-0">
+                                <div id="grafica-libros" class="apex-charts mb-4 mt-2"
+                                    data-colors="#727cf5,#0acf97,#fa5c7c,#ffbc00,#39afd1"></div>
+
+                                <div class="chart-widget-list">
+                                    <?php foreach ($categorias as $i => $cat): ?>
+                                        <p class="<?= $i === array_key_last($categorias) ? 'mb-0' : '' ?>">
+                                            <i class="mdi mdi-square"
+                                                style="color: <?= ['#727cf5', '#0acf97', '#fa5c7c', '#ffbc00', '#39afd1'][$i % 5] ?>"></i>
+                                            <?= htmlspecialchars($cat['category']) ?>
+                                            <span class="float-end"><?= $cat['cantidad'] ?> unidades</span>
+                                        </p>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- end row -->
+
+                    <!-- Script de ApexCharts -->
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            var options = {
+                                chart: {
+                                    type: 'pie',
+                                    height: 300
+                                },
+                                labels: <?php echo json_encode($labels); ?>,
+                                series: <?php echo json_encode($data); ?>,
+                                colors: ['#727cf5', '#0acf97', '#fa5c7c', '#ffbc00', '#39afd1'],
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                tooltip: {
+                                    y: {
+                                        formatter: function (val) {
+                                            return val + " unidades en stock";
+                                        }
+                                    }
+                                }
+                            };
+
+                            var chart = new ApexCharts(document.querySelector("#grafica-libros"), options);
+                            chart.render();
+                        });
+                    </script>
+
+
+                    <div class="col-xl-3 col-lg-6 order-lg-1">
+                        <div class="card">
+                            <div class="d-flex card-header justify-content-between align-items-center">
+                                <h4 class="header-title">Recent Activity</h4>
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <i class="mdi mdi-dots-vertical"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <!-- item-->
+                                        <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
+                                        <!-- item-->
+                                        <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
+                                        <!-- item-->
+                                        <a href="javascript:void(0);" class="dropdown-item">Profit</a>
+                                        <!-- item-->
+                                        <a href="javascript:void(0);" class="dropdown-item">Action</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body py-0 mb-3" data-simplebar style="max-height: 403px;">
+                                <div class="timeline-alt py-0">
+                                    <div class="timeline-item">
+                                        <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
+                                        <div class="timeline-item-info">
+                                            <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You
+                                                sold an item</a>
+                                            <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
+                                            <p class="mb-0 pb-2">
+                                                <small class="text-muted">5 minutes ago</small>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <i class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
+                                        <div class="timeline-item-info">
+                                            <a href="javascript:void(0);"
+                                                class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap
+                                                Market</a>
+                                            <small>Dave Gamache added
+                                                <span class="fw-bold">Admin Dashboard</span>
+                                            </small>
+                                            <p class="mb-0 pb-2">
+                                                <small class="text-muted">30 minutes ago</small>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
+                                        <div class="timeline-item-info">
+                                            <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">Robert
+                                                Delaney</a>
+                                            <small>Send you message
+                                                <span class="fw-bold">"Are you there?"</span>
+                                            </small>
+                                            <p class="mb-0 pb-2">
+                                                <small class="text-muted">2 hours ago</small>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <i class="mdi mdi-upload bg-primary-lighten text-primary timeline-icon"></i>
+                                        <div class="timeline-item-info">
+                                            <a href="javascript:void(0);"
+                                                class="text-primary fw-bold mb-1 d-block">Audrey Tobey</a>
+                                            <small>Uploaded a photo
+                                                <span class="fw-bold">"Error.jpg"</span>
+                                            </small>
+                                            <p class="mb-0 pb-2">
+                                                <small class="text-muted">14 hours ago</small>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
+                                        <div class="timeline-item-info">
+                                            <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You
+                                                sold an item</a>
+                                            <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
+                                            <p class="mb-0 pb-2">
+                                                <small class="text-muted">16 hours ago</small>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <i class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
+                                        <div class="timeline-item-info">
+                                            <a href="javascript:void(0);"
+                                                class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap
+                                                Market</a>
+                                            <small>Dave Gamache added
+                                                <span class="fw-bold">Admin Dashboard</span>
+                                            </small>
+                                            <p class="mb-0 pb-2">
+                                                <small class="text-muted">22 hours ago</small>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
+                                        <div class="timeline-item-info">
+                                            <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">Robert
+                                                Delaney</a>
+                                            <small>Send you message
+                                                <span class="fw-bold">"Are you there?"</span>
+                                            </small>
+                                            <p class="mb-0 pb-2">
+                                                <small class="text-muted">2 days ago</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end timeline -->
+                            </div> <!-- end simplebar -->
+                        </div>
+                        <!-- end card-->
+                    </div>
+                    <!-- end col -->
 
                 </div>
-                <!-- container -->
+                <!-- end row -->
 
             </div>
-            <!-- content -->
+            <!-- container -->
 
-            <!-- Footer Start -->
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
-                        </div>
-                        <div class="col-md-6">
-                            <div class="text-md-end footer-links d-none d-md-block">
-                                <a href="javascript: void(0);">About</a>
-                                <a href="javascript: void(0);">Support</a>
-                                <a href="javascript: void(0);">Contact Us</a>
-                            </div>
+        </div>
+        <!-- content -->
+
+        <!-- Footer Start -->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-md-end footer-links d-none d-md-block">
+                            <a href="javascript: void(0);">About</a>
+                            <a href="javascript: void(0);">Support</a>
+                            <a href="javascript: void(0);">Contact Us</a>
                         </div>
                     </div>
                 </div>
-            </footer>
-            <!-- end Footer -->
+            </div>
+        </footer>
+        <!-- end Footer -->
 
-        </div>
+    </div>
 
-        <!-- ============================================================== -->
-        <!-- End Page content -->
-        <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- End Page content -->
+    <!-- ============================================================== -->
 
     </div>
     <!-- END wrapper -->
