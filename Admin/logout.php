@@ -1,17 +1,9 @@
 <?php
 session_start();
-
-// Guardar tipo de usuario antes de destruir sesión
-$rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : null;
-
-// Cerrar sesión
+// Destruir todas las variables de sesión
 session_unset();
+// Destruir la sesión
 session_destroy();
-
-// Redirigir según rol
-if ($rol === 'admin') {
-    header("Location: login.php");
-} else {
-    header("Location: /ProyectoGrad/index.php");
-}
+// Redirigir al usuario al login
+header("Location: Admin/login.php");
 exit;
