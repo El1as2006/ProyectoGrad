@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
@@ -24,7 +26,10 @@ $libros = $conn->query('SELECT id, titulo FROM libros WHERE disponible = 1 ORDER
 
 $mensaje = '';
 $errores = [];
-$estudiante_id = $libro_id = $fecha_prestamo = $fecha_devolucion = '';
+$estudiante_id = $_POST['estudiante_id'] ?? ($_GET['estudiante_id'] ?? '');
+$libro_id = $_POST['libro_id'] ?? '';
+$fecha_prestamo = $_POST['fecha_prestamo'] ?? '';
+$fecha_devolucion = $_POST['fecha_devolucion'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_usuario = $_POST['estudiante_id'] ?? '';
@@ -39,6 +44,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$fecha_devolucion) { $errores[] = 'La fecha de devolución es obligatoria.'; }
     if ($fecha_prestamo && $fecha_devolucion && $fecha_prestamo > $fecha_devolucion) { $errores[] = 'La fecha de devolución debe ser posterior a la de préstamo.'; }
 
+    // Verificar que el libro esté disponible
+    $libro_disp = $conn->prepare('SELECT disponible FROM libros WHERE id = ?');
+    $libro_disp->bind_param('i', $id_libro);
+    $libro_disp->execute();
+    $libro_disp->bind_result($disponible);
+    $libro_disp->fetch();
+    $libro_disp->close();
+    if ($disponible != 1) {
+        $errores[] = 'El libro seleccionado no está disponible.';
+    }
+
+    // Verificar que el estudiante no tenga un préstamo activo del mismo libro
+    $stmtCheck = $conn->prepare('SELECT COUNT(*) FROM prestamos WHERE id_usuario = ? AND id_libro = ? AND status = "no entregado"');
+    $stmtCheck->bind_param('ii', $id_usuario, $id_libro);
+    $stmtCheck->execute();
+    $stmtCheck->bind_result($prestamo_activo);
+    $stmtCheck->fetch();
+    $stmtCheck->close();
+    if ($prestamo_activo > 0) {
+        $errores[] = 'Este estudiante ya tiene un préstamo activo de este libro.';
+    }
+
     if (empty($errores)) {
         $stmt = $conn->prepare('INSERT INTO prestamos (id_usuario, id_libro, fecha_prestamo, fecha_devolucion, status) VALUES (?, ?, ?, ?, ?)');
         $stmt->bind_param('iisss', $id_usuario, $id_libro, $fecha_prestamo, $fecha_devolucion, $status);
@@ -48,56 +75,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             require_once '../assets/phpqrcode/qrcode.php';
             $qr_dir = '../uploads/qr/';
             if (!is_dir($qr_dir)) { mkdir($qr_dir, 0777, true); }
-            $qr_data = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/detalle_prestamo.php?id=" . $prestamo_id;
+            $qr_data = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/detalle_prestamo.php?id=" . $prestamo_id . "&accion=devolver";
             $qr_file = $qr_dir . "prestamo_{$prestamo_id}.png";
             $qr = QRCode::getMinimumQRCode($qr_data, QR_ERROR_CORRECT_LEVEL_L);
             $img = $qr->createImage(6, 2);
             imagepng($img, $qr_file);
             imagedestroy($img);
+            // Guardar ruta del QR en la base de datos
+            $stmtQr = $conn->prepare('UPDATE prestamos SET qr_prestamo = ? WHERE id_prestamo = ?');
+            $qr_db_path = 'uploads/qr/prestamo_' . $prestamo_id . '.png';
+            $stmtQr->bind_param('si', $qr_db_path, $prestamo_id);
+            $stmtQr->execute();
+            $stmtQr->close();
             // Marcar libro como no disponible
             $conn->query("UPDATE libros SET disponible = 0 WHERE id = $id_libro");
-            $mensaje = 'Préstamo registrado correctamente.';
-            // Obtener correo y nombre del estudiante
-            $stmtUser = $conn->prepare('SELECT gmail_institucional, nombre FROM usuarios WHERE id_usuario = ? AND rol = "estudiante"');
-            if ($stmtUser) {
-                $stmtUser->bind_param('i', $id_usuario);
-                $stmtUser->execute();
-                $stmtUser->bind_result($correo_est, $nombre_est);
-                $stmtUser->fetch();
-                $stmtUser->close();
-                // Enviar correo de notificación
-                $asunto = 'Nuevo préstamo de libro';
-                $cuerpo = "Hola $nombre_est,\n\nSe ha registrado un nuevo préstamo de libro en la biblioteca.\n\nFecha de préstamo: $fecha_prestamo\nFecha de devolución: $fecha_devolucion\n\nPor favor, entrega el libro a tiempo.";
-                @mail($correo_est, $asunto, $cuerpo, "From: biblioteca@tudominio.com");
-            } else {
-                $errores[] = 'No se pudo obtener el correo del estudiante: ' . $conn->error;
-            }
-            // Obtener id_usuario correspondiente al estudiante
-            $id_usuario_notif = null;
-            $stmtUserId = $conn->prepare('SELECT id_usuario FROM estudiantes WHERE id = ?');
-            if ($stmtUserId) {
-                $stmtUserId->bind_param('i', $id_usuario);
-                $stmtUserId->execute();
-                $stmtUserId->bind_result($id_usuario_notif);
-                $stmtUserId->fetch();
-                $stmtUserId->close();
-            }
-            // Registrar notificación en la base de datos solo si se obtuvo el id_usuario
+            // Notificación para el estudiante
             $tipo = 'prestamo';
             $mensaje_notif = 'Nuevo préstamo registrado. Fecha devolución: ' . $fecha_devolucion;
-            if ($id_usuario_notif) {
-                $stmtNotif = $conn->prepare('INSERT INTO notificaciones (usuario_id, tipo, mensaje) VALUES (?, ?, ?)');
-                if ($stmtNotif) {
-                    $stmtNotif->bind_param('iss', $id_usuario_notif, $tipo, $mensaje_notif);
-                    $stmtNotif->execute();
-                    $stmtNotif->close();
-                } else {
-                    $errores[] = 'Error al preparar la notificación: ' . $conn->error . ' | Consulta: INSERT INTO notificaciones (usuario_id, tipo, mensaje) VALUES (?, ?, ?)';
-                }
-            } else {
-                $errores[] = 'No se pudo obtener el usuario vinculado al estudiante para la notificación.';
+            $stmtNotif = $conn->prepare('INSERT INTO notificaciones (usuario_id, tipo, mensaje) VALUES (?, ?, ?)');
+            $stmtNotif->bind_param('iss', $id_usuario, $tipo, $mensaje_notif);
+            $stmtNotif->execute();
+            $stmtNotif->close();
+            // Notificación para todos los admins
+            $admins = $conn->query("SELECT id_usuario FROM usuarios WHERE rol='admin' OR rol='super_admin'");
+            while($admin = $admins->fetch_assoc()) {
+                $stmtNotifA = $conn->prepare('INSERT INTO notificaciones (usuario_id, tipo, mensaje) VALUES (?, ?, ?)');
+                $msg = 'Nuevo préstamo realizado por el estudiante ID: ' . $id_usuario;
+                $stmtNotifA->bind_param('iss', $admin['id_usuario'], $tipo, $msg);
+                $stmtNotifA->execute();
+                $stmtNotifA->close();
             }
-            $id_usuario = $id_libro = $fecha_prestamo = $fecha_devolucion = '';
+            $mensaje = 'Préstamo registrado correctamente. <br> <b>QR generado:</b><br><img src="../' . $qr_db_path . '" alt="QR Préstamo" style="width:120px;">';
+            $estudiante_id = $libro_id = $fecha_prestamo = $fecha_devolucion = '';
         } else {
             $errores[] = 'Error al registrar el préstamo.';
         }
@@ -142,6 +151,7 @@ if (isset($_GET['carnet']) || isset($_GET['carnet_manual'])) {
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">
@@ -218,25 +228,46 @@ if (isset($_GET['carnet']) || isset($_GET['carnet_manual'])) {
                                     </div>
                                     <script src="../assets/js/html5-qrcode.min.js"></script>
                                     <script>
+                                    let html5QrCodeInstance = null;
                                     function escanearQR() {
-                                        document.getElementById('qr-scanner').style.display = 'block';
-                                        if (!window.qrScannerLoaded) {
-                                            const qrDiv = document.getElementById('qr-scanner');
-                                            const html5QrCode = new Html5Qrcode("qr-scanner");
-                                            html5QrCode.start(
-                                                { facingMode: "environment" },
-                                                { fps: 10, qrbox: 200 },
-                                                qrCodeMessage => {
-                                                    document.getElementById('carnetInput').value = qrCodeMessage;
-                                                    html5QrCode.stop();
-                                                    qrDiv.innerHTML = '';
-                                                    qrDiv.style.display = 'none';
-                                                },
-                                                errorMessage => {}
-                                            ).catch(err => {
-                                                qrDiv.innerHTML = '<span class="text-danger">No se pudo acceder a la cámara</span>';
+                                        const qrDiv = document.getElementById('qr-scanner');
+                                        qrDiv.style.display = 'block';
+                                        qrDiv.innerHTML = '';
+                                        if (html5QrCodeInstance) {
+                                            html5QrCodeInstance.stop().then(() => {
+                                                html5QrCodeInstance.clear();
+                                                iniciarEscaneo();
+                                            }).catch(() => {
+                                                iniciarEscaneo();
                                             });
-                                            window.qrScannerLoaded = true;
+                                        } else {
+                                            iniciarEscaneo();
+                                        }
+                                        function iniciarEscaneo() {
+                                            html5QrCodeInstance = new Html5Qrcode("qr-scanner");
+                                            Html5Qrcode.getCameras().then(cameras => {
+                                                if (cameras && cameras.length) {
+                                                    html5QrCodeInstance.start(
+                                                        { facingMode: "environment" },
+                                                        { fps: 10, qrbox: 200 },
+                                                        qrCodeMessage => {
+                                                            document.getElementById('carnetInput').value = qrCodeMessage;
+                                                            html5QrCodeInstance.stop().then(() => {
+                                                                html5QrCodeInstance.clear();
+                                                                qrDiv.innerHTML = '';
+                                                                qrDiv.style.display = 'none';
+                                                            });
+                                                        },
+                                                        errorMessage => {}
+                                                    ).catch(err => {
+                                                        qrDiv.innerHTML = '<span class="text-danger">No se pudo acceder a la cámara: ' + err + '</span>';
+                                                    });
+                                                } else {
+                                                    qrDiv.innerHTML = '<span class="text-danger">No se detectó ninguna cámara disponible.</span>';
+                                                }
+                                            }).catch(err => {
+                                                qrDiv.innerHTML = '<span class="text-danger">Error al buscar cámaras: ' + err + '</span>';
+                                            });
                                         }
                                     }
                                     document.getElementById('form-buscar-carnet').addEventListener('submit', function(e) {

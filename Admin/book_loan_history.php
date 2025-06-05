@@ -30,6 +30,8 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $libro_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
+$id_usuario = $_SESSION['user_id'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="es">

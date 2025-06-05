@@ -1,9 +1,18 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 include '../conexion.php';
 
 $mensaje = '';
 $errores = [];
 $busqueda = trim($_GET['q'] ?? '');
+$id_usuario = $_SESSION['user_id'] ?? '';
 
 $sql = 'SELECT id_usuario, nombre, gmail_institucional, telefono FROM usuarios WHERE rol = "estudiante"';
 $params = [];
@@ -36,6 +45,7 @@ $result = $stmt->get_result();
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">

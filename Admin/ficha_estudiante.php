@@ -7,6 +7,7 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
+$id_usuario = $_SESSION['user_id'];
 include '../conexion.php';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $estudiante = null;
@@ -32,6 +33,7 @@ $qr_path = $estudiante ? '../uploads/qr/carnet_' . $estudiante['carnet'] . '.png
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">

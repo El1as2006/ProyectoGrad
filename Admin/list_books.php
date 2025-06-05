@@ -8,9 +8,19 @@ if (!isset($_SESSION['user_id'])) {
 }
 include '../conexion.php';
 
-// Consulta principal para la tabla de libros
+$id_usuario = $_SESSION['user_id'] ?? null;
+
+// Consulta principal para la tabla de libros con categorías
 $libros = [];
-$result = $conn->query("SELECT * FROM libros ORDER BY id DESC");
+$result = $conn->query("
+    SELECT l.*, 
+           cl.nombre as categoria_nombre, 
+           cl.color as categoria_color, 
+           cl.icono as categoria_icono
+    FROM libros l
+    LEFT JOIN categorias_libros cl ON l.categoria_id = cl.id
+    ORDER BY l.id DESC
+");
 if ($result === false) {
     echo '<div class="alert alert-danger">Error en la consulta SQL: ' . $conn->error . '</div>';
 } else {
@@ -28,12 +38,14 @@ if ($result === false) {
     <link href="../assets/css/vendor.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
     <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/material-icons-fix.css" rel="stylesheet" type="text/css" />
     <!-- PDF.js y animaciones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">
@@ -57,6 +69,7 @@ if ($result === false) {
                                                     <th>Título</th>
                                                     <th>Autor</th>
                                                     <th>Género</th>
+                                                    <th>Categoría</th>
                                                     <th>Tipo</th>
                                                     <th>Año</th>
                                                     <th>ISBN</th>
@@ -73,8 +86,19 @@ if ($result === false) {
                                                     <td><?= htmlspecialchars($row['titulo']) ?></td>
                                                     <td><?= htmlspecialchars($row['autor']) ?></td>
                                                     <td><?= htmlspecialchars($row['genero']) ?></td>
+                                                    <td>
+                                                        <?php if ($row['categoria_nombre']): ?>
+                                                            <span class="badge d-inline-flex align-items-center gap-1" 
+                                                                  style="background-color: <?= $row['categoria_color'] ?>; color: white;">
+                                                                <i class="<?= $row['categoria_icono'] ?>"></i>
+                                                                <?= htmlspecialchars($row['categoria_nombre']) ?>
+                                                            </span>
+                                                        <?php else: ?>
+                                                            <span class="badge bg-secondary">Sin categoría</span>
+                                                        <?php endif; ?>
+                                                    </td>
                                                     <td><?= htmlspecialchars($row['tipo_libro']) ?></td>
-                                                    <td><?= htmlspecialchars($row['año_publicacion']) ?></td>
+                                                    <td><?= htmlspecialchars($row['anio_publicacion']) ?></td>
                                                     <td><?= htmlspecialchars($row['isbn']) ?></td>
                                                     <td><?= htmlspecialchars($row['descripcion']) ?></td>
                                                     <td>
@@ -139,6 +163,7 @@ if ($result === false) {
     </div>
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
+    <script src="includes/notifications.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
 function renderPDF(pdfUrl, containerId) {

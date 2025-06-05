@@ -1,8 +1,12 @@
 <?php
 include '../conexion.php';
 
-$id = $_GET['id'] ?? null;
-if (!$id || !is_numeric($id)) {
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$id_usuario = $_SESSION['user_id'] ?? null;
+
+if (!$id_usuario) {
     header('Location: list_students.php');
     exit;
 }
@@ -12,7 +16,7 @@ $errores = [];
 
 // Obtener datos actuales
 $stmt = $conn->prepare('SELECT nombre, gmail_institucional, telefono, carnet FROM usuarios WHERE id_usuario = ? AND rol = "estudiante"');
-$stmt->bind_param('i', $id);
+$stmt->bind_param('i', $id_usuario);
 $stmt->execute();
 $stmt->store_result();
 if ($stmt->num_rows === 0) {
@@ -37,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar carnet único
     if ($carnet !== '') {
         $stmt = $conn->prepare('SELECT COUNT(*) FROM usuarios WHERE carnet = ? AND id_usuario != ?');
-        $stmt->bind_param('si', $carnet, $id);
+        $stmt->bind_param('si', $carnet, $id_usuario);
         $stmt->execute();
         $stmt->bind_result($count);
         $stmt->fetch();
@@ -47,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errores)) {
         $stmt = $conn->prepare('UPDATE usuarios SET nombre=?, gmail_institucional=?, telefono=?, carnet=? WHERE id_usuario=? AND rol="estudiante"');
-        $stmt->bind_param('ssssi', $nombre, $email, $telefono, $carnet, $id);
+        $stmt->bind_param('ssssi', $nombre, $email, $telefono, $carnet, $id_usuario);
         if ($stmt->execute()) {
             $mensaje = 'Estudiante actualizado correctamente.';
         } else {
@@ -69,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">

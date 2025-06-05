@@ -57,7 +57,17 @@ $stmt->close();
 </head>
 <body>
     <div class="wrapper">
-        <?php include 'includes/sidebar.php'; ?>
+        <?php
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: login.php');
+            exit;
+        }
+        include 'includes/session_check.php';
+        include 'includes/sidebar.php';
+        ?>
         <div class="content-page">
             <div class="content">
                 <div class="container-fluid pt-4">

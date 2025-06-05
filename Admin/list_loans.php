@@ -8,15 +8,28 @@ if (!isset($_SESSION['user_id'])) {
 }
 include '../conexion.php';
 
-// Consulta principal para la tabla de préstamos
-$result = $conn->query("
-    SELECT prestamos.*, usuarios.nombre, usuarios.gmail_institucional, libros.titulo
-FROM prestamos
-JOIN usuarios ON prestamos.id_usuario = usuarios.id_usuario
-JOIN libros ON prestamos.id_libro = libros.id
-ORDER BY prestamos.id_prestamo DESC
+$id_usuario = $_SESSION['user_id'] ?? null;
+$user_rol = $_SESSION['user_rol'] ?? '';
 
-");
+// Mostrar todos los préstamos si es admin o super_admin, solo los suyos si es estudiante/docente
+if ($user_rol === 'admin' || $user_rol === 'super_admin') {
+    $result = $conn->query("
+        SELECT prestamos.*, usuarios.nombre, usuarios.gmail_institucional, libros.titulo
+        FROM prestamos
+        JOIN usuarios ON prestamos.id_usuario = usuarios.id_usuario
+        JOIN libros ON prestamos.id_libro = libros.id
+        ORDER BY prestamos.id_prestamo DESC
+    ");
+} else {
+    $result = $conn->query("
+        SELECT prestamos.*, usuarios.nombre, usuarios.gmail_institucional, libros.titulo
+        FROM prestamos
+        JOIN usuarios ON prestamos.id_usuario = usuarios.id_usuario
+        JOIN libros ON prestamos.id_libro = libros.id
+        WHERE prestamos.id_usuario = $id_usuario
+        ORDER BY prestamos.id_prestamo DESC
+    ");
+}
 
 
 if ($result === false) {
@@ -36,6 +49,7 @@ if ($result === false) {
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">
@@ -101,5 +115,7 @@ if ($result === false) {
     </div>
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
+    <!-- Script para notificaciones -->
+    <script src="includes/notifications.js"></script>
 </body>
 </html>

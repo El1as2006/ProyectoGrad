@@ -2,15 +2,16 @@
 include_once '../conexion.php';
 
 $busqueda = trim($_GET['q'] ?? '');
+$id_usuario = $_SESSION['user_id'] ?? '';
 
-$sql = 'SELECT id, titulo, autor, genero, tipo_libro, año_publicacion, isbn, descripcion, disponible, archivo_pdf FROM libros';
-$params = [];
-$types = '';
+$sql = 'SELECT id, titulo, autor, genero, tipo_libro, año_publicacion, isbn, descripcion, disponible, archivo_pdf FROM libros WHERE id_usuario = ?';
+$params = [$id_usuario];
+$types = 'i';
 if ($busqueda !== '') {
-    $sql .= ' WHERE titulo LIKE ? OR autor LIKE ? OR genero LIKE ? OR tipo_libro LIKE ? OR año_publicacion LIKE ? OR isbn LIKE ? OR descripcion LIKE ?';
+    $sql .= ' AND (titulo LIKE ? OR autor LIKE ? OR genero LIKE ? OR tipo_libro LIKE ? OR año_publicacion LIKE ? OR isbn LIKE ? OR descripcion LIKE ?)';
     $like = "%$busqueda%";
-    $params = [$like, $like, $like, $like, $like, $like, $like];
-    $types = 'sssssss';
+    $params = [$id_usuario, $like, $like, $like, $like, $like, $like, $like];
+    $types = 'isssssss';
 }
 $sql .= ' ORDER BY id DESC';
 

@@ -2,17 +2,33 @@
 include '../conexion.php';
 session_start();
 
-// Validar sesión
-if (!isset($_SESSION['id_usuario'])) {
+// Validar sesión - verificar ambas posibles variables de sesión
+$id_usuario = null;
+if (isset($_SESSION['user_id'])) {
+    $id_usuario = $_SESSION['user_id'];
+} elseif (isset($_SESSION['id_usuario'])) {
+    $id_usuario = $_SESSION['id_usuario'];
+}
+
+if (!$id_usuario) {
     header('Location: login.php');
     exit;
 }
 
-// Suponiendo que el id del usuario está en $_SESSION['id_usuario']
-$id_usuario = $_SESSION['id_usuario'];
+$notificaciones = [];
 
-// Obtener notificaciones del usuario
-$stmt = $conn->prepare('SELECT tipo, mensaje, fecha FROM notificaciones WHERE usuario_id = ? ORDER BY fecha DESC');
+// Verificar que la conexión existe
+if (!$conn) {
+    die("Error de conexión a la base de datos");
+}
+
+// Preparar la consulta con manejo de errores
+$stmt = $conn->prepare('SELECT tipo, mensaje, fecha, leido FROM notificaciones WHERE usuario_id = ? ORDER BY fecha DESC');
+
+if (!$stmt) {
+    die("Error en la preparación de la consulta: " . $conn->error);
+}
+
 $stmt->bind_param('i', $id_usuario);
 $stmt->execute();
 $result = $stmt->get_result();

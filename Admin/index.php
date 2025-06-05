@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include_once '../conexion.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -55,6 +57,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">
@@ -178,6 +181,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
     </div>
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
+    <script src="includes/notifications.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         // Datos desde PHP

@@ -1,8 +1,11 @@
 <?php
 include_once '../conexion.php';
 
-$id = $_GET['id'] ?? null;
-if (!$id || !is_numeric($id)) {
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$id_usuario = $_SESSION['user_id'] ?? null;
+if (!$id_usuario || !is_numeric($id_usuario)) {
     header('Location: list_users.php');
     exit;
 }
@@ -12,7 +15,7 @@ $errores = [];
 
 // Obtener datos actuales
 $stmt = $conn->prepare('SELECT nombre, email, rol, activo FROM usuarios WHERE id = ?');
-$stmt->bind_param('i', $id);
+$stmt->bind_param('i', $id_usuario);
 $stmt->execute();
 $stmt->store_result();
 if ($stmt->num_rows === 0) {
@@ -41,10 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($password !== '') {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $conn->prepare('UPDATE usuarios SET nombre=?, email=?, rol=?, activo=?, contrasena=? WHERE id=?');
-            $stmt->bind_param('sssisi', $nombre, $email, $rol, $activo, $hash, $id);
+            $stmt->bind_param('sssisi', $nombre, $email, $rol, $activo, $hash, $id_usuario);
         } else {
             $stmt = $conn->prepare('UPDATE usuarios SET nombre=?, email=?, rol=?, activo=? WHERE id=?');
-            $stmt->bind_param('sssii', $nombre, $email, $rol, $activo, $id);
+            $stmt->bind_param('sssii', $nombre, $email, $rol, $activo, $id_usuario);
         }
         if ($stmt->execute()) {
             $mensaje = 'Usuario actualizado correctamente.';
@@ -67,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">

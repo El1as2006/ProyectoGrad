@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
@@ -7,15 +9,26 @@ if (!isset($_SESSION['user_id'])) {
 
 include '../conexion.php';
 
+$id_usuario = $_SESSION['user_id'] ?? null;
+
 $titulo = $autor = $genero = $tipo_libro = $anio_publicacion = $isbn = $descripcion = '';
+$categoria_id = 0;
 $disponible = 1;
 $mensaje = '';
 $errores = [];
+
+// Obtener categorías disponibles
+$categorias = [];
+$result = $conn->query('SELECT id, nombre, color, icono FROM categorias_libros WHERE activo = 1 ORDER BY nombre');
+if ($result) {
+    $categorias = $result->fetch_all(MYSQLI_ASSOC);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = trim($_POST['titulo'] ?? '');
     $autor = trim($_POST['autor'] ?? '');
     $genero = trim($_POST['genero'] ?? '');
+    $categoria_id = (int)($_POST['categoria_id'] ?? 0);
     $tipo_libro = trim($_POST['tipo_libro'] ?? '');
     $anio_publicacion = trim($_POST['año_publicacion'] ?? '');
     $isbn = trim($_POST['isbn'] ?? '');
@@ -26,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($titulo === '') { $errores[] = 'El título es obligatorio.'; }
     if ($autor === '') { $errores[] = 'El autor es obligatorio.'; }
     if ($genero === '') { $errores[] = 'El género es obligatorio.'; }
+    if ($categoria_id === 0) { $errores[] = 'La categoría es obligatoria.'; }
     if ($tipo_libro === '') { $errores[] = 'El tipo de libro es obligatorio.'; }
     if (!preg_match('/^\d{4}$/', $anio_publicacion)) { $errores[] = 'Año inválido.'; }
     if ($isbn === '') { $errores[] = 'El ISBN es obligatorio.'; }
@@ -46,9 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (empty($errores)) {
-        $stmt = $conn->prepare('INSERT INTO libros (titulo, autor, genero, tipo_libro, año_publicacion, isbn, descripcion, disponible, archivo_pdf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('sssssssis', $titulo, $autor, $genero, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $archivo_pdf);
+        if (empty($errores)) {
+        $stmt = $conn->prepare('INSERT INTO libros (titulo, autor, genero, categoria_id, tipo_libro, año_publicacion, isbn, descripcion, disponible, archivo_pdf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt->bind_param('sssissssis', $titulo, $autor, $genero, $categoria_id, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $archivo_pdf);
         if ($stmt->execute()) {
             $id_libro = $stmt->insert_id;
             // Generar QR
@@ -63,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             imagedestroy($img);
             $mensaje = 'Libro añadido correctamente. Código QR generado.';
             $titulo = $autor = $genero = $tipo_libro = $anio_publicacion = $isbn = $descripcion = '';
+            $categoria_id = 0;
             $disponible = 1;
         } else {
             $errores[] = 'Error al guardar en la base de datos.';
@@ -80,9 +95,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="../assets/css/vendor.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
     <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/material-icons-fix.css" rel="stylesheet" type="text/css" />
+    <style>
+        .categoria-option {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .categoria-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            color: white;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+        .categoria-badge i {
+            margin-right: 0.25rem;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">
@@ -116,6 +154,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <div class="mb-3">
                                             <label for="genero" class="form-label">Género</label>
                                             <input type="text" class="form-control" id="genero" name="genero" value="<?= htmlspecialchars($genero) ?>" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="categoria_id" class="form-label">Categoría *</label>
+                                            <select class="form-control" id="categoria_id" name="categoria_id" required>
+                                                <option value="">Seleccione una categoría...</option>
+                                                <?php foreach ($categorias as $categoria): ?>
+                                                    <option value="<?= $categoria['id'] ?>" 
+                                                            <?= $categoria_id == $categoria['id'] ? 'selected' : '' ?>
+                                                            data-color="<?= $categoria['color'] ?>"
+                                                            data-icono="<?= $categoria['icono'] ?>">
+                                                        <?= htmlspecialchars($categoria['nombre']) ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <div id="categoria-preview" class="mt-2" style="display: none;">
+                                                <span class="categoria-badge">
+                                                    <i></i>
+                                                    <span></span>
+                                                </span>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="tipo_libro" class="form-label">Tipo de Libro</label>
@@ -167,5 +225,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
+    <script src="includes/notifications.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoriaSelect = document.getElementById('categoria_id');
+            const categoriaPreview = document.getElementById('categoria-preview');
+            
+            categoriaSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                
+                if (selectedOption.value) {
+                    const color = selectedOption.getAttribute('data-color');
+                    const icono = selectedOption.getAttribute('data-icono');
+                    const nombre = selectedOption.text;
+                    
+                    categoriaPreview.style.display = 'block';
+                    const badge = categoriaPreview.querySelector('.categoria-badge');
+                    badge.style.backgroundColor = color;
+                    badge.querySelector('i').className = icono;
+                    badge.querySelector('span').textContent = nombre;
+                } else {
+                    categoriaPreview.style.display = 'none';
+                }
+            });
+            
+            // Trigger change event if there's a pre-selected category
+            if (categoriaSelect.value) {
+                categoriaSelect.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
 </body>
 </html>

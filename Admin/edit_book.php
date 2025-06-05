@@ -10,8 +10,18 @@ if (!$id || !is_numeric($id)) {
 $mensaje = '';
 $errores = [];
 
+// Obtener categorías disponibles
+$categorias = [];
+$result = $conn->query('SELECT id, nombre, color, icono FROM categorias_libros WHERE activo = 1 ORDER BY nombre');
+if ($result) {
+    $categorias = $result->fetch_all(MYSQLI_ASSOC);
+}
+
 // Obtener datos actuales
-$stmt = $conn->prepare('SELECT titulo, autor, genero, tipo_libro, año_publicacion, isbn, descripcion, disponible, archivo_pdf FROM libros WHERE id = ?');
+$stmt = $conn->prepare('SELECT titulo, autor, genero, categoria_id, tipo_libro, anio_publicacion, isbn, descripcion, disponible, archivo_pdf FROM libros WHERE id = ?');
+if (!$stmt) {
+    die('<div class="alert alert-danger">Error en la consulta SQL: ' . $conn->error . '</div>');
+}
 $stmt->bind_param('i', $id);
 $stmt->execute();
 $stmt->store_result();
@@ -20,7 +30,7 @@ if ($stmt->num_rows === 0) {
     header('Location: list_books.php');
     exit;
 }
-$stmt->bind_result($titulo, $autor, $genero, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $archivo_pdf);
+$stmt->bind_result($titulo, $autor, $genero, $categoria_id, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $archivo_pdf);
 $stmt->fetch();
 $stmt->close();
 
@@ -28,8 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = trim($_POST['titulo'] ?? '');
     $autor = trim($_POST['autor'] ?? '');
     $genero = trim($_POST['genero'] ?? '');
+    $categoria_id = (int)($_POST['categoria_id'] ?? 0);
     $tipo_libro = trim($_POST['tipo_libro'] ?? '');
-    $anio_publicacion = trim($_POST['año_publicacion'] ?? '');
+    $anio_publicacion = trim($_POST['anio_publicacion'] ?? '');
     $isbn = trim($_POST['isbn'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
     $disponible = isset($_POST['disponible']) ? 1 : 0;
@@ -38,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($titulo === '') { $errores[] = 'El título es obligatorio.'; }
     if ($autor === '') { $errores[] = 'El autor es obligatorio.'; }
     if ($genero === '') { $errores[] = 'El género es obligatorio.'; }
+    if ($categoria_id === 0) { $errores[] = 'La categoría es obligatoria.'; }
     if ($tipo_libro === '') { $errores[] = 'El tipo de libro es obligatorio.'; }
     if (!preg_match('/^\d{4}$/', $anio_publicacion)) { $errores[] = 'Año inválido.'; }
     if ($isbn === '') { $errores[] = 'El ISBN es obligatorio.'; }
@@ -59,15 +71,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errores)) {
-        $stmt = $conn->prepare('UPDATE libros SET titulo=?, autor=?, genero=?, tipo_libro=?, año_publicacion=?, isbn=?, descripcion=?, disponible=?, archivo_pdf=? WHERE id=?');
-        $stmt->bind_param('sssssssisi', $titulo, $autor, $genero, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $nuevo_pdf, $id);
-        if ($stmt->execute()) {
-            $mensaje = 'Libro actualizado correctamente.';
-            $archivo_pdf = $nuevo_pdf;
+        $stmt = $conn->prepare('UPDATE libros SET titulo=?, autor=?, genero=?, categoria_id=?, tipo_libro=?, anio_publicacion=?, isbn=?, descripcion=?, disponible=?, archivo_pdf=? WHERE id=?');
+        if (!$stmt) {
+            $errores[] = 'Error en la consulta SQL: ' . $conn->error;
         } else {
-            $errores[] = 'Error al actualizar en la base de datos.';
+            $stmt->bind_param('sssississsi', $titulo, $autor, $genero, $categoria_id, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $nuevo_pdf, $id);
+            if ($stmt->execute()) {
+                $mensaje = 'Libro actualizado correctamente.';
+                $archivo_pdf = $nuevo_pdf;
+            } else {
+                $errores[] = 'Error al actualizar en la base de datos.';
+            }
+            $stmt->close();
         }
-        $stmt->close();
     }
 }
 ?>
@@ -80,10 +96,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="../assets/css/vendor.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
     <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/material-icons-fix.css" rel="stylesheet" type="text/css" />
+    <style>
+        .categoria-option {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .categoria-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            color: white;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+        .categoria-badge i {
+            margin-right: 0.25rem;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
-        <?php include 'includes/sidebar.php'; ?>
+        <?php
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: login.php');
+            exit;
+        }
+        include 'includes/session_check.php';
+        include 'includes/sidebar.php';
+        ?>
         <div class="content-page">
             <div class="content">
                 <div class="container-fluid pt-4">
@@ -118,6 +166,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <input type="text" class="form-control" id="genero" name="genero" value="<?= htmlspecialchars($genero) ?>" required>
                                         </div>
                                         <div class="mb-3">
+                                            <label for="categoria_id" class="form-label">Categoría *</label>
+                                            <select class="form-control" id="categoria_id" name="categoria_id" required>
+                                                <option value="">Seleccione una categoría...</option>
+                                                <?php foreach ($categorias as $categoria): ?>
+                                                    <option value="<?= $categoria['id'] ?>" 
+                                                            <?= $categoria_id == $categoria['id'] ? 'selected' : '' ?>
+                                                            data-color="<?= $categoria['color'] ?>"
+                                                            data-icono="<?= $categoria['icono'] ?>">
+                                                        <?= htmlspecialchars($categoria['nombre']) ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <div id="categoria-preview" class="mt-2" style="display: none;">
+                                                <span class="categoria-badge">
+                                                    <i></i>
+                                                    <span></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
                                             <label for="tipo_libro" class="form-label">Tipo de Libro</label>
                                             <select class="form-control" id="tipo_libro" name="tipo_libro" required>
                                                 <option value="">Seleccione...</option>
@@ -126,8 +194,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="año_publicacion" class="form-label">Año de Publicación</label>
-                                            <input type="number" class="form-control" id="año_publicacion" name="año_publicacion" value="<?= htmlspecialchars($anio_publicacion) ?>" required min="1000" max="9999">
+                                            <label for="anio_publicacion" class="form-label">Año de Publicación</label>
+                                            <input type="number" class="form-control" id="anio_publicacion" name="anio_publicacion" value="<?= htmlspecialchars($anio_publicacion) ?>" required min="1000" max="9999">
                                         </div>
                                         <div class="mb-3">
                                             <label for="isbn" class="form-label">ISBN</label>
@@ -162,5 +230,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
+    <script src="includes/notifications.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoriaSelect = document.getElementById('categoria_id');
+            const categoriaPreview = document.getElementById('categoria-preview');
+            
+            categoriaSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                
+                if (selectedOption.value) {
+                    const color = selectedOption.getAttribute('data-color');
+                    const icono = selectedOption.getAttribute('data-icono');
+                    const nombre = selectedOption.text;
+                    
+                    categoriaPreview.style.display = 'block';
+                    const badge = categoriaPreview.querySelector('.categoria-badge');
+                    badge.style.backgroundColor = color;
+                    badge.querySelector('i').className = icono;
+                    badge.querySelector('span').textContent = nombre;
+                } else {
+                    categoriaPreview.style.display = 'none';
+                }
+            });
+            
+            // Trigger change event if there's a pre-selected category
+            if (categoriaSelect.value) {
+                categoriaSelect.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
 </body>
 </html>

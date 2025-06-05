@@ -1,11 +1,15 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
 include '../conexion.php';
+
+$id_usuario = $_SESSION['user_id'] ?? null;
 
 // Mostrar solo usuarios con rol estudiante
 $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono, carnet FROM usuarios WHERE rol = 'estudiante' ORDER BY id_usuario DESC");
@@ -22,6 +26,7 @@ $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">
@@ -74,5 +79,7 @@ $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono
     </div>
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
+    <!-- Script para notificaciones -->
+    <script src="includes/notifications.js"></script>
 </body>
 </html>

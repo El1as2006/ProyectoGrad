@@ -139,8 +139,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <hr class="hr-or">
                    
                 </div>
-                <div class="form-group">
-                    
+                <div class="form-group text-center">
+                    <a href="forgot_password.php" class="text-muted">
+                        <i class="fa fa-lock"></i> ¿Olvidaste tu contraseña?
+                    </a>
                 </div>
             </form>
         </div>

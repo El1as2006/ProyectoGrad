@@ -1,6 +1,16 @@
 <?php
 include_once '../conexion.php';
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
+$id_usuario = $_SESSION['user_id'] ?? null;
+
 $sql = 'SELECT p.id, e.nombre, e.apellido, l.titulo, p.fecha_prestamo, p.fecha_devolucion, p.devuelto
         FROM prestamos p
         JOIN estudiantes e ON p.estudiante_id = e.id
@@ -20,6 +30,7 @@ $result = $conn->query($sql);
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">

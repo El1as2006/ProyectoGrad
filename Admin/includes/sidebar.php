@@ -59,9 +59,18 @@ if ($id_usuario && isset($conn)) {
 
     <!-- Icons css -->
     <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/custom-colors.css">
 </head>
 
 <body>
+    <div class="bg-yellow-blobs">
+        <svg width="100vw" height="100vh" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100vw;height:100vh;position:absolute;top:0;left:0;">
+            <ellipse cx="200" cy="200" rx="300" ry="120" fill="#FFD600" opacity="0.18"/>
+            <ellipse cx="1400" cy="300" rx="250" ry="100" fill="#FFD600" opacity="0.15"/>
+            <ellipse cx="800" cy="800" rx="400" ry="120" fill="#FFD600" opacity="0.13"/>
+            <ellipse cx="400" cy="700" rx="180" ry="70" fill="#FFD600" opacity="0.12"/>
+        </svg>
+    </div>
     <!-- Begin page -->
     <div class="wrapper">
 
@@ -323,52 +332,16 @@ if ($id_usuario && isset($conn)) {
                     </li>
 
                     <li class="dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <span class="account-user-avatar">
-                                <img src="../assets/images/users/avatar-1.jpg" alt="user-image" width="32" class="rounded-circle">
-                            </span>
-                            <span class="d-lg-flex flex-column gap-1 d-none">
-                                <h5 class="my-0"><?= htmlspecialchars($nombre_usuario) ?></h5>
-                                <h6 class="my-0 fw-normal">Usuario</h6>
-                            </span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
-                            <!-- item-->
-                            <div class=" dropdown-header noti-title">
-                                <h6 class="text-overflow m-0">Welcome !</h6>
-                            </div>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
-                                <i class="mdi mdi-account-circle me-1"></i>
-                                <span>My Account</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
-                                <i class="mdi mdi-account-edit me-1"></i>
-                                <span>Settings</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
-                                <i class="mdi mdi-lifebuoy me-1"></i>
-                                <span>Support</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
-                                <i class="mdi mdi-lock-outline me-1"></i>
-                                <span>Lock Screen</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="logout.php" class="dropdown-item">
-                                <i class="mdi mdi-logout me-1"></i>
-                                <span>Cerrar sesión</span>
-                            </a>
-                        </div>
-                    </li>
+    <div class="nav-user px-2" style="cursor:default; display:flex; align-items:center; gap:0.7em; border:2.5px solid #FFD600; background:#fff; border-radius:10px; box-shadow:0 2px 12px #FFD60022; min-width:160px; max-width:220px;">
+        <span class="account-user-avatar">
+            <img src="../assets/images/users/avatar-1.jpg" alt="user-image" width="32" style="border-radius:6px;">
+        </span>
+        <span class="d-lg-flex flex-column gap-1">
+            <h5 class="my-0" style="color:#222;font-weight:900;">Admin Principal</h5>
+            <h6 class="my-0 fw-normal" style="color:#FFD600;font-weight:700;">Usuario</h6>
+        </span>
+    </div>
+</li>
                 </ul>
             </div>
         </div>
@@ -403,6 +376,12 @@ if ($id_usuario && isset($conn)) {
                         </a>
                     </li>
                     <li class="side-nav-item">
+                        <a href="categorias.php" class="side-nav-link">
+                            <i class="mdi mdi-shape"></i>
+                            <span> Categorías </span>
+                        </a>
+                    </li>
+                    <li class="side-nav-item">
                         <a href="list_loans.php" class="side-nav-link">
                             <i class="mdi mdi-bookmark-check"></i>
                             <span> Préstamos </span>
@@ -421,7 +400,7 @@ if ($id_usuario && isset($conn)) {
                         </a>
                     </li>
                     <li class="side-nav-item">
-                        <a href="../old/logout.php" class="side-nav-link">
+                        <a href="logout.php" class="side-nav-link">
                             <i class="mdi mdi-logout"></i>
                             <span> Cerrar sesión </span>
                         </a>
@@ -1008,26 +987,7 @@ if ($id_usuario && isset($conn)) {
 
     <!-- App js -->
     <script src="../assets/js/app.min.js"></script>
-
-    <!-- Notificaciones en tiempo real (AJAX) -->
-    <script>
-    // Refrescar notificaciones cada 30 segundos
-    setInterval(function() {
-        fetch('includes/sidebar.php?ajax_notificaciones=1')
-            .then(res => res.json())
-            .then(data => {
-                let notiList = '';
-                if (data.length === 0) {
-                    notiList = '<div class="text-center text-muted py-3">No tienes notificaciones recientes.</div>';
-                } else {
-                    data.forEach(function(noti) {
-                        notiList += `<a href=\"notificaciones.php\" class=\"dropdown-item p-0 notify-item card ${noti.leido ? 'read-noti' : 'unread-noti'} shadow-none mb-2\"><div class=\"card-body\"><div class=\"d-flex align-items-center\"><div class=\"flex-grow-1 text-truncate ms-2\"><h5 class=\"noti-item-title fw-semibold font-14 mb-1\">${noti.tipo.charAt(0).toUpperCase() + noti.tipo.slice(1)}<small class=\"fw-normal text-muted ms-1\">${noti.fecha}</small></h5><small class=\"noti-item-subtitle text-muted\">${noti.mensaje}</small></div></div></div></a>`;
-                    });
-                }
-                document.querySelector('.dropdown-menu .px-2').innerHTML = notiList;
-            });
-    }, 30000);
-    </script>
+</div>
 
 </body>
 </html>

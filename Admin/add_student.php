@@ -1,11 +1,15 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
 include '../conexion.php';
+
+$id_usuario = $_SESSION['user_id'] ?? null;
 
 $nombre = $email = $telefono = $mensaje = '';
 $errores = [];
@@ -80,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">
@@ -135,5 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
+    <script src="includes/notifications.js"></script>
 </body>
 </html>

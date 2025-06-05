@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id'])) {
 }
 include '../conexion.php';
 
+$id_usuario = $_SESSION['user_id'] ?? null;
+
 // Consulta principal para la tabla de usuarios
 $result = $conn->query("SELECT * FROM usuarios ORDER BY id_usuario DESC");
 if ($result === false) {
@@ -26,6 +28,7 @@ if ($result === false) {
 </head>
 <body>
     <div class="wrapper">
+        <?php include 'includes/session_check.php'; ?>
         <?php include 'includes/sidebar.php'; ?>
         <div class="content-page">
             <div class="content">
