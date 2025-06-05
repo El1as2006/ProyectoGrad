@@ -37,7 +37,7 @@ $prestamos_mes = $conn->query("SELECT DATE_FORMAT(fecha_prestamo, '%Y-%m') as me
 $prestamos_por_mes = array_reverse($prestamos_mes ? $prestamos_mes->fetch_all(MYSQLI_ASSOC) : []);
 
 // Libros por categoría
-$libros_categoria = $conn->query("SELECT categoria, COUNT(*) as total FROM libros GROUP BY categoria");
+$libros_categoria = $conn->query("SELECT categoria_id, COUNT(*) as total FROM libros GROUP BY categoria_id");
 $libros_por_categoria = $libros_categoria ? $libros_categoria->fetch_all(MYSQLI_ASSOC) : [];
 
 // Top usuarios con más préstamos
