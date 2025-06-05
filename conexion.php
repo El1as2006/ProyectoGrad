@@ -1,18 +1,19 @@
 <?php
-$host = 'localhost';
-$dbname = 'bibliotecachaleca';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
 
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-];
+// Mostrar todos los errores y advertencias de PHP para depuración
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=$charset", $user, $pass, $options);
-    return $pdo; 
-} catch (PDOException $e) {
-    die("Error de conexión: " . $e->getMessage());
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "biblioteca";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Conexión fallida: " . $conn->connect_error);
 }
+
+return $conn;
