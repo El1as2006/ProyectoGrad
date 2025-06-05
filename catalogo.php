@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Biblioteca Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/ProyectoGrad/assets/css/indexstyle.css">
+
+    <title>Catálogo - Bilioteca Chaleca</title>
     <style>
         * {
             margin: 0;
@@ -386,8 +389,25 @@
     <!-- Header -->
     <header>
         <div class="container">
-            <h1>📚 Biblioteca Digital</h1>
-            <p>Descubre tu próxima gran lectura</p>
+            <div class="header-content">
+                <div class="logo">
+                    <span><img src="/ProyectoGrad/assets/images/Recurso_23.png"  height="50"></span>
+                </div>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="index.php"><i class="fas fa-home"></i> Inicio</a></li>
+                        <li><a href="catalogo.php"><i class="fas fa-book"></i> Catálogo</a></li>
+                        <li><a href="#"><i class="fas fa-bookmark"></i> Mis Libros</a></li>
+                        <li><a href="#"><i class="fas fa-calendar-alt"></i> Eventos</a></li>
+                        <li><a href="#"><i class="fas fa-info-circle"></i> Acerca de</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> Contacto</a></li>
+                        <li><a href="Admin/login.php" class="login-btn"><i class="fas fa-user"></i> Iniciar Sesión</a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </header>
 

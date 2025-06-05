@@ -13,10 +13,16 @@
     <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 </head>
 <?php
+session_start();
 require "../conexion.php";
 
-if (isset($_SESSION['id_usuario'])) {
-    header("Location: index.php");
+if (isset($_SESSION['id_user'])) {
+    // Si ya hay sesión activa, redirige según tipo de usuario
+    if ($_SESSION['user_type'] == 1) {
+        header("Location: admin.php");
+    } else {
+        header("Location: index.php");
+    }
     exit;
 }
 
@@ -37,10 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if ($usuario) {
                 if (password_verify($contraseña, $usuario['pass'])) {
+                    // Guardamos datos de sesión correctamente
                     $_SESSION['id_user'] = $usuario['id_user'];
                     $_SESSION['email'] = $gmail_institucional;
-                    $_SESSION['user_type'] = $usuario['email'];
-                    header("Location: admin.php");
+                    $_SESSION['user_type'] = $usuario['user_type'];
+
+                    // Redirige según el tipo de usuario
+                    if ($usuario['user_type'] == 1) {
+                        header("Location: admin.php");
+                    } else {
+                        header("Location: /ProyectoGrad/index.php"); // Aquí debe ir el archivo del usuario normal
+                    }
                     exit;
                 } else {
                     $error = "Contraseña incorrecta.";
@@ -54,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 <body class="authentication-bg position-relative">
     <div class="position-absolute start-0 end-0 start-0 bottom-0 w-100 h-100">
         <svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 800 800'>

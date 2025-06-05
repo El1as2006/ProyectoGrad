@@ -53,20 +53,20 @@ $conn = include_once "../conexion.php";
                         <!-- Logo light -->
                         <a href="index.html" class="logo-light">
                             <span class="logo-lg">
-                                <img src="../assets/images/Recurso_23.png" alt="logo">
+                                <img src="../assets/images/logo.png" alt="logo">
                             </span>
                             <span class="logo-sm">
-                                <img src="../assets/images/Recurso_9.png" alt="small logo">
+                                <img src="../assets/images/logo-sm.png" alt="small logo">
                             </span>
                         </a>
 
                         <!-- Logo Dark -->
                         <a href="index.html" class="logo-dark">
                             <span class="logo-lg">
-                                <img src="../assets/images/Recurso_23.png" alt="dark logo">
+                                <img src="../assets/images/logo-dark.png" alt="dark logo">
                             </span>
                             <span class="logo-sm">
-                                <img src="../assets/images/Recurso_9.png" alt="small logo">
+                                <img src="../assets/images/logo-dark-sm.png" alt="small logo">
                             </span>
                         </a>
                     </div>
@@ -87,6 +87,14 @@ $conn = include_once "../conexion.php";
 
                     <!-- Topbar Search Form -->
                     <div class="app-search dropdown d-none d-lg-block">
+                        <form>
+                            <div class="input-group">
+                                <input type="search" class="form-control dropdown-toggle" placeholder="Search..."
+                                    id="top-search">
+                                <span class="mdi mdi-magnify search-icon"></span>
+                                <button class="input-group-text btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </form>
 
                         <div class="dropdown-menu dropdown-menu-animated dropdown-lg" id="search-dropdown">
                             <!-- item-->
@@ -297,7 +305,7 @@ $conn = include_once "../conexion.php";
                             </a>
 
                             <!-- item-->
-                            <a href="../index.php" class="dropdown-item">
+                            <a href="logout.php" class="dropdown-item">
                                 <i class="mdi mdi-logout me-1"></i>
                                 <span>Logout</span>
                             </a>
@@ -314,20 +322,20 @@ $conn = include_once "../conexion.php";
             <!-- Brand Logo Light -->
             <a href="index.html" class="logo logo-light">
                 <span class="logo-lg">
-                    <img src="../assets/images/Recurso_23.png" alt="logo">
+                    <img src="../assets/images/logo.png" alt="logo">
                 </span>
                 <span class="logo-sm">
-                    <img src="../assets/images/Recurso_9.png" alt="small logo">
+                    <img src="../assets/images/logo-sm.png" alt="small logo">
                 </span>
             </a>
 
             <!-- Brand Logo Dark -->
             <a href="index.html" class="logo logo-dark">
                 <span class="logo-lg">
-                    <img src="../assets/images/Recurso_23.png" alt="dark logo">
+                    <img src="../assets/images/logo-dark.png" alt="dark logo">
                 </span>
                 <span class="logo-sm">
-                    <img src="../assets/images/Recurso_9.png" alt="small logo">
+                    <img src="../assets/images/logo-dark-sm.png" alt="small logo">
                 </span>
             </a>
 
@@ -668,7 +676,99 @@ $conn = include_once "../conexion.php";
                         </div>
                     </li>
 
-                    
+                    <li class="side-nav-title">Components</li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarBaseUI" aria-expanded="false"
+                            aria-controls="sidebarBaseUI" class="side-nav-link">
+                            <i class="uil-box"></i>
+                            <span> Base UI </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarBaseUI">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="ui-accordions.html">Accordions & Collapse</a>
+                                </li>
+                                <li>
+                                    <a href="ui-alerts.html">Alerts</a>
+                                </li>
+                                <li>
+                                    <a href="ui-avatars.html">Avatars</a>
+                                </li>
+                                <li>
+                                    <a href="ui-badges.html">Badges</a>
+                                </li>
+                                <li>
+                                    <a href="ui-breadcrumb.html">Breadcrumb</a>
+                                </li>
+                                <li>
+                                    <a href="ui-buttons.html">Buttons</a>
+                                </li>
+                                <li>
+                                    <a href="ui-cards.html">Cards</a>
+                                </li>
+                                <li>
+                                    <a href="ui-carousel.html">Carousel</a>
+                                </li>
+                                <li>
+                                    <a href="ui-dropdowns.html">Dropdowns</a>
+                                </li>
+                                <li>
+                                    <a href="ui-embed-video.html">Embed Video</a>
+                                </li>
+                                <li>
+                                    <a href="ui-grid.html">Grid</a>
+                                </li>
+                                <li>
+                                    <a href="ui-list-group.html">List Group</a>
+                                </li>
+                                <li>
+                                    <a href="ui-modals.html">Modals</a>
+                                </li>
+                                <li>
+                                    <a href="ui-notifications.html">Notifications</a>
+                                </li>
+                                <li>
+                                    <a href="ui-offcanvas.html">Offcanvas</a>
+                                </li>
+                                <li>
+                                    <a href="ui-placeholders.html">Placeholders</a>
+                                </li>
+                                <li>
+                                    <a href="ui-pagination.html">Pagination</a>
+                                </li>
+                                <li>
+                                    <a href="ui-popovers.html">Popovers</a>
+                                </li>
+                                <li>
+                                    <a href="ui-progress.html">Progress</a>
+                                </li>
+                                <li>
+                                    <a href="ui-ribbons.html">Ribbons</a>
+                                </li>
+                                <li>
+                                    <a href="ui-spinners.html">Spinners</a>
+                                </li>
+                                <li>
+                                    <a href="ui-tabs.html">Tabs</a>
+                                </li>
+                                <li>
+                                    <a href="ui-tooltips.html">Tooltips</a>
+                                </li>
+                                <li>
+                                    <a href="ui-links.html">Links</a>
+                                </li>
+                                <li>
+                                    <a href="ui-typography.html">Typography</a>
+                                </li>
+                                <li>
+                                    <a href="ui-utilities.html">Utilities</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarExtendedUI" aria-expanded="false"
                             aria-controls="sidebarExtendedUI" class="side-nav-link">
@@ -1134,7 +1234,7 @@ $conn = include_once "../conexion.php";
                         <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
                             <div class="card">
                                 <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Top Libros</h4>
+                                    <h4 class="header-title">Top Selling Products</h4>
                                     <a href="javascript:void(0);" class="btn btn-sm btn-light">Export <i
                                             class="mdi mdi-download ms-1"></i></a>
                                 </div>
@@ -1179,7 +1279,7 @@ $conn = include_once "../conexion.php";
                                                                             echo '<h5 class="font-14 my-1 fw-normal">' . htmlspecialchars($estado) . '</h5>';
                                                                             echo '<span class="text-muted font-13">Book Status</span>';
                                                                             echo '</td>';
-
+                                                                            
                                                                         }
                                                                     } else {
                                                                         echo '<tr><td colspan="4">No hay libros disponibles.</td></tr>';
@@ -1193,88 +1293,209 @@ $conn = include_once "../conexion.php";
                             </div> <!-- end card-->
                         </div> <!-- end col-->
 
-
-                        <!--Inicio Grafica de PASTEL 1-->
-                        <?php
-                        $stmt = $conn->prepare("
-                            SELECT category, SUM(stock) AS cantidad 
-                            FROM libros 
-                            WHERE estado = 1 
-                            GROUP BY category
-                        ");
-                        $stmt->execute();
-                        $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                        // Preparar datos para la gráfica
-                        $labels = [];
-                        $data = [];
-
-                        foreach ($categorias as $cat) {
-                            $labels[] = $cat['category'];
-                            $data[] = (int) $cat['cantidad'];
-                        }
-                        ?>
-
                         <div class="col-xl-3 col-lg-6 order-lg-1">
                             <div class="card">
                                 <div class="d-flex card-header justify-content-between align-items-center">
+                                    <h4 class="header-title">Total Sales</h4>
                                     <div class="dropdown">
                                         <a href="#" class="dropdown-toggle arrow-none card-drop"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="mdi mdi-dots-vertical"></i>
-                                            <!-- Contenedor para la gráfica -->
-                                            <div id="grafica-libros" class="apex-charts mt-4"
-                                                style="min-height: 400px;"></div>
-
-                                            <!-- Script de ApexCharts -->
-                                             
-                                            <script>
-                                                
-                                                document.addEventListener("DOMContentLoaded", function () {
-                                                    var options = {
-                                                        chart: {
-                                                            type: 'pie',
-                                                            height: 400
-                                                        },
-                                                        labels: <?php echo json_encode($labels); ?>,
-                                                        series: <?php echo json_encode($data); ?>,
-                                                        colors: ['#727cf5', '#0acf97', '#fa5c7c', '#ffbc00', '#39afd1'],
-                                                        legend: {
-                                                            position: 'bottom'
-                                                        },
-                                                        title: {
-                                                            text: 'Stock Disponible por Categoría',
-                                                            align: 'center'
-                                                        },
-                                                        tooltip: {
-                                                            y: {
-                                                                formatter: function (val) {
-                                                                    return val + " unidades en stock";
-                                                                }
-                                                            }
-                                                        }
-                                                    };
-
-                                                    var chart = new ApexCharts(document.querySelector("#grafica-libros"), options);
-                                                    chart.render();
-                                                });
-                                            </script>
                                         </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <!-- item-->
+                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
+                                            <!-- item-->
+                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
+                                            <!-- item-->
+                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
+                                            <!-- item-->
+                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div class="card-body pt-0">
+                                    <div id="average-sales" class="apex-charts mb-4 mt-2"
+                                        data-colors="#727cf5,#0acf97,#fa5c7c,#ffbc00"></div>
+
+
+                                    <div class="chart-widget-list">
+                                        <p>
+                                            <i class="mdi mdi-square text-primary"></i> Direct
+                                            <span class="float-end">$300.56</span>
+                                        </p>
+                                        <p>
+                                            <i class="mdi mdi-square text-danger"></i> Affilliate
+                                            <span class="float-end">$135.18</span>
+                                        </p>
+                                        <p>
+                                            <i class="mdi mdi-square text-success"></i> Sponsored
+                                            <span class="float-end">$48.96</span>
+                                        </p>
+                                        <p class="mb-0">
+                                            <i class="mdi mdi-square text-warning"></i> E-mail
+                                            <span class="float-end">$154.02</span>
+                                        </p>
+                                    </div>
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col-->
+
+                        <div class="col-xl-3 col-lg-6 order-lg-1">
+                            <div class="card">
+                                <div class="d-flex card-header justify-content-between align-items-center">
+                                    <h4 class="header-title">Recent Activity</h4>
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="mdi mdi-dots-vertical"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <!-- item-->
+                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
+                                            <!-- item-->
+                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
+                                            <!-- item-->
+                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
+                                            <!-- item-->
+                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body py-0 mb-3" data-simplebar style="max-height: 403px;">
+                                    <div class="timeline-alt py-0">
+                                        <div class="timeline-item">
+                                            <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
+                                            <div class="timeline-item-info">
+                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You
+                                                    sold an item</a>
+                                                <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
+                                                <p class="mb-0 pb-2">
+                                                    <small class="text-muted">5 minutes ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <i
+                                                class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
+                                            <div class="timeline-item-info">
+                                                <a href="javascript:void(0);"
+                                                    class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap
+                                                    Market</a>
+                                                <small>Dave Gamache added
+                                                    <span class="fw-bold">Admin Dashboard</span>
+                                                </small>
+                                                <p class="mb-0 pb-2">
+                                                    <small class="text-muted">30 minutes ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
+                                            <div class="timeline-item-info">
+                                                <a href="javascript:void(0);"
+                                                    class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
+                                                <small>Send you message
+                                                    <span class="fw-bold">"Are you there?"</span>
+                                                </small>
+                                                <p class="mb-0 pb-2">
+                                                    <small class="text-muted">2 hours ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <i class="mdi mdi-upload bg-primary-lighten text-primary timeline-icon"></i>
+                                            <div class="timeline-item-info">
+                                                <a href="javascript:void(0);"
+                                                    class="text-primary fw-bold mb-1 d-block">Audrey Tobey</a>
+                                                <small>Uploaded a photo
+                                                    <span class="fw-bold">"Error.jpg"</span>
+                                                </small>
+                                                <p class="mb-0 pb-2">
+                                                    <small class="text-muted">14 hours ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
+                                            <div class="timeline-item-info">
+                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You
+                                                    sold an item</a>
+                                                <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
+                                                <p class="mb-0 pb-2">
+                                                    <small class="text-muted">16 hours ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <i
+                                                class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
+                                            <div class="timeline-item-info">
+                                                <a href="javascript:void(0);"
+                                                    class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap
+                                                    Market</a>
+                                                <small>Dave Gamache added
+                                                    <span class="fw-bold">Admin Dashboard</span>
+                                                </small>
+                                                <p class="mb-0 pb-2">
+                                                    <small class="text-muted">22 hours ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
+                                            <div class="timeline-item-info">
+                                                <a href="javascript:void(0);"
+                                                    class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
+                                                <small>Send you message
+                                                    <span class="fw-bold">"Are you there?"</span>
+                                                </small>
+                                                <p class="mb-0 pb-2">
+                                                    <small class="text-muted">2 days ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end timeline -->
+                                </div> <!-- end simplebar -->
                             </div>
+                            <!-- end card-->
+                        </div>
+                        <!-- end col -->
 
+                    </div>
+                    <!-- end row -->
 
-                        <!--Fin Grafica de PASTEL 1-->
+                </div>
+                <!-- container -->
 
-                        <!--Inicio Grafica de PASTEL 2-->
-
-                        <!--Fin Grafica de PASTEL 2-->
-
+            </div>
+            <!-- content -->
 
             <!-- Footer Start -->
             <footer class="footer">
-
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-md-end footer-links d-none d-md-block">
+                                <a href="javascript: void(0);">About</a>
+                                <a href="javascript: void(0);">Support</a>
+                                <a href="javascript: void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </footer>
             <!-- end Footer -->
 
