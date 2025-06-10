@@ -1,12 +1,28 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include_once 'conexion.php'; // No dots, relative to the current file
 
-// Verificación de sesión
-if (!isset($_SESSION['id_user'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: Admin/login.php");
     exit;
 }
+
+$nombre = $_SESSION['user_name'] ?? '';
+$rol = $_SESSION['user_rol'] ?? 'estudiante';
+
+function safe_count_query($conn, $sql) {
+    $res = $conn->query($sql);
+    if ($res && $row = $res->fetch_row()) {
+        return $row[0];
+    } else {
+        error_log("SQL Error: $sql | " . $conn->error);
+        return 0;
+    }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -66,8 +82,8 @@ if (!isset($_SESSION['id_user'])) {
                     <img src="https://source.unsplash.com/random/200x200/?portrait" alt="Avatar de usuario">
                 </div>
                 <div class="user-info">
-                    <h3>¡Bienvenido de nuevo, <?php echo htmlspecialchars($_SESSION['email']); ?>!</h3>
-                    <p><i class="fas fa-user-clock"></i> Miembro desde: Enero 2023</p>
+                <h3>¡Bienvenido de nuevo, <?php echo htmlspecialchars($_SESSION['gmail_institucional'] ?? $nombre); ?>!</h3>
+                <p><i class="fas fa-user-clock"></i> Miembro desde:2025</p>
                     <div class="user-stats">
                         <div class="stat-item">
                             <div class="stat-number">3</div>

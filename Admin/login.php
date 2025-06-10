@@ -1,11 +1,12 @@
 <?php
 session_start();
-include_once '../conexion.php';
+include_once '../conexion.php'; // Assuming conexion.php is in your_project_root/
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gmail_institucional = trim($_POST['gmail_institucional'] ?? '');
     $contraseña = trim($_POST['contraseña'] ?? '');
+
     if (empty($gmail_institucional) || empty($contraseña)) {
         $error = 'Por favor, ingrese su correo institucional y contraseña.';
     } else {
@@ -16,16 +17,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param('s', $gmail_institucional);
             $stmt->execute();
             $result = $stmt->get_result();
+
             if ($row = $result->fetch_assoc()) {
-                // Debug temporal para ver el hash y la contraseña ingresada
-                echo '<pre>Hash en BD: ' . htmlspecialchars($row['contrasena']) . "\n";
-                echo 'Contraseña ingresada: ' . htmlspecialchars($contraseña) . "</pre>";
                 if (password_verify($contraseña, $row['contrasena'])) {
                     $_SESSION['user_id'] = $row['id_usuario'];
                     $_SESSION['user_name'] = $row['nombre'];
                     $_SESSION['user_rol'] = $row['rol'];
-                    header('Location: index.php');
-                    exit;
+
+                    // You can uncomment this line temporarily for debugging:
+                    // echo "DEBUG: User Role from DB: '" . htmlspecialchars($row['rol']) . "'<br>";
+
+                    if ($_SESSION['user_rol'] === 'admin') {
+                        // Admin index is in the same folder as login.php (Admin folder)
+                        header('Location: index.php'); // This looks correct for admin
+                        exit;
+                    } elseif ($_SESSION['user_rol'] === 'estudiante') {
+                        // Student index is one level UP from the Admin folder
+                        header('Location: ../index.php'); // Corrected path for student
+                        exit;
+                    } else {
+                        $error = 'Rol de usuario no reconocido. Por favor, contacte al soporte.';
+                    }
                 } else {
                     $error = 'Contraseña incorrecta.';
                 }
@@ -137,7 +149,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn-primary btn-block">Login</button>
                 <div class="login-or">
                     <hr class="hr-or">
-                   
                 </div>
                 <div class="form-group text-center">
                     <a href="forgot_password.php" class="text-muted">
@@ -149,5 +160,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </body>
 </html>
-
-
