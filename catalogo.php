@@ -3,7 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Conexión a la base de datos (se captura el valor retornado)
 $conexion = include_once 'conexion.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -13,7 +12,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $nombre = $_SESSION['user_name'] ?? '';
 $rol = $_SESSION['user_rol'] ?? 'estudiante';
-
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +22,38 @@ $rol = $_SESSION['user_rol'] ?? 'estudiante';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/ProyectoGrad/assets/css/indexstyle.css">
     <title>Catálogo - Biblioteca Chaleca</title>
+    <style>
+        .category-filter {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .category-filter button {
+            margin: 5px;
+            padding: 8px 16px;
+            border: none;
+            background-color: #e0e0e0;
+            color: #333;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .category-filter button.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .books-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .book-card {
+            flex: 1 1 250px;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            background: white;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -51,22 +81,41 @@ $rol = $_SESSION['user_rol'] ?? 'estudiante';
         </div>
     </header>
 
+    <!-- Filtros de Categoría -->
+     
+    <div class="category-filter">
+    <button class="category-btn active" data-category="todos">Todos</button>
+    <?php
+    $cat_query = "SELECT id, nombre FROM categorias_libros WHERE activo = 1 ORDER BY nombre ASC";
+    $cat_resultado = $conexion->query($cat_query);
+
+    if (!$cat_resultado) {
+        echo "<p style='color:red;'>Error al cargar categorías: " . $conexion->error . "</p>";
+    } else {
+        while ($cat = $cat_resultado->fetch_assoc()) {
+            $cat_id = htmlspecialchars($cat['id']);
+            $cat_nombre = htmlspecialchars($cat['nombre']);
+            echo '<button class="category-btn" data-category="' . $cat_id . '">' . $cat_nombre . '</button>';
+        }
+    }
+    ?>
+</div>
+
+
     <!-- Sección de Libros -->
     <section class="books-section">
         <div class="container">
             <h2 class="books-title">Catálogo de Libros</h2>
             <div class="books-grid" id="booksGrid">
                 <?php
-                // Consulta para obtener los libros
-                $sql = "SELECT * FROM libros";
+                $sql = "SELECT * FROM libros ORDER BY titulo ASC";
                 $resultado = $conexion->query($sql);
 
                 if ($resultado && $resultado->num_rows > 0) {
                     while ($libro = $resultado->fetch_assoc()) {
-                        // Defensivo contra campos faltantes
                         $categoria = htmlspecialchars($libro['categoria'] ?? '');
                         $estado = htmlspecialchars($libro['estado'] ?? '');
-                        $icono = htmlspecialchars($libro['icono'] ?? '');
+                        $icono = htmlspecialchars($libro['icono'] ?? '📘');
                         $titulo = htmlspecialchars($libro['titulo'] ?? '');
                         $autor = htmlspecialchars($libro['autor'] ?? '');
                         $descripcion = htmlspecialchars($libro['descripcion'] ?? '');
@@ -89,7 +138,6 @@ $rol = $_SESSION['user_rol'] ?? 'estudiante';
                     echo '<p>No se encontraron libros disponibles.</p>';
                 }
 
-                // Cerrar conexión
                 $conexion->close();
                 ?>
             </div>
@@ -97,59 +145,25 @@ $rol = $_SESSION['user_rol'] ?? 'estudiante';
     </section>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            const categoryCards = document.querySelectorAll('.category-card');
+        document.addEventListener('DOMContentLoaded', function () {
+            const categoryBtns = document.querySelectorAll('.category-btn');
             const bookCards = document.querySelectorAll('.book-card');
 
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    filterBtns.forEach(b => b.classList.remove('active'));
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    categoryBtns.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
 
-                    const filter = this.getAttribute('data-filter');
+                    const selectedCategory = this.getAttribute('data-category');
 
                     bookCards.forEach(card => {
-                        const status = card.getAttribute('data-status');
-                        card.style.display = (filter === 'todos' || status === filter) ? 'block' : 'none';
+                        const bookCategory = card.getAttribute('data-category');
+                        if (selectedCategory === 'todos' || bookCategory === selectedCategory) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
                     });
-                });
-            });
-
-            categoryCards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const category = this.getAttribute('data-category');
-
-                    document.querySelector('.books-section').scrollIntoView({ behavior: 'smooth' });
-
-                    setTimeout(() => {
-                        bookCards.forEach(bookCard => {
-                            const bookCategory = bookCard.getAttribute('data-category');
-                            if (bookCategory === category) {
-                                bookCard.style.display = 'block';
-                                bookCard.style.animation = 'none';
-                                bookCard.offsetHeight;
-                                bookCard.style.animation = 'fadeInUp 0.6s ease forwards';
-                            } else {
-                                bookCard.style.display = 'none';
-                            }
-                        });
-
-                        filterBtns.forEach(btn => btn.classList.remove('active'));
-                        filterBtns[0].classList.add('active');
-                    }, 500);
-                });
-            });
-
-            document.querySelectorAll('.btn-primary').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (this.textContent === 'Reservar') {
-                        this.textContent = 'Reservado';
-                        this.classList.remove('btn-primary');
-                        this.classList.add('btn-secondary');
-                        this.disabled = true;
-                    }
                 });
             });
         });
