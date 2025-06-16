@@ -44,6 +44,7 @@ $rol = $_SESSION['user_rol'] ?? 'estudiante';
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            justify-content: center;
         }
         .book-card {
             flex: 1 1 250px;
@@ -52,6 +53,41 @@ $rol = $_SESSION['user_rol'] ?? 'estudiante';
             border-radius: 8px;
             padding: 16px;
             background: white;
+            text-align: center;
+        }
+        .book-cover {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        .book-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .book-author, .book-category {
+            font-size: 14px;
+            color: #666;
+        }
+        .book-description {
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        .book-actions {
+            margin-top: 15px;
+        }
+        .btn {
+            padding: 6px 12px;
+            margin: 0 4px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
         }
     </style>
 </head>
@@ -74,7 +110,7 @@ $rol = $_SESSION['user_rol'] ?? 'estudiante';
                         <li><a href="#"><i class="fas fa-calendar-alt"></i> Eventos</a></li>
                         <li><a href="#"><i class="fas fa-info-circle"></i> Acerca de</a></li>
                         <li><a href="#"><i class="fas fa-envelope"></i> Contacto</a></li>
-                        <li><a href="Admin/login.php" class="login-btn"><i class="fas fa-user"></i> Iniciar Sesión</a></li>
+                        <li><a href="Admin/logout.php" class="login-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
                     </ul>
                 </nav>
             </div>
@@ -82,25 +118,26 @@ $rol = $_SESSION['user_rol'] ?? 'estudiante';
     </header>
 
     <!-- Filtros de Categoría -->
-     
     <div class="category-filter">
-    <button class="category-btn active" data-category="todos">Todos</button>
-    <?php
-    $cat_query = "SELECT id, nombre FROM categorias_libros WHERE activo = 1 ORDER BY nombre ASC";
-    $cat_resultado = $conexion->query($cat_query);
+        <button class="category-btn active" data-category="todos">Todos</button>
+        <?php
+        $cat_query = "SELECT id, nombre FROM categorias_libros WHERE activo = 1 ORDER BY nombre ASC";
+        $cat_resultado = $conexion->query($cat_query);
 
-    if (!$cat_resultado) {
-        echo "<p style='color:red;'>Error al cargar categorías: " . $conexion->error . "</p>";
-    } else {
-        while ($cat = $cat_resultado->fetch_assoc()) {
-            $cat_id = htmlspecialchars($cat['id']);
-            $cat_nombre = htmlspecialchars($cat['nombre']);
-            echo '<button class="category-btn" data-category="' . $cat_id . '">' . $cat_nombre . '</button>';
+        $categorias_nombres = [];
+
+        if ($cat_resultado) {
+            while ($cat = $cat_resultado->fetch_assoc()) {
+                $cat_id = htmlspecialchars($cat['id']);
+                $cat_nombre = htmlspecialchars($cat['nombre']);
+                $categorias_nombres[$cat_id] = $cat_nombre;
+                echo '<button class="category-btn" data-category="' . $cat_id . '">' . $cat_nombre . '</button>';
+            }
+        } else {
+            echo "<p style='color:red;'>Error al cargar categorías: " . $conexion->error . "</p>";
         }
-    }
-    ?>
-</div>
-
+        ?>
+    </div>
 
     <!-- Sección de Libros -->
     <section class="books-section">
@@ -113,19 +150,20 @@ $rol = $_SESSION['user_rol'] ?? 'estudiante';
 
                 if ($resultado && $resultado->num_rows > 0) {
                     while ($libro = $resultado->fetch_assoc()) {
-                        $categoria = htmlspecialchars($libro['categoria'] ?? '');
+                        $categoria_id = htmlspecialchars($libro['categoria_id'] ?? '');
+                        $categoria_nombre = $categorias_nombres[$categoria_id] ?? 'Sin Categoría';
                         $estado = htmlspecialchars($libro['estado'] ?? '');
                         $icono = htmlspecialchars($libro['icono'] ?? '📘');
                         $titulo = htmlspecialchars($libro['titulo'] ?? '');
                         $autor = htmlspecialchars($libro['autor'] ?? '');
                         $descripcion = htmlspecialchars($libro['descripcion'] ?? '');
 
-                        echo '<div class="book-card" data-category="' . $categoria . '" data-status="' . $estado . '">';
+                        echo '<div class="book-card" data-category="' . $categoria_id . '" data-status="' . $estado . '">';
                         echo '<div class="book-cover">' . $icono . '</div>';
                         echo '<div class="book-info">';
                         echo '<h3 class="book-title">' . $titulo . '</h3>';
                         echo '<p class="book-author">' . $autor . '</p>';
-                        echo '<span class="book-category">' . $categoria . '</span>';
+                        echo '<span class="book-category">' . $categoria_nombre . '</span>';
                         echo '<p class="book-description">' . $descripcion . '</p>';
                         echo '<div class="book-actions">';
                         echo '<button class="btn btn-primary">Reservar</button>';
