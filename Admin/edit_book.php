@@ -17,8 +17,8 @@ if ($result) {
     $categorias = $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Obtener datos actuales
-$stmt = $conn->prepare('SELECT titulo, autor, genero, categoria_id, tipo_libro, anio_publicacion, isbn, descripcion, disponible, archivo_pdf FROM libros WHERE id = ?');
+// Obtener datos actuales del libro, incluyendo stock
+$stmt = $conn->prepare('SELECT titulo, autor, genero, categoria_id, tipo_libro, anio_publicacion, isbn, descripcion, disponible, archivo_pdf, stock FROM libros WHERE id = ?');
 if (!$stmt) {
     die('<div class="alert alert-danger">Error en la consulta SQL: ' . $conn->error . '</div>');
 }
@@ -30,7 +30,7 @@ if ($stmt->num_rows === 0) {
     header('Location: list_books.php');
     exit;
 }
-$stmt->bind_result($titulo, $autor, $genero, $categoria_id, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $archivo_pdf);
+$stmt->bind_result($titulo, $autor, $genero, $categoria_id, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $archivo_pdf, $stock);
 $stmt->fetch();
 $stmt->close();
 
@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $isbn = trim($_POST['isbn'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
     $disponible = isset($_POST['disponible']) ? 1 : 0;
+    $stock = (int)($_POST['stock'] ?? 0);
     $nuevo_pdf = $archivo_pdf;
 
     if ($titulo === '') { $errores[] = 'El título es obligatorio.'; }
@@ -54,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!preg_match('/^\d{4}$/', $anio_publicacion)) { $errores[] = 'Año inválido.'; }
     if ($isbn === '') { $errores[] = 'El ISBN es obligatorio.'; }
     if ($descripcion === '') { $errores[] = 'La descripción es obligatoria.'; }
+    if ($stock < 0) { $errores[] = 'El stock no puede ser negativo.'; }
 
     if (isset($_FILES['archivo_pdf']) && $_FILES['archivo_pdf']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['archivo_pdf']['name'], PATHINFO_EXTENSION));
@@ -71,11 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errores)) {
-        $stmt = $conn->prepare('UPDATE libros SET titulo=?, autor=?, genero=?, categoria_id=?, tipo_libro=?, anio_publicacion=?, isbn=?, descripcion=?, disponible=?, archivo_pdf=? WHERE id=?');
+        $stmt = $conn->prepare('UPDATE libros SET titulo=?, autor=?, genero=?, categoria_id=?, tipo_libro=?, anio_publicacion=?, isbn=?, descripcion=?, disponible=?, archivo_pdf=?, stock=? WHERE id=?');
         if (!$stmt) {
             $errores[] = 'Error en la consulta SQL: ' . $conn->error;
         } else {
-            $stmt->bind_param('sssississsi', $titulo, $autor, $genero, $categoria_id, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $nuevo_pdf, $id);
+            $stmt->bind_param('sssississsii', $titulo, $autor, $genero, $categoria_id, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $nuevo_pdf, $stock, $id);
             if ($stmt->execute()) {
                 $mensaje = 'Libro actualizado correctamente.';
                 $archivo_pdf = $nuevo_pdf;
@@ -205,6 +207,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <label for="descripcion" class="form-label">Descripción</label>
                                             <textarea class="form-control" id="descripcion" name="descripcion" required><?= htmlspecialchars($descripcion) ?></textarea>
                                         </div>
+
+                                        <!-- Nuevo campo stock -->
+                                        <div class="mb-3">
+                                            <label for="stock" class="form-label">Stock</label>
+                                            <input type="number" class="form-control" id="stock" name="stock" value="<?= htmlspecialchars($stock) ?>" min="0" required>
+                                        </div>
+
                                         <div class="mb-3">
                                             <label for="archivo_pdf" class="form-label">Archivo PDF</label>
                                             <input type="file" class="form-control" id="archivo_pdf" name="archivo_pdf" accept=".pdf">

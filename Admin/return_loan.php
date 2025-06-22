@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../conexion.php';
 
 $id = $_GET['id'] ?? null;
@@ -15,35 +16,47 @@ $stmt = $conn->prepare('SELECT id_libro, status FROM prestamos WHERE id_prestamo
 $stmt->bind_param('i', $id);
 $stmt->execute();
 $stmt->store_result();
+
 if ($stmt->num_rows === 0) {
     $stmt->close();
     header('Location: list_loans.php');
     exit;
 }
+
 $stmt->bind_result($libro_id, $status);
 $stmt->fetch();
 $stmt->close();
 
+// Si ya está devuelto, redirige
 if (strtolower($status) === 'devuelto') {
-
     header('Location: list_loans.php');
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Marcar préstamo como devuelto
-    $stmt = $conn->prepare("UPDATE prestamos SET status = 'devuelto' WHERE id_prestamo = ?");
-    $stmt->bind_param('i', $id);
+    $fecha_actual = date('Y-m-d');
+
+    // Marcar préstamo como devuelto con fecha
+    $stmt = $conn->prepare("UPDATE prestamos SET status = 'devuelto', fecha_devolucion = ? WHERE id_prestamo = ?");
+    $stmt->bind_param('si', $fecha_actual, $id);
+
     if ($stmt->execute()) {
-        // Marcar libro como disponible
-        $conn->query("UPDATE libros SET disponible = 1 WHERE id = $libro_id");
+        $stmt->close();
+
+        // Incrementar stock del libro
+        $update_stock = $conn->prepare("UPDATE libros SET stock = stock + 1 WHERE id = ?");
+        $update_stock->bind_param("i", $libro_id);
+        $update_stock->execute();
+        $update_stock->close();
+
         // Obtener usuario del préstamo
-        $stmtUser    = $conn->prepare('SELECT id_usuario FROM prestamos WHERE id_prestamo = ?');
+        $stmtUser = $conn->prepare('SELECT id_usuario FROM prestamos WHERE id_prestamo = ?');
         $stmtUser->bind_param('i', $id);
         $stmtUser->execute();
         $stmtUser->bind_result($usuario_id);
         $stmtUser->fetch();
         $stmtUser->close();
+
         // Obtener correo y nombre del usuario
         $stmtCorreo = $conn->prepare('SELECT gmail_institucional, nombre FROM usuarios WHERE id_usuario = ?');
         $stmtCorreo->bind_param('i', $usuario_id);
@@ -51,23 +64,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtCorreo->bind_result($correo_est, $nombre_est);
         $stmtCorreo->fetch();
         $stmtCorreo->close();
+
         // Enviar correo de notificación
         $asunto = 'Libro devuelto correctamente';
         $cuerpo = "Hola $nombre_est,\n\nSe ha registrado la devolución de tu libro en la biblioteca.\n\n¡Gracias por usar el servicio!";
         @mail($correo_est, $asunto, $cuerpo, "From: biblioteca@tudominio.com");
-        // Registrar notificación en la base de datos
+
+        // Registrar notificación en base de datos
         $tipo = 'devolucion';
         $mensaje_notif = 'Libro devuelto correctamente.';
         $stmtNotif = $conn->prepare('INSERT INTO notificaciones (usuario_id, tipo, mensaje) VALUES (?, ?, ?)');
         $stmtNotif->bind_param('iss', $usuario_id, $tipo, $mensaje_notif);
         $stmtNotif->execute();
         $stmtNotif->close();
+
         header('Location: list_loans.php?returned=1');
         exit;
     } else {
         $errores[] = 'Error al marcar como devuelto.';
+        $stmt->close();
     }
-    $stmt->close();
 }
 ?>
 <!DOCTYPE html>
@@ -96,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php if ($errores): ?>
                                         <div class="alert alert-danger">
                                             <ul class="mb-0">
-                                                <?php foreach ($errores as $e) { echo "<li>$e</li>"; } ?>
+                                                <?php foreach ($errores as $e) echo "<li>$e</li>"; ?>
                                             </ul>
                                         </div>
                                     <?php endif; ?>
