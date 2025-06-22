@@ -1,6 +1,6 @@
 <?php
 session_start();
-// --- DEBUGGING TEMPORAL (¡DESCOMENTA ESTAS LÍNEAS SOLO PARA DEPURAR Y ELIMÍNALAS EN PRODUCCIÓN!) ---
+// --- DEBUGGING TEMPORAL (¡DESCOMENTA ESTAS LÍNEAS SOLO PARA DEPURAR Y ELIMINAR EN PRODUCCIÓN!) ---
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 // ----------------------------------------------------------------------------------------------------
@@ -18,13 +18,13 @@ $libro_id = intval($_GET['id']);
 $sql = "SELECT l.id, l.titulo, l.autor, l.descripcion, l.tipo_libro, l.archivo_pdf, l.stock, c.nombre AS categoria_nombre
         FROM libros l
         LEFT JOIN categorias_libros c ON l.categoria_id = c.id
-        WHERE l.id = ?"; // Usamos un placeholder '?' para el ID
+        WHERE l.id = ?";
 
 $stmt = $conexion->prepare($sql);
 if (!$stmt) {
     die("Error al preparar la consulta: " . $conexion->error);
 }
-$stmt->bind_param("i", $libro_id); // 'i' indica que $libro_id es un entero
+$stmt->bind_param("i", $libro_id);
 $stmt->execute();
 $resultado = $stmt->get_result();
 
@@ -35,41 +35,41 @@ if (!$resultado || $resultado->num_rows === 0) {
 
 $libro = $resultado->fetch_assoc();
 
-// Asignamos y sanitizamos las variables del libro para mostrar en HTML
-$titulo        = htmlspecialchars($libro['titulo'] ?? '');
-$autor         = htmlspecialchars($libro['autor'] ?? '');
-$descripcion   = htmlspecialchars($libro['descripcion'] ?? '');
-$categoria     = htmlspecialchars($libro['categoria_nombre'] ?? '');
-$tipo_libro    = htmlspecialchars($libro['tipo_libro'] ?? '');
-$archivo_pdf   = htmlspecialchars($libro['archivo_pdf'] ?? ''); // Este es el nombre del archivo (ej. "mi_libro.pdf")
-$stock         = intval($libro['stock'] ?? 0);
+// Sanitizamos variables para mostrar en HTML
+$titulo      = htmlspecialchars($libro['titulo'] ?? '');
+$autor       = htmlspecialchars($libro['autor'] ?? '');
+$descripcion = htmlspecialchars($libro['descripcion'] ?? '');
+$categoria   = htmlspecialchars($libro['categoria_nombre'] ?? '');
+$tipo_libro  = htmlspecialchars($libro['tipo_libro'] ?? '');
+$archivo_pdf = htmlspecialchars($libro['archivo_pdf'] ?? '');
 
-// --- CONFIGURACIÓN DE RUTAS CLAVE ---
-// PASO 1: Define la ruta base URL para tu carpeta 'uploads'.
-// Esta es la ruta que el NAVEGADOR usará.
-// EJEMPLO: Si tu sitio es 'tudominio.com' y tu proyecto 'ProyectoGrad' está directamente
-// en la raíz web (ej. /var/www/html/ProyectoGrad/), entonces la URL para 'uploads' es:
-// 'tudominio.com/ProyectoGrad/uploads/'.
-// Si tu dominio ya apunta DIRECTAMENTE a la carpeta 'ProyectoGrad', entonces usa '/uploads/'.
-$base_url_uploads = '/ProyectoGrad/uploads/'; // <-- ¡AJUSTA ESTA LÍNEA SEGÚN LA ESTRUCTURA DE TU SERVIDOR WEB!
+// --- CORRECCIÓN: Eliminamos prefijo 'uploads/' si existe para evitar ruta duplicada ---
+$archivo_pdf = preg_replace('#^uploads/#', '', $archivo_pdf);
 
-// PASO 2: Define la ruta física ABSOLUTA en el servidor para tu carpeta 'uploads'.
-// Esto es lo que PHP usará para la función 'file_exists()'.
-// $_SERVER['DOCUMENT_ROOT'] es la raíz física de tu servidor web (ej. /var/www/html).
+$stock = intval($libro['stock'] ?? 0);
+
+// --- CONFIGURACIÓN DE RUTAS ---
+
+// Ruta URL base para la carpeta uploads (ajusta según tu estructura)
+$base_url_uploads = '/ProyectoGrad/uploads/';
+
+// Ruta física absoluta para la carpeta uploads (servidor)
 $base_path_uploads = $_SERVER['DOCUMENT_ROOT'] . $base_url_uploads;
 
-// --- VERIFICACIÓN DE EXISTENCIA DEL ARCHIVO PDF ---
-$pdf_path_physical = $base_path_uploads . $archivo_pdf; // Ruta física completa del PDF en el servidor
-$pdf_url_browser = $base_url_uploads . $archivo_pdf;     // Ruta URL completa para el enlace del navegador
+// Ruta física completa del PDF en servidor
+$pdf_path_physical = $base_path_uploads . $archivo_pdf;
 
-// Variable booleana para saber si el PDF existe y está disponible
+// Ruta URL completa para navegador
+$pdf_url_browser = $base_url_uploads . $archivo_pdf;
+
+// Comprobamos si archivo existe para libros digitales
 $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists($pdf_path_physical));
 
-// --- LÍNEAS DE DEPURACIÓN (¡DESCOMENTA ESTAS LÍNEAS TEMPORALMENTE PARA VER LAS RUTAS EN TU NAVEGADOR!) ---
-// echo "<p><strong>Ruta URL para el navegador:</strong> " . $pdf_url_browser . "</p>";
-// echo "<p><strong>Ruta física en el servidor:</strong> " . $pdf_path_physical . "</p>";
-// echo "<p><strong>El archivo PDF existe físicamente:</strong> " . ($pdf_exists ? 'Sí' : 'No') . "</p>";
-// ----------------------------------------------------------------------------------------------------------
+// --- DEPURACIÓN TEMPORAL (descomenta para verificar rutas) ---
+// echo "<p>Ruta URL para navegador: $pdf_url_browser</p>";
+// echo "<p>Ruta física en servidor: $pdf_path_physical</p>";
+// echo "<p>¿Archivo existe?: " . ($pdf_exists ? 'Sí' : 'No') . "</p>";
+// --------------------------------------------------------------------------------------
 ?>
 
 <!DOCTYPE html>
@@ -82,33 +82,11 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
     <link rel="stylesheet" href="/ProyectoGrad/assets/css/librodetalles.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-     /* Tu CSS personalizado si lo tienes, o déjalo vacío */
-    </style>
 </head>
 <body>
 <header>
-    <div class="container">
-        <div class="header-content" style="display:flex; align-items:center; justify-content:space-between;">
-            <div class="logo">
-                <span><img src="/ProyectoGrad/assets/images/Recurso_23.png" height="50" alt="Logo"></span>
-            </div>
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            <nav class="nav-menu">
-                <ul>
-                    <li><a href="index.php"><i class="fas fa-home"></i> Inicio</a></li>
-                    <li><a href="catalogo.php"><i class="fas fa-book"></i> Catálogo</a></li>
-                    <li><a href="#"><i class="fas fa-bookmark"></i> Mis Libros</a></li>
-                    <li><a href="#"><i class="fas fa-calendar-alt"></i> Eventos</a></li>
-                    <li><a href="#"><i class="fas fa-info-circle"></i> Acerca de</a></li>
-                    <li><a href="#"><i class="fas fa-envelope"></i> Contacto</a></li>
-                    <li><a href="Admin/logout.php" class="login-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+        <?php include 'header.php'; ?>
+
 </header>
 
 <main class="main-content">
