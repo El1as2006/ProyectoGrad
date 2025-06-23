@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2025 at 07:02 PM
+-- Generation Time: Jun 23, 2025 at 09:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -118,7 +118,10 @@ CREATE TABLE `estudiantes` (
 --
 
 INSERT INTO `estudiantes` (`id`, `nombre`, `gmail_institucional`, `telefono`, `carnet_e`, `contrasena`, `grado`, `seccion`, `creado_en`, `actualizado_en`, `activo`, `reset_token_e`, `reset_token_expires`, `rol`) VALUES
-(1, 'Luis Manuel Ramos Herrera', 'luisravanzo25@gmail.com', 76191279, '20110007', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'B', '2025-06-23 08:10:38', '2025-06-23 08:17:21', 1, NULL, NULL, 'estudiante');
+(1, 'Luis Manuel Ramos Herrera', 'luisravanzo25@gmail.com', 76191279, '20110007', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'B', '2025-06-23 08:10:38', '2025-06-23 08:17:21', 1, NULL, NULL, 'estudiante'),
+(2, 'Carlos Alfonso Torres Argueta', 'ct198316@gmail.com', 69527659, '20230146', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'A', '2025-06-23 08:10:38', '2025-06-23 08:17:21', 1, NULL, NULL, 'estudiante'),
+(3, 'Alejandro Jose Torres Argueta', 'alejandro@gmail.com', 99021736, '20230147', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 1, 'D', '2025-06-23 13:11:38', '2025-06-23 13:11:21', 1, NULL, NULL, 'estudiante'),
+(4, 'Santiago Elias Alvarado', 'elijah@gmail.com', 82773818, '20230047', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'A', '2025-06-23 13:10:38', '2025-06-23 13:10:21', 1, NULL, NULL, 'estudiante');
 
 -- --------------------------------------------------------
 
@@ -151,7 +154,7 @@ CREATE TABLE `libros` (
 INSERT INTO `libros` (`id`, `titulo`, `autor`, `genero`, `tipo_libro`, `anio_publicacion`, `isbn`, `descripcion`, `disponible`, `archivo_pdf`, `codigo_qr`, `creado_en`, `actualizado_en`, `categoria_id`, `stock`) VALUES
 (1, 'El Principito 2', 'Antoine de Saint-ExupÃ©ry', 'Novela', 'fisico', 1967, '9780307474728', 'Obra maestra de la literatura latinoamericana.', 0, NULL, NULL, '2025-06-03 08:00:40', '2025-06-22 17:12:23', 1, 0),
 (2, 'El Principito', 'Antoine de Saint-Exupéry', 'Fábula', 'fisico', 1943, '9780156012195', 'Un clásico para niños y adultos.', 1, NULL, NULL, '2025-06-03 08:00:40', '2025-06-22 17:12:19', 1, 0),
-(3, 'Dune', 'Frank Herbert', 'Novela', 'fisico', 1967, '9780307474729', 'novela épica de ciencia ficción escrita por Frank Herbert en 1965.', 1, NULL, NULL, '2025-06-03 08:00:40', '2025-06-23 11:01:49', 7, 13);
+(3, 'Dune', 'Frank Herbert', 'Novela', 'fisico', 1967, '9780307474729', 'novela épica de ciencia ficción escrita por Frank Herbert en 1965.', 1, NULL, NULL, '2025-06-03 08:00:40', '2025-06-23 13:27:28', 7, 12);
 
 -- --------------------------------------------------------
 
@@ -217,12 +220,8 @@ CREATE TABLE `prestamos` (
 --
 
 INSERT INTO `prestamos` (`id_prestamo`, `id_usuario`, `id_libro`, `fecha_prestamo`, `fecha_devolucion`, `status`, `qr_prestamo`, `tipo_usuario`, `carnet_e`, `origen_usuario`, `id_estudiante`) VALUES
-(1, 2, 1, '2025-06-01', '2025-06-10', 'no entregado', NULL, 'usuario', NULL, 'usuario', 0),
-(2, 3, 2, '2025-06-02', '2025-06-12', 'no entregado', NULL, 'usuario', NULL, 'usuario', 0),
 (4, 7, 1, '2025-06-04', '2025-06-13', 'devuelto', NULL, 'usuario', NULL, 'usuario', 0),
 (5, 7, 2, '2025-06-05', '2025-07-03', 'devuelto', NULL, 'usuario', NULL, 'usuario', 0),
-(6, 2, 2, '2025-06-12', '2025-06-20', 'devuelto', NULL, 'usuario', NULL, 'usuario', 0),
-(7, 3, 1, '2025-06-05', '2025-06-13', 'no entregado', 'uploads/qr/prestamo_7.png', 'usuario', NULL, 'usuario', 0),
 (8, 1, 3, '2025-06-23', '2025-06-23', 'devuelto', NULL, 'usuario', NULL, 'usuario', 0),
 (9, 1, 3, '2025-06-23', '2025-06-23', 'devuelto', NULL, 'usuario', NULL, 'usuario', 0),
 (10, 1, 3, '2025-06-23', '2025-06-23', 'devuelto', NULL, 'usuario', NULL, 'usuario', 0),
@@ -231,7 +230,8 @@ INSERT INTO `prestamos` (`id_prestamo`, `id_usuario`, `id_libro`, `fecha_prestam
 (13, 1, 3, '2025-06-23', '2025-06-23', 'devuelto', NULL, 'usuario', NULL, 'usuario', 0),
 (14, 7, 3, '2025-06-23', '2025-06-23', 'devuelto', NULL, 'usuario', NULL, 'usuario', NULL),
 (15, 1, 3, '2025-06-23', '2025-06-23', 'devuelto', NULL, 'usuario', NULL, 'usuario', NULL),
-(16, 1, 3, '2025-06-23', '2025-06-23', 'devuelto', NULL, 'usuario', NULL, 'usuario', NULL);
+(16, 1, 3, '2025-06-23', '2025-06-23', 'devuelto', NULL, 'usuario', NULL, 'usuario', NULL),
+(17, 2, 3, '2025-06-23', '2025-06-24', 'no entregado', NULL, 'usuario', NULL, 'usuario', NULL);
 
 -- --------------------------------------------------------
 
@@ -478,7 +478,7 @@ ALTER TABLE `notificaciones`
 -- AUTO_INCREMENT for table `prestamos`
 --
 ALTER TABLE `prestamos`
-  MODIFY `id_prestamo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_prestamo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `recomendaciones`
@@ -515,12 +515,6 @@ ALTER TABLE `categorias_libros`
   ADD CONSTRAINT `fk_subcategoria` FOREIGN KEY (`subcategoria_id`) REFERENCES `subcategorias_libros` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `estudiantes`
---
-ALTER TABLE `estudiantes`
-  ADD CONSTRAINT `estudiantes_ibfk_1` FOREIGN KEY (`id`) REFERENCES `prestamos` (`id_usuario`);
-
---
 -- Constraints for table `libros`
 --
 ALTER TABLE `libros`
@@ -536,8 +530,8 @@ ALTER TABLE `notificaciones`
 -- Constraints for table `prestamos`
 --
 ALTER TABLE `prestamos`
-  ADD CONSTRAINT `prestamos_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE,
-  ADD CONSTRAINT `prestamos_ibfk_2` FOREIGN KEY (`id_libro`) REFERENCES `libros` (`id`);
+  ADD CONSTRAINT `prestamos_ibfk_2` FOREIGN KEY (`id_libro`) REFERENCES `libros` (`id`),
+  ADD CONSTRAINT `prestamos_ibfk_3` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
 
 --
 -- Constraints for table `recomendaciones`

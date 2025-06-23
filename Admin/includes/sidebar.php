@@ -378,86 +378,126 @@ if (isset($conn)) {
         </div>
         <!-- ========== Topbar End ========== -->
 
-        <!-- ========== Left Sidebar Start ========== -->
-        <div class="leftside-menu">
-            <a href="index.php" class="logo text-center">
-                <span class="logo-lg">
-                    <img src="../assets/images/logo.png" alt="logo" height="60"
-                        onerror="this.onerror=null;this.src='../assets/images/logo-sm.png';">
-                </span>
-            </a>
-            <div class="h-100" id="leftside-menu-container" data-simplebar>
-                <ul class="side-nav">
-                    <li class="side-nav-title">Menú</li>
-                    <li class="side-nav-item">
-                        <a href="index.php" class="side-nav-link">
-                            <i class="mdi mdi-view-dashboard"></i>
-                            <span> Dashboard </span>
-                        </a>
-                    </li>
+       <!-- ========== Left Sidebar Start ========== -->
+<div class="leftside-menu">
+    <a href="index.php" class="logo text-center">
+        <span class="logo-lg">
+            <img src="../assets/images/logo.png" alt="logo" height="60"
+                onerror="this.onerror=null;this.src='../assets/images/logo-sm.png';">
+        </span>
+    </a>
+    <div class="h-100" id="leftside-menu-container" data-simplebar>
+        <ul class="side-nav">
+            <li class="side-nav-title">Menú</li>
 
-                    <li class="side-nav-item">
-                        <a href="list_students.php" class="side-nav-link">
-                            <i class="mdi mdi-account-multiple"></i>
-                            <span> Estudiantes </span>
-                        </a>
-                    </li>
+            <li class="side-nav-item">
+                <a href="index.php" class="side-nav-link">
+                    <i class="mdi mdi-view-dashboard"></i>
+                    <span> Dashboard </span>
+                </a>
+            </li>
 
-                    <li class="side-nav-item">
-                        <a href="list_books.php" class="side-nav-link">
-                            <i class="mdi mdi-book-open-page-variant"></i>
-                            <span> Libros </span>
-                        </a>
-                    </li>
+            <!-- Dropdown Estudiantes -->
+            <li class="side-nav-item">
+    <a href="list_students_by_grade.php" class="side-nav-link">
+        <i class="mdi mdi-account-multiple"></i>
+        <span> Estudiantes </span>
+    </a>
+</li>
 
-                    <li class="side-nav-item">
-                        <div class="side-nav-link"
-                            style="display: flex; justify-content: space-between; align-items: center;">
-                            <a href="categorias.php"
-                                style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-                                <i class="mdi mdi-shape"></i>
-                                <span style="margin-left: 8px;">Categorías</span>
-                            </a>
-                            <span onclick="toggleSubcategorias()"
-                                style="cursor: pointer; padding: 0 10px;">&#9662;</span>
-                        </div>
-                        <ul class="side-nav-sub" id="subcategorias" style="display: none; padding-left: 20px;">
-                            <li class="side-nav-sub-item">
-                                <a href="subcategorias.php" class="side-nav-link">
-                                    Ver subcategorías
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="side-nav-item">
-                        <a href="list_loans.php" class="side-nav-link">
-                            <i class="mdi mdi-bookmark-check"></i>
-                            <span> Préstamos </span>
-                        </a>
-                    </li>
-                    <li class="side-nav-item">
-                        <a href="list_users.php" class="side-nav-link">
-                            <i class="mdi mdi-account-key"></i>
-                            <span> Usuarios </span>
-                        </a>
-                    </li>
-                    <li class="side-nav-item">
-                        <a href="notificaciones.php" class="side-nav-link">
-                            <i class="mdi mdi-bell-outline"></i>
-                            <span> Notificaciones </span>
-                        </a>
-                    </li>
-                    <li class="side-nav-item">
-                        <a href="logout.php" class="side-nav-link">
-                            <i class="mdi mdi-logout"></i>
-                            <span> Cerrar sesión </span>
-                        </a>
+
+            <li class="side-nav-item">
+                <a href="list_books.php" class="side-nav-link">
+                    <i class="mdi mdi-book-open-page-variant"></i>
+                    <span> Libros </span>
+                </a>
+            </li>
+
+            
+
+            <li class="side-nav-item">
+                <div class="side-nav-link"
+                    style="display: flex; justify-content: space-between; align-items: center;">
+                    <a href="categorias.php"
+                        style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                        <i class="mdi mdi-shape"></i>
+                        <span style="margin-left: 8px;">Categorías</span>
+                    </a>
+                    <span onclick="toggleSubcategorias()" style="cursor: pointer; padding: 0 10px;">&#9662;</span>
+                </div>
+                <ul class="side-nav-sub" id="subcategorias" style="display: none; padding-left: 20px;">
+                    <li class="side-nav-sub-item">
+                        <a href="subcategorias.php" class="side-nav-link">Ver subcategorías</a>
                     </li>
                 </ul>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-        <!-- ========== Left Sidebar End ========== -->
+            </li>
+            
+
+            <li class="side-nav-item">
+                <a href="list_loans.php" class="side-nav-link">
+                    <i class="mdi mdi-bookmark-check"></i>
+                    <span> Préstamos </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="list_users.php" class="side-nav-link">
+                    <i class="mdi mdi-account-key"></i>
+                    <span> Usuarios </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="notificaciones.php" class="side-nav-link">
+                    <i class="mdi mdi-bell-outline"></i>
+                    <span> Notificaciones </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="logout.php" class="side-nav-link">
+                    <i class="mdi mdi-logout"></i>
+                    <span> Cerrar sesión </span>
+                </a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- ========== Left Sidebar End ========== -->
+
+<script>
+    function toggleSubcategorias(element) {
+        var submenu = document.getElementById('subcategorias');
+        submenu.style.display = (submenu.style.display === 'none') ? 'block' : 'none';
+
+        // Cambiar color a amarillo al hacer clic
+        resetMenuColors();
+        element.style.backgroundColor = '#FFD700'; // Amarillo
+    }
+
+    function toggleEstudiantes(element) {
+        var submenu = document.getElementById('estudiantesSub');
+        submenu.style.display = (submenu.style.display === 'none') ? 'block' : 'none';
+
+        // Cambiar color a amarillo al hacer clic
+        resetMenuColors();
+        element.style.backgroundColor = '#FFD700'; // Amarillo
+    }
+
+    function resetMenuColors() {
+        var items = document.querySelectorAll('.side-nav-link');
+        items.forEach(function(item) {
+            item.style.backgroundColor = ''; // Reset
+        });
+        var dropdowns = document.querySelectorAll('.side-nav-item > div.side-nav-link');
+        dropdowns.forEach(function(item) {
+            item.style.backgroundColor = ''; // Reset
+        });
+    }
+</script>
+
+
 
         <!-- Theme Settings -->
         <div class="offcanvas offcanvas-end" tabindex="-1" id="theme-settings-offcanvas">
