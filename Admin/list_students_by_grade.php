@@ -9,14 +9,18 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 include '../conexion.php';
-
+// Corrección: renombrar la variable del resultset
 $grados = $conn->query("SELECT DISTINCT grado FROM estudiantes ORDER BY grado");
 $secciones = $conn->query("SELECT DISTINCT seccion FROM estudiantes ORDER BY seccion");
+$especialidades = $conn->query("SELECT DISTINCT especialidad FROM estudiantes ORDER BY especialidad");
 
+// Obtener valores del filtro
 $grado = $_GET['grado'] ?? '';
 $seccion = $_GET['seccion'] ?? '';
+$especialidad = $_GET['especialidad'] ?? '';
 
-$query = "SELECT id, nombre, grado, seccion FROM estudiantes WHERE 1=1";
+
+$query = "SELECT id, nombre, grado, seccion, especialidad FROM estudiantes WHERE 1=1";
 $params = [];
 $types = '';
 
@@ -32,10 +36,17 @@ if ($seccion !== '') {
     $types .= 's';
 }
 
+if ($especialidad !== '') {
+    $query .= " AND especialidad = ?";
+    $params[] = $especialidad;
+    $types .= 's';
+}
+
 $stmt = $conn->prepare($query);
 if (!empty($params)) {
     $stmt->bind_param($types, ...$params);
 }
+
 $stmt->execute();
 $resultado = $stmt->get_result();
 
@@ -43,6 +54,7 @@ $resultado = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Filtrar Estudiantes</title>
@@ -50,6 +62,7 @@ $resultado = $stmt->get_result();
     <link href="../assets/css/app-saas.min.css" rel="stylesheet" />
     <link href="../assets/css/icons.min.css" rel="stylesheet" />
 </head>
+
 <body>
     <div class="wrapper">
         <?php include __DIR__ . '/includes/sidebar.php'; ?>
@@ -87,6 +100,18 @@ $resultado = $stmt->get_result();
                                                 <?php endwhile; ?>
                                             </select>
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="especialidad" class="form-label">Especialidad</label>
+                                            <select class="form-control" id="especialidad" name="especialidad">
+                                                <option value="">Todas</option>
+                                                <?php while ($s = $especialidades->fetch_assoc()): ?>
+                                                    <option value="<?= $s['especialidad'] ?>"
+                                                        <?= $especialidad == $s['especialidad'] ? 'selected' : '' ?>>
+                                                        <?= htmlspecialchars($s['especialidad']) ?>
+                                                    </option>
+                                                <?php endwhile; ?>
+                                            </select>
+                                        </div>
                                         <button type="submit" class="btn btn-primary">Filtrar</button>
                                     </form>
                                 </div>
@@ -106,6 +131,7 @@ $resultado = $stmt->get_result();
                                                     <th>Nombre</th>
                                                     <th>Grado</th>
                                                     <th>Sección</th>
+                                                    <th>especialidad</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -116,10 +142,14 @@ $resultado = $stmt->get_result();
                                                             <td><?= htmlspecialchars($row['nombre']) ?></td>
                                                             <td><?= htmlspecialchars($row['grado']) ?></td>
                                                             <td><?= htmlspecialchars($row['seccion']) ?></td>
+                                                            <td><?= htmlspecialchars($row['especialidad']) ?></td>
                                                         </tr>
                                                     <?php endwhile; ?>
                                                 <?php else: ?>
-                                                    <tr><td colspan="4" class="text-center">No se encontraron estudiantes.</td></tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-center">No se encontraron estudiantes.
+                                                        </td>
+                                                    </tr>
                                                 <?php endif; ?>
                                             </tbody>
                                         </table>
@@ -137,4 +167,5 @@ $resultado = $stmt->get_result();
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
 </body>
+
 </html>

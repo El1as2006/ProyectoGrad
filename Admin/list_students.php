@@ -12,7 +12,7 @@ include '../conexion.php';
 $id_usuario = $_SESSION['user_id'] ?? null;
 
 // Mostrar solo usuarios con rol estudiante
-$result = $conn->query("SELECT id, nombre, gmail_institucional, telefono, carnet_e, grado, seccion FROM estudiantes ORDER BY id DESC");
+$result = $conn->query("SELECT id, nombre, gmail_institucional, telefono, carnet_e, grado, seccion, especialidad FROM estudiantes ORDER BY id DESC");
 
 ?>
 <!DOCTYPE html>
@@ -55,6 +55,7 @@ $result = $conn->query("SELECT id, nombre, gmail_institucional, telefono, carnet
                                             <th>Carnet</th>
                                             <th>Grado</th>
                                             <th>Seccion</th>
+                                            <th>especialidad</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -62,7 +63,7 @@ $result = $conn->query("SELECT id, nombre, gmail_institucional, telefono, carnet
 
                                         <?php
 
-                                        $result = $conn->query("SELECT id, nombre, gmail_institucional, telefono, carnet_e, grado, seccion FROM estudiantes ORDER BY id DESC");
+                                        $result = $conn->query("SELECT id, nombre, gmail_institucional, telefono, carnet_e, grado, seccion, especialidad FROM estudiantes ORDER BY id DESC");
 
                                         $estudiantes = [];
                                         if ($result) {
@@ -81,6 +82,7 @@ $result = $conn->query("SELECT id, nombre, gmail_institucional, telefono, carnet
                                                 <td><?= htmlspecialchars($row['carnet_e'] ?? '') ?></td>
                                                 <td><?= htmlspecialchars($row['grado'] ?? '') ?></td>
                                                 <td><?= htmlspecialchars($row['seccion'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($row['especialidad'] ?? '') ?></td>
                                                 <td>
                                                     <a href="ficha_estudiante.php?id=<?= $row['id'] ?>"
                                                         class="btn btn-sm btn-info">Ver ficha</a>

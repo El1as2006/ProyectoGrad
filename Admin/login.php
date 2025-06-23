@@ -25,6 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if ($row['rol'] === 'admin') {
                         header('Location: index.php');
+                    } elseif ($row['rol'] === 'docente') {
+                        header('Location: ../Docente/index.php');  // <-- Redirección para docentes
                     } elseif ($row['rol'] === 'estudiante') {
                         header('Location: ../index.php');
                     } else {
@@ -71,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -81,33 +84,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
-        body, html {
+        body,
+        html {
             height: 100%;
             margin: 0;
             background-color: #f8f9fa;
         }
+
         .myform {
             width: 100%;
             max-width: 400px;
             padding: 30px;
             background: white;
             border-radius: 15px;
-            box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
         }
+
         .logo img {
             height: 80px;
             width: auto;
             margin-bottom: 20px;
         }
+
         .login-container {
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
         .btn-primary {
             border-radius: 50px;
         }
+
         .google.btn {
             background-color: #db4a39;
             color: white;
@@ -115,20 +124,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-align: center;
             width: 100%;
         }
+
         .google.btn:hover {
             background-color: #c23321;
             color: white;
         }
+
         .login-or {
             position: relative;
             text-align: center;
             margin: 20px 0;
         }
+
         .hr-or {
             height: 1px;
             margin: 0;
             background-color: #ccc;
         }
+
         .span-or {
             background: white;
             padding: 0 10px;
@@ -141,6 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
+
 <body>
     <div class="container login-container">
         <div class="myform text-center">
@@ -157,11 +171,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form action="" method="post" name="login" autocomplete="off">
                 <div class="form-group">
                     <label for="gmail_institucional">Correo institucional</label>
-                    <input type="email" name="gmail_institucional" class="form-control" id="gmail_institucional" placeholder="Correo institucional" required autofocus value="<?php echo htmlspecialchars($_POST['gmail_institucional'] ?? ''); ?>">
+                    <input type="email" name="gmail_institucional" class="form-control" id="gmail_institucional"
+                        placeholder="Correo institucional" required autofocus
+                        value="<?php echo htmlspecialchars($_POST['gmail_institucional'] ?? ''); ?>">
                 </div>
                 <div class="form-group">
                     <label for="contraseña">Contraseña</label>
-                    <input type="password" name="contraseña" class="form-control" id="contraseña" placeholder="Contraseña" required>
+                    <input type="password" name="contraseña" class="form-control" id="contraseña"
+                        placeholder="Contraseña" required>
                 </div>
                 <div class="form-group">
                     <p class="text-center mb-1">Al ingresar aceptas nuestros <a href="#">Términos de uso</a></p>
@@ -179,4 +196,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </body>
+
 </html>
