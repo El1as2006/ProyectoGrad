@@ -230,7 +230,7 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id_usuario`, `nombre`, `gmail_institucional`, `telefono`, `carnet`, `contrasena`, `rol`, `creado_en`, `actualizado_en`, `activo`, `reset_token`, `reset_token_expires`) VALUES
+
 (1, 'Admin Principal', 'admin@gmail.com', '77778888', '00000001', '$2y$10$szoj6VvpLUbyo90iTurV7e5gml8ymC7VDQFCYLAbmCfP6LOH7I/1S', 'admin', '2025-06-03 08:00:40', '2025-06-05 04:13:34', 1, NULL, NULL),
 (2, 'Juan Pérez', 'juan.perez@colegio.edu', '77778889', '12345678', '$2y$10$wH1Qw8Qw8Qw8Qw8Qw8Qw8eQw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8', 'estudiante', '2025-06-03 08:00:40', '2025-06-03 08:00:40', 1, NULL, NULL),
 (3, 'Ana López', 'ana.lopez@colegio.edu', '77778890', '87654321', '$2y$10$wH1Qw8Qw8Qw8Qw8Qw8Qw8eQw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8', 'estudiante', '2025-06-03 08:00:40', '2025-06-03 08:00:40', 1, NULL, NULL),
@@ -239,7 +239,7 @@ INSERT INTO `usuarios` (`id_usuario`, `nombre`, `gmail_institucional`, `telefono
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_libros_categorias`
+-- Estructura Stand-in para la vista `vista_libros_categorias`INSERT INTO `usuarios` (`id_usuario`, `nombre`, `gmail_institucional`, `telefono`, `carnet`, `contrasena`, `rol`, `creado_en`, `actualizado_en`, `activo`, `reset_token`, `reset_token_expires`) VALUES
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `vista_libros_categorias` (

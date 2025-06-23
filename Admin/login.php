@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once '../conexion.php'; // Assuming conexion.php is in your_project_root/
+include_once '../conexion.php';
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -10,10 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($gmail_institucional) || empty($contraseña)) {
         $error = 'Por favor, ingrese su correo institucional y contraseña.';
     } else {
+        // 1. Buscar en usuarios
         $stmt = $conn->prepare('SELECT id_usuario, nombre, contrasena, rol FROM usuarios WHERE gmail_institucional = ? LIMIT 1');
-        if (!$stmt) {
-            $error = 'Error en la consulta: ' . $conn->error;
-        } else {
+        if ($stmt) {
             $stmt->bind_param('s', $gmail_institucional);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -24,31 +23,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['user_name'] = $row['nombre'];
                     $_SESSION['user_rol'] = $row['rol'];
 
-                    // You can uncomment this line temporarily for debugging:
-                    // echo "DEBUG: User Role from DB: '" . htmlspecialchars($row['rol']) . "'<br>";
-
-                    if ($_SESSION['user_rol'] === 'admin') {
-                        // Admin index is in the same folder as login.php (Admin folder)
-                        header('Location: index.php'); // This looks correct for admin
-                        exit;
-                    } elseif ($_SESSION['user_rol'] === 'estudiante') {
-                        // Student index is one level UP from the Admin folder
-                        header('Location: ../index.php'); // Corrected path for student
-                        exit;
+                    if ($row['rol'] === 'admin') {
+                        header('Location: index.php');
+                    } elseif ($row['rol'] === 'estudiante') {
+                        header('Location: ../index.php');
                     } else {
-                        $error = 'Rol de usuario no reconocido. Por favor, contacte al soporte.';
+                        $error = 'Rol de usuario no reconocido.';
                     }
+                    exit;
                 } else {
                     $error = 'Contraseña incorrecta.';
                 }
             } else {
-                $error = 'Usuario no encontrado.';
+                // 2. Buscar en estudiantes
+                $stmt2 = $conn->prepare('SELECT id, nombre, contrasena FROM estudiantes WHERE gmail_institucional = ? LIMIT 1'); // Asegúrate de que la columna se llame gmail
+                if ($stmt2) {
+                    $stmt2->bind_param('s', $gmail_institucional);
+                    $stmt2->execute();
+                    $result2 = $stmt2->get_result();
+
+                    if ($estudiante = $result2->fetch_assoc()) {
+                        if (password_verify($contraseña, $estudiante['contrasena'])) {
+                            $_SESSION['user_id'] = $estudiante['id'];
+                            $_SESSION['user_name'] = $estudiante['nombre'];
+                            $_SESSION['user_rol'] = 'estudiante';
+
+                            header('Location: ../index.php');
+                            exit;
+                        } else {
+                            $error = 'Contraseña incorrecta.';
+                        }
+                    } else {
+                        $error = 'Usuario no encontrado.';
+                    }
+                    $stmt2->close();
+                } else {
+                    $error = 'Error en la consulta de estudiantes: ' . $conn->error;
+                }
             }
             $stmt->close();
+        } else {
+            $error = 'Error en la consulta de usuarios: ' . $conn->error;
         }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

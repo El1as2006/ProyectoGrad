@@ -240,11 +240,13 @@ if (isset($_GET['export']) && $_GET['export'] === 'excel') {
                                     <h4 class="card-title">Subcategorías de Libros</h4>
                                     <a href="?export=excel" class="btn btn-success mb-3">Exportar a Excel</a>
                                     <div class="table-responsive">
-                                        <table class="table table-bordered table-hover">
+                                        <table class="table table-bordered table-hover" style="font-size: 19px;">
+                                            <!-- Tamaño de texto aumentado -->
                                             <thead>
                                                 <tr>
-                                                    <th>Nombre de la categoria</th>
-                                                    <th>Subcategorías</th>
+                                                    <th style="width: 50%;">Nombre de la categoría</th>
+                                                    <!-- Ancho ampliado -->
+                                                    <th style="width: 50%;">Subcategorías</th> <!-- Ancho ampliado -->
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -268,12 +270,6 @@ if (isset($_GET['export']) && $_GET['export'] === 'excel') {
 
 
                                                 $result = $conn->query($query);
-
-                                                if (!$result) {
-                                                    echo "Error en la consulta SQL: " . $conn->error;
-                                                } else {
-                                                    echo "Filas encontradas: " . $result->num_rows . "<br>";
-                                                }
 
                                                 if ($result && $result->num_rows > 0):
                                                     while ($row = $result->fetch_assoc()):

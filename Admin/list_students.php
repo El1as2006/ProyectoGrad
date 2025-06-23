@@ -12,7 +12,7 @@ include '../conexion.php';
 $id_usuario = $_SESSION['user_id'] ?? null;
 
 // Mostrar solo usuarios con rol estudiante
-$result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono, carnet FROM usuarios WHERE rol = 'estudiante' ORDER BY id_usuario DESC");
+$result = $conn->query("SELECT id, nombre, gmail_institucional, telefono, carnet_e, grado, seccion FROM estudiantes ORDER BY id DESC");
 
 ?>
 <!DOCTYPE html>
@@ -53,6 +53,8 @@ $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono
                                             <th>Email</th>
                                             <th>Teléfono</th>
                                             <th>Carnet</th>
+                                            <th>Grado</th>
+                                            <th>Seccion</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -60,7 +62,7 @@ $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono
 
                                         <?php
 
-                                        $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono, carnet FROM usuarios WHERE rol = 'estudiante' ORDER BY id_usuario DESC");
+                                        $result = $conn->query("SELECT id, nombre, gmail_institucional, telefono, carnet_e, grado, seccion FROM estudiantes ORDER BY id DESC");
 
                                         $estudiantes = [];
                                         if ($result) {
@@ -72,17 +74,19 @@ $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono
 
                                         foreach ($estudiantes as $row): ?>
                                             <tr>
-                                                <td><?= $row['id_usuario'] ?></td>
+                                                <td><?= $row['id'] ?></td>
                                                 <td><?= htmlspecialchars($row['nombre']) ?></td>
                                                 <td><?= htmlspecialchars($row['gmail_institucional']) ?></td>
                                                 <td><?= htmlspecialchars($row['telefono'] ?? '') ?></td>
-                                                <td><?= htmlspecialchars($row['carnet'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($row['carnet_e'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($row['grado'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($row['seccion'] ?? '') ?></td>
                                                 <td>
-                                                    <a href="ficha_estudiante.php?id=<?= $row['id_usuario'] ?>"
+                                                    <a href="ficha_estudiante.php?id=<?= $row['id'] ?>"
                                                         class="btn btn-sm btn-info">Ver ficha</a>
-                                                    <a href="edit_student.php?id=<?= $row['id_usuario'] ?>"
+                                                    <a href="edit_student.php?id=<?= $row['id'] ?>"
                                                         class="btn btn-sm btn-warning">Editar</a>
-                                                    <a href="delete_student.php?id=<?= $row['id_usuario'] ?>"
+                                                    <a href="delete_student.php?id=<?= $row['id'] ?>"
                                                         class="btn btn-sm btn-danger"
                                                         onclick="return confirm('¿Seguro que deseas eliminar este estudiante?')">Eliminar</a>
                                                 </td>

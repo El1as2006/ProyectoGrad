@@ -6,6 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
+
 include '../conexion.php';
 
 $id_usuario = $_SESSION['user_id'] ?? null;
@@ -13,30 +14,39 @@ $user_rol = $_SESSION['user_rol'] ?? '';
 
 // Mostrar todos los préstamos si es admin o super_admin, solo los suyos si es estudiante/docente
 if ($user_rol === 'admin' || $user_rol === 'super_admin') {
-    $result = $conn->query("
+    $query = "
         SELECT prestamos.*, usuarios.nombre, usuarios.gmail_institucional, libros.titulo
         FROM prestamos
         JOIN usuarios ON prestamos.id_usuario = usuarios.id_usuario
         JOIN libros ON prestamos.id_libro = libros.id
         ORDER BY prestamos.id_prestamo DESC
-    ");
+    ";
 } else {
-    $result = $conn->query("
+    $query = "
         SELECT prestamos.*, usuarios.nombre, usuarios.gmail_institucional, libros.titulo
         FROM prestamos
         JOIN usuarios ON prestamos.id_usuario = usuarios.id_usuario
         JOIN libros ON prestamos.id_libro = libros.id
         WHERE prestamos.id_usuario = $id_usuario
         ORDER BY prestamos.id_prestamo DESC
-    ");
+    ";
 }
 
+$result = $conn->query($query);
+$prestamos = [];
 
-if ($result === false) {
-    echo '<div class="alert alert-danger">Error en la consulta SQL: ' . $conn->error . '</div>';
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $prestamos[] = $row;
+    }
+} else {
+    echo '<div class="alert alert-warning">No se encontraron préstamos.</div>';
 }
 
+// Debug opcional
+// echo '<pre>'; print_r($prestamos); echo '</pre>';
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -79,28 +89,33 @@ if ($result === false) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php while($row = $result->fetch_assoc()): ?>
-                                                <tr>
-                                                    <td><?= $row['id_prestamo'] ?></td>
-                                                    <td><?= htmlspecialchars($row['nombre']) ?> (<?= htmlspecialchars($row['gmail_institucional']) ?>)</td>
-                                                    <td><?= htmlspecialchars($row['titulo']) ?></td>
-                                                    <td><?= htmlspecialchars($row['fecha_prestamo']) ?></td>
-                                                    <td><?= htmlspecialchars($row['fecha_devolucion']) ?></td>
-                                                    <td>
-                                                    <?php if (in_array(strtolower($row['status']), ['devuelto', 'entregado', 'entregado con retraso'])): ?>
-    <span class="badge bg-success">Sí</span>
-<?php else: ?>
-    <span class="badge bg-danger">No</span>
-<?php endif; ?>
-
-                                                    </td>
-                                                    <td>
-                                                        <?php if ($row['status'] == 'no entregado'): ?>
-                                                        <a href="return_loan.php?id=<?= $row['id_prestamo'] ?>" class="btn btn-sm btn-info">Marcar Devuelto</a>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                </tr>
-                                                <?php endwhile; ?>
+                                                <?php if (!empty($prestamos)): ?>
+                                                    <?php foreach($prestamos as $row): ?>
+                                                    <tr>
+                                                        <td><?= $row['id_prestamo'] ?></td>
+                                                        <td><?= htmlspecialchars($row['nombre']) ?> (<?= htmlspecialchars($row['gmail_institucional']) ?>)</td>
+                                                        <td><?= htmlspecialchars($row['titulo']) ?></td>
+                                                        <td><?= htmlspecialchars($row['fecha_prestamo']) ?></td>
+                                                        <td><?= htmlspecialchars($row['fecha_devolucion']) ?></td>
+                                                        <td>
+                                                            <?php if (in_array(strtolower($row['status']), ['devuelto', 'entregado', 'entregado con retraso'])): ?>
+                                                                <span class="badge bg-success">Sí</span>
+                                                            <?php else: ?>
+                                                                <span class="badge bg-danger">No</span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php if ($row['status'] == 'no entregado'): ?>
+                                                                <a href="return_loan.php?id=<?= $row['id_prestamo'] ?>" class="btn btn-sm btn-info">Marcar Devuelto</a>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    </tr>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <tr>
+                                                        <td colspan="7" class="text-center">No hay préstamos registrados.</td>
+                                                    </tr>
+                                                <?php endif; ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -115,7 +130,6 @@ if ($result === false) {
     </div>
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
-    <!-- Script para notificaciones -->
     <script src="includes/notifications.js"></script>
 </body>
 </html>
