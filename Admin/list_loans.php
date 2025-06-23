@@ -12,20 +12,17 @@ include '../conexion.php';
 $id_usuario = $_SESSION['user_id'] ?? null;
 $user_rol = $_SESSION['user_rol'] ?? '';
 
-// Mostrar todos los préstamos si es admin o super_admin, solo los suyos si es estudiante/docente
 if ($user_rol === 'admin' || $user_rol === 'super_admin') {
     $query = "
-        SELECT prestamos.*, usuarios.nombre, usuarios.gmail_institucional, libros.titulo
+        SELECT prestamos.*, libros.titulo
         FROM prestamos
-        JOIN usuarios ON prestamos.id_usuario = usuarios.id_usuario
         JOIN libros ON prestamos.id_libro = libros.id
         ORDER BY prestamos.id_prestamo DESC
     ";
 } else {
     $query = "
-        SELECT prestamos.*, usuarios.nombre, usuarios.gmail_institucional, libros.titulo
+        SELECT prestamos.*, libros.titulo
         FROM prestamos
-        JOIN usuarios ON prestamos.id_usuario = usuarios.id_usuario
         JOIN libros ON prestamos.id_libro = libros.id
         WHERE prestamos.id_usuario = $id_usuario
         ORDER BY prestamos.id_prestamo DESC
@@ -37,15 +34,35 @@ $prestamos = [];
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
+        $id_usuario_prestamo = $row['id_usuario'];
+
+        // Primero busca en estudiantes
+        $estudiante_query = $conn->query("SELECT nombre, gmail_institucional FROM estudiantes WHERE id = $id_usuario_prestamo LIMIT 1");
+        if ($estudiante_query && $estudiante_query->num_rows > 0) {
+            $estudiante = $estudiante_query->fetch_assoc();
+            $row['nombre'] = $estudiante['nombre'];
+            $row['gmail_institucional'] = $estudiante['gmail_institucional'];
+        } else {
+            // Si no es estudiante, busca en usuarios
+            $usuario_query = $conn->query("SELECT nombre, gmail_institucional FROM usuarios WHERE id_usuario = $id_usuario_prestamo LIMIT 1");
+            if ($usuario_query && $usuario_query->num_rows > 0) {
+                $usuario = $usuario_query->fetch_assoc();
+                $row['nombre'] = $usuario['nombre'];
+                $row['gmail_institucional'] = $usuario['gmail_institucional'];
+            } else {
+                // Si no está en ninguna tabla
+                $row['nombre'] = 'Desconocido';
+                $row['gmail_institucional'] = 'Desconocido';
+            }
+        }
         $prestamos[] = $row;
     }
 } else {
     echo '<div class="alert alert-warning">No se encontraron préstamos.</div>';
 }
-
-// Debug opcional
-// echo '<pre>'; print_r($prestamos); echo '</pre>';
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -80,7 +97,7 @@ if ($result && $result->num_rows > 0) {
                                             <thead class="table-light">
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>Estudiante</th>
+                                                    <th>Estudiante/Usuario</th>
                                                     <th>Libro</th>
                                                     <th>Fecha Préstamo</th>
                                                     <th>Fecha Devolución</th>

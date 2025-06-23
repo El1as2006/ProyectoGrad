@@ -33,6 +33,11 @@ $sql = "SELECT l.id, l.titulo, l.autor, l.descripcion, l.tipo_libro, l.archivo_p
         LEFT JOIN categorias_libros c ON l.categoria_id = c.id
         WHERE l.id = ?";
 
+// Ejemplo para estudiante:
+$stmt = $conn->prepare("INSERT INTO prestamos (id_usuario, id_libro, fecha_prestamo, fecha_devolucion, status, origen_usuario)
+                        VALUES (?, ?, ?, ?, ?, 'estudiante')");
+$stmt->bind_param("iisss", $id_estudiante, $id_libro, $fecha_prestamo, $fecha_devolucion, $status);
+
 $stmt = $conexion->prepare($sql);
 if (!$stmt) {
     die("Error al preparar la consulta: " . $conexion->error);
@@ -56,6 +61,8 @@ $descripcion = htmlspecialchars($libro['descripcion'] ?? '');
 $categoria = htmlspecialchars($libro['categoria_nombre'] ?? '');
 $tipo_libro = htmlspecialchars($libro['tipo_libro'] ?? '');
 $archivo_pdf = htmlspecialchars($libro['archivo_pdf'] ?? '');
+
+
 
 // --- CORRECCIÓN: Eliminamos prefijo 'uploads/' si existe para evitar ruta duplicada ---
 $archivo_pdf = preg_replace('#^uploads/#', '', $archivo_pdf);
