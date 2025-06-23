@@ -11,10 +11,21 @@ include '../conexion.php';
 $id_usuario = $_SESSION['user_id'] ?? null;
 
 // Consulta principal para la tabla de usuarios
-$result = $conn->query("SELECT * FROM usuarios ORDER BY id_usuario DESC");
-if ($result === false) {
-    echo '<div class="alert alert-danger">Error en la consulta SQL: ' . $conn->error . '</div>';
+$query = "SELECT * FROM usuarios ORDER BY id_usuario DESC";
+$result = $conn->query($query);
+
+$usuarios = []; // Array para guardar los resultados
+
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $usuarios[] = $row;
+    }
+} else {
+    echo '<div class="alert alert-warning">No hay usuarios registrados.</div>';
 }
+
+// Debug opcional para ver los datos
+// echo '<pre>'; print_r($usuarios); echo '</pre>';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -57,19 +68,25 @@ if ($result === false) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php while($row = $result->fetch_assoc()): ?>
-                                                <tr>
-                                                    <td><?= $row['id_usuario'] ?></td>
-                                                    <td><?= htmlspecialchars($row['nombre']) ?></td>
-                                                    <td><?= htmlspecialchars($row['gmail_institucional']) ?></td>
-                                                    <td><?= htmlspecialchars($row['rol']) ?></td>
-                                                    <td><?= $row['activo'] ? 'Sí' : 'No' ?></td>
-                                                    <td>
-                                                        <a href="edit_user.php?id=<?= $row['id_usuario'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                                                        <a href="delete_user.php?id=<?= $row['id_usuario'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar este usuario?')">Eliminar</a>
-                                                    </td>
-                                                </tr>
-                                                <?php endwhile; ?>
+                                                <?php if (!empty($usuarios)): ?>
+                                                    <?php foreach ($usuarios as $row): ?>
+                                                    <tr>
+                                                        <td><?= $row['id_usuario'] ?></td>
+                                                        <td><?= htmlspecialchars($row['nombre']) ?></td>
+                                                        <td><?= htmlspecialchars($row['gmail_institucional']) ?></td>
+                                                        <td><?= htmlspecialchars($row['rol']) ?></td>
+                                                        <td><?= $row['activo'] ? 'Sí' : 'No' ?></td>
+                                                        <td>
+                                                            <a href="edit_user.php?id=<?= $row['id_usuario'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                                                            <a href="delete_user.php?id=<?= $row['id_usuario'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar este usuario?')">Eliminar</a>
+                                                        </td>
+                                                    </tr>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">No hay usuarios registrados.</td>
+                                                    </tr>
+                                                <?php endif; ?>
                                             </tbody>
                                         </table>
                                     </div>

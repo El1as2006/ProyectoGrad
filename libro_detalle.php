@@ -7,6 +7,19 @@ session_start();
 
 $conexion = include_once 'conexion.php'; // Asegúrate de que 'conexion.php' establece la conexión a la base de datos
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $libro_id = intval($_POST['libro_id'] ?? 0);
+    $fecha_devolucion = $_POST['fecha_devolucion'] ?? '';
+
+    $fecha_hoy = date('Y-m-d');
+    $fecha_limite = date('Y-m-d', strtotime('+30 days'));
+
+    // Validación segura de fecha
+    if (empty($fecha_devolucion) || $fecha_devolucion < $fecha_hoy || $fecha_devolucion > $fecha_limite) {
+        die('Error: La fecha de devolución no es válida. Debe ser entre hoy y 30 días máximo.');
+    }
+}
+
 if (!isset($_GET['id'])) {
     echo "Libro no especificado.";
     exit;
@@ -35,12 +48,13 @@ if (!$resultado || $resultado->num_rows === 0) {
 
 $libro = $resultado->fetch_assoc();
 
+
 // Sanitizamos variables para mostrar en HTML
-$titulo      = htmlspecialchars($libro['titulo'] ?? '');
-$autor       = htmlspecialchars($libro['autor'] ?? '');
+$titulo = htmlspecialchars($libro['titulo'] ?? '');
+$autor = htmlspecialchars($libro['autor'] ?? '');
 $descripcion = htmlspecialchars($libro['descripcion'] ?? '');
-$categoria   = htmlspecialchars($libro['categoria_nombre'] ?? '');
-$tipo_libro  = htmlspecialchars($libro['tipo_libro'] ?? '');
+$categoria = htmlspecialchars($libro['categoria_nombre'] ?? '');
+$tipo_libro = htmlspecialchars($libro['tipo_libro'] ?? '');
 $archivo_pdf = htmlspecialchars($libro['archivo_pdf'] ?? '');
 
 // --- CORRECCIÓN: Eliminamos prefijo 'uploads/' si existe para evitar ruta duplicada ---
@@ -74,6 +88,7 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Detalles del Libro - <?php echo $titulo; ?></title>
@@ -83,86 +98,92 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-<header>
+    <header>
         <?php include 'header.php'; ?>
 
-</header>
+    </header>
 
-<main class="main-content">
+    <main class="main-content">
 
-    <section class="book-details">
-        <div class="book-header">
-            <h1 class="book-title"><?php echo $titulo; ?></h1>
-        </div>
-
-        <div class="book-content">
-            <div class="book-image-section">
-                <img src="/placeholder.svg?height=500&width=400" alt="Portada del libro" class="main-image">
+        <section class="book-details">
+            <div class="book-header">
+                <h1 class="book-title"><?php echo $titulo; ?></h1>
             </div>
 
-            <div class="book-info">
-                <?php if (isset($_GET['prestamo']) && $_GET['prestamo'] === 'ok'): ?>
-                    <p style="color: green;"><strong>¡Préstamo realizado correctamente!</strong></p>
-                <?php endif; ?>
-
-                <div class="availability">
-                    <?php echo $tipo_libro === 'digital' ? 'Disponible en línea' : 'Disponible en biblioteca'; ?>
+            <div class="book-content">
+                <div class="book-image-section">
+                    <img src="/placeholder.svg?height=500&width=400" alt="Portada del libro" class="main-image">
                 </div>
 
-                <div class="book-actions">
-                    <?php if ($tipo_libro === 'digital'): ?>
-                        <?php if ($pdf_exists): ?>
-                            <a href="<?php echo $pdf_url_browser; ?>" target="_blank" class="btn-primary">📖 Leer libro</a>
-                        <?php else: ?>
-                            <p style="color:red;">Archivo no disponible para este libro.</p>
-                        <?php endif; ?>
-                    <?php elseif ($tipo_libro === 'fisico'): ?>
-                        <?php if ($stock > 0): ?>
-                            <form action="pedir_libro.php" method="POST">
-                                <input type="hidden" name="libro_id" value="<?php echo $libro_id; ?>">
-                                <label for="fecha_devolucion"><strong>Selecciona fecha de devolución:</strong></label><br>
-                                <input type="date" name="fecha_devolucion" required min="<?php echo date('Y-m-d'); ?>" style="margin: 10px 0; padding: 6px;"><br>
-                                <button type="submit" class="btn-primary">📚 Pedir préstamo</button>
-                            </form>
-                        <?php else: ?>
-                            <p style="color:red;"><strong>No disponible para préstamo. Sin stock.</strong></p>
-                        <?php endif; ?>
+                <div class="book-info">
+                    <?php if (isset($_GET['prestamo']) && $_GET['prestamo'] === 'ok'): ?>
+                        <p style="color: green;"><strong>¡Préstamo realizado correctamente!</strong></p>
                     <?php endif; ?>
-                </div>
 
-                <div style="margin-top: 20px;">
-                    <h3>Descripción:</h3>
-                    <p><?php echo nl2br($descripcion); ?></p>
-                </div>
+                    <div class="availability">
+                        <?php echo $tipo_libro === 'digital' ? 'Disponible en línea' : 'Disponible en biblioteca'; ?>
+                    </div>
 
-                <div class="info-grid">
-                    <div class="info-item"><strong>Autor:</strong> <?php echo $autor; ?></div>
-                    <div class="info-item"><strong>Categoría:</strong> <?php echo $categoria; ?></div>
-                    <div class="info-item"><strong>Tipo:</strong> <?php echo ucfirst($tipo_libro); ?></div>
-                    <div class="info-item"><strong>Stock:</strong> <?php echo $stock; ?></div>
-                </div>
+                    <div class="book-actions">
+                        <?php if ($tipo_libro === 'digital'): ?>
+                            <?php if ($pdf_exists): ?>
+                                <a href="<?php echo $pdf_url_browser; ?>" target="_blank" class="btn-primary">📖 Leer libro</a>
+                            <?php else: ?>
+                                <p style="color:red;">Archivo no disponible para este libro.</p>
+                            <?php endif; ?>
+                        <?php elseif ($tipo_libro === 'fisico'): ?>
+                            <?php if ($stock > 0): ?>
+                                <form action="pedir_libro.php" method="POST">
+                                    <input type="hidden" name="libro_id" value="<?php echo $libro_id; ?>">
+                                    <label for="fecha_devolucion"><strong>Selecciona fecha de devolución (máx. 30
+                                            días):</strong></label><br>
+                                    <input type="date" name="fecha_devolucion" required min="<?php echo date('Y-m-d'); ?>"
+                                        max="<?php echo date('Y-m-d', strtotime('+30 days')); ?>"
+                                        style="margin: 10px 0; padding: 6px;"><br>
+                                    <button type="submit" class="btn-primary">📚 Pedir préstamo</button>
+                                </form>
+                            <?php else: ?>
+                                <p style="color:red;"><strong>No disponible para préstamo. Sin stock.</strong></p>
+                            <?php endif; ?>
+                        <?php endif; ?>
 
-                <div style="margin-top: 20px;">
-                    <a href="catalogo.php" class="btn-secondary">← Volver al catálogo</a>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h3>Descripción:</h3>
+                        <p><?php echo nl2br($descripcion); ?></p>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item"><strong>Autor:</strong> <?php echo $autor; ?></div>
+                        <div class="info-item"><strong>Categoría:</strong> <?php echo $categoria; ?></div>
+                        <div class="info-item"><strong>Tipo:</strong> <?php echo ucfirst($tipo_libro); ?></div>
+                        <div class="info-item"><strong>Stock:</strong> <?php echo $stock; ?></div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <a href="catalogo.php" class="btn-secondary">← Volver al catálogo</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section> 
-</main>
+        </section>
+    </main>
 
-<script>
-    document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
-        document.querySelector('.nav-menu').classList.toggle('active');
-    });
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
 
-    document.addEventListener('click', function (event) {
-        const isClickInsideNav = event.target.closest('.nav-menu');
-        const isClickOnMenuBtn = event.target.closest('.mobile-menu-btn');
-        if (!isClickInsideNav && !isClickOnMenuBtn && document.querySelector('.nav-menu').classList.contains('active')) {
-            document.querySelector('.nav-menu').classList.remove('active');
-        }
-    });
-</script>
+        document.addEventListener('click', function (event) {
+            const isClickInsideNav = event.target.closest('.nav-menu');
+            const isClickOnMenuBtn = event.target.closest('.mobile-menu-btn');
+            if (!isClickInsideNav && !isClickOnMenuBtn && document.querySelector('.nav-menu').classList.contains('active')) {
+                document.querySelector('.nav-menu').classList.remove('active');
+            }
+        });
+    </script>
 </body>
+
 </html>
