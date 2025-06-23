@@ -13,9 +13,11 @@ $id_usuario = $_SESSION['user_id'] ?? null;
 
 // Mostrar solo usuarios con rol estudiante
 $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono, carnet FROM usuarios WHERE rol = 'estudiante' ORDER BY id_usuario DESC");
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8" />
     <title>Listado de Estudiantes | Admin Dashboard</title>
@@ -24,6 +26,7 @@ $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono
     <link href="../assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
     <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
     <div class="wrapper">
         <?php include 'includes/session_check.php'; ?>
@@ -32,7 +35,8 @@ $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono
             <div class="content">
                 <div class="container-fluid pt-4">
                     <div class="card mt-4">
-                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <div
+                            class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">Listado de Estudiantes</h4>
                             <a href="add_student.php" class="btn btn-light btn-sm">+ Añadir Estudiante</a>
                         </div>
@@ -53,20 +57,38 @@ $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php while($row = $result->fetch_assoc()): ?>
-                                        <tr>
-                                            <td><?= $row['id_usuario'] ?></td>
-                                            <td><?= htmlspecialchars($row['nombre']) ?></td>
-                                            <td><?= htmlspecialchars($row['gmail_institucional']) ?></td>
-                                            <td><?= htmlspecialchars($row['telefono'] ?? '') ?></td>
-                                            <td><?= htmlspecialchars($row['carnet'] ?? '') ?></td>
-                                            <td>
-                                                <a href="ficha_estudiante.php?id=<?= $row['id_usuario'] ?>" class="btn btn-sm btn-info">Ver ficha</a>
-                                                <a href="edit_student.php?id=<?= $row['id_usuario'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                                                <a href="delete_student.php?id=<?= $row['id_usuario'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar este estudiante?')">Eliminar</a>
-                                            </td>
-                                        </tr>
-                                        <?php endwhile; ?>
+
+                                        <?php
+
+                                        $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono, carnet FROM usuarios WHERE rol = 'estudiante' ORDER BY id_usuario DESC");
+
+                                        $estudiantes = [];
+                                        if ($result) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                $estudiantes[] = $row;
+                                            }
+                                        }
+
+
+                                        foreach ($estudiantes as $row): ?>
+                                            <tr>
+                                                <td><?= $row['id_usuario'] ?></td>
+                                                <td><?= htmlspecialchars($row['nombre']) ?></td>
+                                                <td><?= htmlspecialchars($row['gmail_institucional']) ?></td>
+                                                <td><?= htmlspecialchars($row['telefono'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($row['carnet'] ?? '') ?></td>
+                                                <td>
+                                                    <a href="ficha_estudiante.php?id=<?= $row['id_usuario'] ?>"
+                                                        class="btn btn-sm btn-info">Ver ficha</a>
+                                                    <a href="edit_student.php?id=<?= $row['id_usuario'] ?>"
+                                                        class="btn btn-sm btn-warning">Editar</a>
+                                                    <a href="delete_student.php?id=<?= $row['id_usuario'] ?>"
+                                                        class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('¿Seguro que deseas eliminar este estudiante?')">Eliminar</a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -82,4 +104,5 @@ $result = $conn->query("SELECT id_usuario, nombre, gmail_institucional, telefono
     <!-- Script para notificaciones -->
     <script src="includes/notifications.js"></script>
 </body>
+
 </html>

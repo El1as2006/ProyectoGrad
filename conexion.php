@@ -1,19 +1,13 @@
 <?php
+$host = "localhost";
+$user = "root";
+$password = ""; // o tu contraseña si la tienes
+$database = "biblioteca"; // Asegúrate de que este sea el nombre correcto
 
-// Mostrar todos los errores y advertencias de PHP para depuración
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+$conn = mysqli_connect($host, $user, $password, $database);
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "biblioteca";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+// Verificación de conexión
+if (!$conn) {
+    die("Error de conexión: " . mysqli_connect_error());
 }
-
-return $conn;
+?>
