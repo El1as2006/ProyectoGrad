@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 23, 2025 at 09:38 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 24-06-2025 a las 19:11:26
+-- Versión del servidor: 10.1.37-MariaDB
+-- Versión de PHP: 7.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `biblioteca`
+-- Base de datos: `biblioteca`
 --
 CREATE DATABASE IF NOT EXISTS `biblioteca` DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci;
 USE `biblioteca`;
@@ -26,23 +27,23 @@ USE `biblioteca`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categorias_libros`
+-- Estructura de tabla para la tabla `categorias_libros`
 --
 
 CREATE TABLE `categorias_libros` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
-  `descripcion` text DEFAULT NULL,
+  `descripcion` text,
   `color` varchar(7) DEFAULT '#007bff',
   `icono` varchar(50) DEFAULT 'mdi-book',
-  `activo` tinyint(1) DEFAULT 1,
-  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
-  `fecha_actualizacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `activo` tinyint(1) DEFAULT '1',
+  `fecha_creacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_actualizacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `subcategoria_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `categorias_libros`
+-- Volcado de datos para la tabla `categorias_libros`
 --
 
 INSERT INTO `categorias_libros` (`id`, `nombre`, `descripcion`, `color`, `icono`, `activo`, `fecha_creacion`, `fecha_actualizacion`, `subcategoria_id`) VALUES
@@ -80,7 +81,7 @@ INSERT INTO `categorias_libros` (`id`, `nombre`, `descripcion`, `color`, `icono`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `estadisticas`
+-- Estructura de tabla para la tabla `estadisticas`
 --
 
 CREATE TABLE `estadisticas` (
@@ -88,45 +89,46 @@ CREATE TABLE `estadisticas` (
   `fecha` date DEFAULT NULL,
   `total_prestamos` int(11) DEFAULT NULL,
   `total_devoluciones` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `estudiantes`
+-- Estructura de tabla para la tabla `estudiantes`
 --
 
 CREATE TABLE `estudiantes` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(255) NOT NULL,
-  `gmail_institucional` varchar(255) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `gmail_institucional` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `telefono` int(20) DEFAULT NULL,
-  `carnet_e` varchar(8) DEFAULT NULL,
-  `contrasena` varchar(255) NOT NULL,
+  `carnet_e` varchar(8) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `contrasena` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `grado` int(1) NOT NULL,
-  `seccion` varchar(1) NOT NULL,
+  `seccion` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
+  `especialidad` varchar(150) COLLATE utf8_spanish_ci NOT NULL,
   `creado_en` datetime DEFAULT NULL,
-  `actualizado_en` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `actualizado_en` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `activo` tinyint(1) DEFAULT NULL,
-  `reset_token_e` varchar(255) DEFAULT NULL,
+  `reset_token_e` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
   `reset_token_expires` datetime DEFAULT NULL,
-  `rol` enum('estudiante','','','') NOT NULL
+  `rol` enum('estudiante','','','') COLLATE utf8_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Dumping data for table `estudiantes`
+-- Volcado de datos para la tabla `estudiantes`
 --
 
-INSERT INTO `estudiantes` (`id`, `nombre`, `gmail_institucional`, `telefono`, `carnet_e`, `contrasena`, `grado`, `seccion`, `creado_en`, `actualizado_en`, `activo`, `reset_token_e`, `reset_token_expires`, `rol`) VALUES
-(1, 'Luis Manuel Ramos Herrera', 'luisravanzo25@gmail.com', 76191279, '20110007', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'B', '2025-06-23 08:10:38', '2025-06-23 08:17:21', 1, NULL, NULL, 'estudiante'),
-(2, 'Carlos Alfonso Torres Argueta', 'ct198316@gmail.com', 69527659, '20230146', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'A', '2025-06-23 08:10:38', '2025-06-23 08:17:21', 1, NULL, NULL, 'estudiante'),
-(3, 'Alejandro Jose Torres Argueta', 'alejandro@gmail.com', 99021736, '20230147', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 1, 'D', '2025-06-23 13:11:38', '2025-06-23 13:11:21', 1, NULL, NULL, 'estudiante'),
-(4, 'Santiago Elias Alvarado', 'elijah@gmail.com', 82773818, '20230047', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'A', '2025-06-23 13:10:38', '2025-06-23 13:10:21', 1, NULL, NULL, 'estudiante');
+INSERT INTO `estudiantes` (`id`, `nombre`, `gmail_institucional`, `telefono`, `carnet_e`, `contrasena`, `grado`, `seccion`, `especialidad`, `creado_en`, `actualizado_en`, `activo`, `reset_token_e`, `reset_token_expires`, `rol`) VALUES
+(1, 'Luis Manuel Ramos Herrera', 'luisravanzo25@gmail.com', 76191279, '20110007', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'B', 'Informatica', '2025-06-23 08:10:38', '2025-06-24 09:09:03', 1, NULL, NULL, 'estudiante'),
+(2, 'Carlos Alfonso Torres Argueta', 'ct198316@gmail.com', 69527659, '20230146', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'A', 'EMCA', '2025-06-23 08:10:38', '2025-06-24 09:09:07', 1, NULL, NULL, 'estudiante'),
+(3, 'Alejandro Jose Torres Argueta', 'alejandro@gmail.com', 99021736, '20230147', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 1, 'D', 'DG', '2025-06-23 13:11:38', '2025-06-24 09:10:58', 1, NULL, NULL, 'estudiante'),
+(4, 'Santiago Elias Alvarado', 'elijah@gmail.com', 82773818, '20230047', '$2y$10$Pf3Xlyxx0jylfZvj.5VdTOzaUmPXvPmCt06ZTSkc2k5gQKqTFGhGW', 3, 'A', 'Salud', '2025-06-23 13:10:38', '2025-06-24 09:09:39', 1, NULL, NULL, 'estudiante');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `libros`
+-- Estructura de tabla para la tabla `libros`
 --
 
 CREATE TABLE `libros` (
@@ -137,42 +139,42 @@ CREATE TABLE `libros` (
   `tipo_libro` enum('digital','fisico') DEFAULT 'fisico',
   `anio_publicacion` int(11) DEFAULT NULL,
   `isbn` varchar(50) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL,
-  `disponible` tinyint(1) DEFAULT 1,
+  `descripcion` text,
+  `disponible` tinyint(1) DEFAULT '1',
   `archivo_pdf` varchar(255) DEFAULT NULL,
   `codigo_qr` varchar(100) DEFAULT NULL,
-  `creado_en` datetime DEFAULT current_timestamp(),
-  `actualizado_en` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `creado_en` datetime DEFAULT CURRENT_TIMESTAMP,
+  `actualizado_en` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `categoria_id` int(11) DEFAULT NULL,
   `stock` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `libros`
+-- Volcado de datos para la tabla `libros`
 --
 
 INSERT INTO `libros` (`id`, `titulo`, `autor`, `genero`, `tipo_libro`, `anio_publicacion`, `isbn`, `descripcion`, `disponible`, `archivo_pdf`, `codigo_qr`, `creado_en`, `actualizado_en`, `categoria_id`, `stock`) VALUES
 (1, 'El Principito 2', 'Antoine de Saint-ExupÃ©ry', 'Novela', 'fisico', 1967, '9780307474728', 'Obra maestra de la literatura latinoamericana.', 0, NULL, NULL, '2025-06-03 08:00:40', '2025-06-22 17:12:23', 1, 0),
-(2, 'El Principito', 'Antoine de Saint-Exupéry', 'Fábula', 'fisico', 1943, '9780156012195', 'Un clásico para niños y adultos.', 1, NULL, NULL, '2025-06-03 08:00:40', '2025-06-22 17:12:19', 1, 0),
+(2, 'El Principito', 'Antoine de Saint-Exupéry', 'FAbula', 'fisico', 1943, '9780156012195', 'Un clásico para niños y adultos.', 1, NULL, NULL, '2025-06-03 08:00:40', '2025-06-24 09:23:27', 1, 0),
 (3, 'Dune', 'Frank Herbert', 'Novela', 'fisico', 1967, '9780307474729', 'novela épica de ciencia ficción escrita por Frank Herbert en 1965.', 1, NULL, NULL, '2025-06-03 08:00:40', '2025-06-23 13:27:28', 7, 12);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notificaciones`
+-- Estructura de tabla para la tabla `notificaciones`
 --
 
 CREATE TABLE `notificaciones` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) DEFAULT NULL,
   `tipo` varchar(50) DEFAULT NULL,
-  `mensaje` text DEFAULT NULL,
-  `fecha` datetime DEFAULT current_timestamp(),
-  `leido` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `mensaje` text,
+  `fecha` datetime DEFAULT CURRENT_TIMESTAMP,
+  `leido` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `notificaciones`
+-- Volcado de datos para la tabla `notificaciones`
 --
 
 INSERT INTO `notificaciones` (`id`, `usuario_id`, `tipo`, `mensaje`, `fecha`, `leido`) VALUES
@@ -198,7 +200,7 @@ INSERT INTO `notificaciones` (`id`, `usuario_id`, `tipo`, `mensaje`, `fecha`, `l
 -- --------------------------------------------------------
 
 --
--- Table structure for table `prestamos`
+-- Estructura de tabla para la tabla `prestamos`
 --
 
 CREATE TABLE `prestamos` (
@@ -213,10 +215,10 @@ CREATE TABLE `prestamos` (
   `carnet_e` varchar(20) DEFAULT NULL,
   `origen_usuario` enum('usuario','estudiante') DEFAULT 'usuario',
   `id_estudiante` int(10) UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `prestamos`
+-- Volcado de datos para la tabla `prestamos`
 --
 
 INSERT INTO `prestamos` (`id_prestamo`, `id_usuario`, `id_libro`, `fecha_prestamo`, `fecha_devolucion`, `status`, `qr_prestamo`, `tipo_usuario`, `carnet_e`, `origen_usuario`, `id_estudiante`) VALUES
@@ -236,7 +238,7 @@ INSERT INTO `prestamos` (`id_prestamo`, `id_usuario`, `id_libro`, `fecha_prestam
 -- --------------------------------------------------------
 
 --
--- Table structure for table `recomendaciones`
+-- Estructura de tabla para la tabla `recomendaciones`
 --
 
 CREATE TABLE `recomendaciones` (
@@ -244,13 +246,13 @@ CREATE TABLE `recomendaciones` (
   `usuario_id` int(11) DEFAULT NULL,
   `libro_id` int(11) DEFAULT NULL,
   `motivo` varchar(255) DEFAULT NULL,
-  `fecha` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `fecha` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `resenas`
+-- Estructura de tabla para la tabla `resenas`
 --
 
 CREATE TABLE `resenas` (
@@ -258,30 +260,30 @@ CREATE TABLE `resenas` (
   `libro_id` int(11) DEFAULT NULL,
   `usuario_id` int(11) DEFAULT NULL,
   `calificacion` int(11) DEFAULT NULL,
-  `comentario` text DEFAULT NULL,
-  `fecha` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `comentario` text,
+  `fecha` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `subcategorias_libros`
+-- Estructura de tabla para la tabla `subcategorias_libros`
 --
 
 CREATE TABLE `subcategorias_libros` (
   `id` int(11) NOT NULL,
   `categoria_id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
-  `descripcion` text DEFAULT NULL,
-  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
-  `fecha_actualizacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `descripcion` text,
+  `fecha_creacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_actualizacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `color` varchar(10) DEFAULT NULL,
   `icono` varchar(100) DEFAULT NULL,
-  `activo` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `activo` tinyint(1) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `subcategorias_libros`
+-- Volcado de datos para la tabla `subcategorias_libros`
 --
 
 INSERT INTO `subcategorias_libros` (`id`, `categoria_id`, `nombre`, `descripcion`, `fecha_creacion`, `fecha_actualizacion`, `color`, `icono`, `activo`) VALUES
@@ -299,7 +301,7 @@ INSERT INTO `subcategorias_libros` (`id`, `categoria_id`, `nombre`, `descripcion
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuarios`
+-- Estructura de tabla para la tabla `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -310,15 +312,15 @@ CREATE TABLE `usuarios` (
   `carnet` varchar(8) DEFAULT NULL,
   `contrasena` varchar(255) NOT NULL,
   `rol` enum('estudiante','docente','admin','super_admin') NOT NULL,
-  `creado_en` datetime DEFAULT current_timestamp(),
-  `actualizado_en` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `activo` tinyint(1) DEFAULT 1,
+  `creado_en` datetime DEFAULT CURRENT_TIMESTAMP,
+  `actualizado_en` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `activo` tinyint(1) DEFAULT '1',
   `reset_token` varchar(255) DEFAULT NULL,
   `reset_token_expires` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `usuarios`
+-- Volcado de datos para la tabla `usuarios`
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `gmail_institucional`, `telefono`, `carnet`, `contrasena`, `rol`, `creado_en`, `actualizado_en`, `activo`, `reset_token`, `reset_token_expires`) VALUES
@@ -330,8 +332,8 @@ INSERT INTO `usuarios` (`id_usuario`, `nombre`, `gmail_institucional`, `telefono
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `vista_libros_categorias`
--- (See below for the actual view)
+-- Estructura Stand-in para la vista `vista_libros_categorias`
+-- (Véase abajo para la vista actual)
 --
 CREATE TABLE `vista_libros_categorias` (
 `id` int(11)
@@ -357,18 +359,18 @@ CREATE TABLE `vista_libros_categorias` (
 -- --------------------------------------------------------
 
 --
--- Structure for view `vista_libros_categorias`
+-- Estructura para la vista `vista_libros_categorias`
 --
 DROP TABLE IF EXISTS `vista_libros_categorias`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_libros_categorias`  AS SELECT `l`.`id` AS `id`, `l`.`titulo` AS `titulo`, `l`.`autor` AS `autor`, `l`.`genero` AS `genero`, `l`.`tipo_libro` AS `tipo_libro`, `l`.`anio_publicacion` AS `anio_publicacion`, `l`.`isbn` AS `isbn`, `l`.`descripcion` AS `descripcion`, `l`.`disponible` AS `disponible`, `l`.`archivo_pdf` AS `archivo_pdf`, `l`.`codigo_qr` AS `codigo_qr`, `l`.`creado_en` AS `creado_en`, `l`.`actualizado_en` AS `actualizado_en`, `l`.`categoria_id` AS `categoria_id`, `cl`.`nombre` AS `categoria_nombre`, `cl`.`descripcion` AS `categoria_descripcion`, `cl`.`color` AS `categoria_color`, `cl`.`icono` AS `categoria_icono` FROM (`libros` `l` left join `categorias_libros` `cl` on(`l`.`categoria_id` = `cl`.`id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_libros_categorias`  AS  select `l`.`id` AS `id`,`l`.`titulo` AS `titulo`,`l`.`autor` AS `autor`,`l`.`genero` AS `genero`,`l`.`tipo_libro` AS `tipo_libro`,`l`.`anio_publicacion` AS `anio_publicacion`,`l`.`isbn` AS `isbn`,`l`.`descripcion` AS `descripcion`,`l`.`disponible` AS `disponible`,`l`.`archivo_pdf` AS `archivo_pdf`,`l`.`codigo_qr` AS `codigo_qr`,`l`.`creado_en` AS `creado_en`,`l`.`actualizado_en` AS `actualizado_en`,`l`.`categoria_id` AS `categoria_id`,`cl`.`nombre` AS `categoria_nombre`,`cl`.`descripcion` AS `categoria_descripcion`,`cl`.`color` AS `categoria_color`,`cl`.`icono` AS `categoria_icono` from (`libros` `l` left join `categorias_libros` `cl` on((`l`.`categoria_id` = `cl`.`id`))) ;
 
 --
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `categorias_libros`
+-- Indices de la tabla `categorias_libros`
 --
 ALTER TABLE `categorias_libros`
   ADD PRIMARY KEY (`id`),
@@ -378,13 +380,13 @@ ALTER TABLE `categorias_libros`
   ADD KEY `fk_subcategoria` (`subcategoria_id`);
 
 --
--- Indexes for table `estadisticas`
+-- Indices de la tabla `estadisticas`
 --
 ALTER TABLE `estadisticas`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `estudiantes`
+-- Indices de la tabla `estudiantes`
 --
 ALTER TABLE `estudiantes`
   ADD PRIMARY KEY (`id`),
@@ -392,7 +394,7 @@ ALTER TABLE `estudiantes`
   ADD UNIQUE KEY `reset_token_e` (`reset_token_e`);
 
 --
--- Indexes for table `libros`
+-- Indices de la tabla `libros`
 --
 ALTER TABLE `libros`
   ADD PRIMARY KEY (`id`),
@@ -400,14 +402,14 @@ ALTER TABLE `libros`
   ADD KEY `idx_libros_categoria` (`categoria_id`);
 
 --
--- Indexes for table `notificaciones`
+-- Indices de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuario_id` (`usuario_id`);
 
 --
--- Indexes for table `prestamos`
+-- Indices de la tabla `prestamos`
 --
 ALTER TABLE `prestamos`
   ADD PRIMARY KEY (`id_prestamo`),
@@ -415,7 +417,7 @@ ALTER TABLE `prestamos`
   ADD KEY `idx_prestamo_libro` (`id_libro`);
 
 --
--- Indexes for table `recomendaciones`
+-- Indices de la tabla `recomendaciones`
 --
 ALTER TABLE `recomendaciones`
   ADD PRIMARY KEY (`id`),
@@ -423,7 +425,7 @@ ALTER TABLE `recomendaciones`
   ADD KEY `libro_id` (`libro_id`);
 
 --
--- Indexes for table `resenas`
+-- Indices de la tabla `resenas`
 --
 ALTER TABLE `resenas`
   ADD PRIMARY KEY (`id`),
@@ -431,14 +433,14 @@ ALTER TABLE `resenas`
   ADD KEY `usuario_id` (`usuario_id`);
 
 --
--- Indexes for table `subcategorias_libros`
+-- Indices de la tabla `subcategorias_libros`
 --
 ALTER TABLE `subcategorias_libros`
   ADD PRIMARY KEY (`id`),
   ADD KEY `categoria_id` (`categoria_id`);
 
 --
--- Indexes for table `usuarios`
+-- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_usuario`),
@@ -447,108 +449,108 @@ ALTER TABLE `usuarios`
   ADD KEY `idx_reset_token` (`reset_token`(191));
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `categorias_libros`
+-- AUTO_INCREMENT de la tabla `categorias_libros`
 --
 ALTER TABLE `categorias_libros`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
--- AUTO_INCREMENT for table `estadisticas`
+-- AUTO_INCREMENT de la tabla `estadisticas`
 --
 ALTER TABLE `estadisticas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `libros`
+-- AUTO_INCREMENT de la tabla `libros`
 --
 ALTER TABLE `libros`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `notificaciones`
+-- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
--- AUTO_INCREMENT for table `prestamos`
+-- AUTO_INCREMENT de la tabla `prestamos`
 --
 ALTER TABLE `prestamos`
   MODIFY `id_prestamo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT for table `recomendaciones`
+-- AUTO_INCREMENT de la tabla `recomendaciones`
 --
 ALTER TABLE `recomendaciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `resenas`
+-- AUTO_INCREMENT de la tabla `resenas`
 --
 ALTER TABLE `resenas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `subcategorias_libros`
+-- AUTO_INCREMENT de la tabla `subcategorias_libros`
 --
 ALTER TABLE `subcategorias_libros`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT for table `usuarios`
+-- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- Constraints for dumped tables
+-- Restricciones para tablas volcadas
 --
 
 --
--- Constraints for table `categorias_libros`
+-- Filtros para la tabla `categorias_libros`
 --
 ALTER TABLE `categorias_libros`
   ADD CONSTRAINT `fk_subcategoria` FOREIGN KEY (`subcategoria_id`) REFERENCES `subcategorias_libros` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `libros`
+-- Filtros para la tabla `libros`
 --
 ALTER TABLE `libros`
   ADD CONSTRAINT `libros_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias_libros` (`id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `notificaciones`
+-- Filtros para la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
   ADD CONSTRAINT `notificaciones_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE;
 
 --
--- Constraints for table `prestamos`
+-- Filtros para la tabla `prestamos`
 --
 ALTER TABLE `prestamos`
   ADD CONSTRAINT `prestamos_ibfk_2` FOREIGN KEY (`id_libro`) REFERENCES `libros` (`id`),
   ADD CONSTRAINT `prestamos_ibfk_3` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
 
 --
--- Constraints for table `recomendaciones`
+-- Filtros para la tabla `recomendaciones`
 --
 ALTER TABLE `recomendaciones`
   ADD CONSTRAINT `recomendaciones_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id_usuario`),
   ADD CONSTRAINT `recomendaciones_ibfk_2` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`id`);
 
 --
--- Constraints for table `resenas`
+-- Filtros para la tabla `resenas`
 --
 ALTER TABLE `resenas`
   ADD CONSTRAINT `resenas_ibfk_1` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`id`),
   ADD CONSTRAINT `resenas_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id_usuario`);
 
 --
--- Constraints for table `subcategorias_libros`
+-- Filtros para la tabla `subcategorias_libros`
 --
 ALTER TABLE `subcategorias_libros`
   ADD CONSTRAINT `subcategorias_libros_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias_libros` (`id`) ON DELETE CASCADE;

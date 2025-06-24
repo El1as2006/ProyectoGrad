@@ -10,19 +10,28 @@ include '../conexion.php';
 
 $id_usuario = $_SESSION['user_id'] ?? null;
 
-// Consulta principal para la tabla de usuarios
-$query = "SELECT * FROM usuarios ORDER BY id_usuario DESC";
+// Consulta unificada para usuarios y estudiantes
+$query = "
+    SELECT id_usuario AS id, nombre, gmail_institucional, rol, activo, 'usuarios' AS tipo 
+    FROM usuarios
+    UNION
+    SELECT id AS id, nombre, gmail_institucional, rol, activo, 'estudiante' AS tipo 
+    FROM estudiantes
+    ORDER BY id DESC
+";
+
 $result = $conn->query($query);
 
-$usuarios = []; // Array para guardar los resultados
+$usuarios = []; // Reiniciamos el array
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $usuarios[] = $row;
     }
 } else {
-    echo '<div class="alert alert-warning">No hay usuarios registrados.</div>';
+    echo '<div class="alert alert-warning">No hay usuarios ni estudiantes registrados.</div>';
 }
+
 
 // Debug opcional para ver los datos
 // echo '<pre>'; print_r($usuarios); echo '</pre>';
@@ -57,37 +66,45 @@ if ($result && $result->num_rows > 0) {
                                     <?php endif; ?>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-hover align-middle mb-0">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Nombre</th>
-                                                    <th>Email</th>
-                                                    <th>Rol</th>
-                                                    <th>Activo</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php if (!empty($usuarios)): ?>
-                                                    <?php foreach ($usuarios as $row): ?>
-                                                    <tr>
-                                                        <td><?= $row['id_usuario'] ?></td>
-                                                        <td><?= htmlspecialchars($row['nombre']) ?></td>
-                                                        <td><?= htmlspecialchars($row['gmail_institucional']) ?></td>
-                                                        <td><?= htmlspecialchars($row['rol']) ?></td>
-                                                        <td><?= $row['activo'] ? 'Sí' : 'No' ?></td>
-                                                        <td>
-                                                            <a href="edit_user.php?id=<?= $row['id_usuario'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                                                            <a href="delete_user.php?id=<?= $row['id_usuario'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar este usuario?')">Eliminar</a>
-                                                        </td>
-                                                    </tr>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <tr>
-                                                        <td colspan="6" class="text-center">No hay usuarios registrados.</td>
-                                                    </tr>
-                                                <?php endif; ?>
-                                            </tbody>
+                                        <thead class="table-light">
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Activo</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+    </tr>
+</thead>
+<tbody>
+    <?php if (!empty($usuarios)): ?>
+        <?php foreach ($usuarios as $row): ?>
+        <tr>
+            <td><?= $row['id'] ?></td>
+            <td><?= htmlspecialchars($row['nombre']) ?></td>
+            <td><?= htmlspecialchars($row['gmail_institucional']) ?></td>
+            <td><?= htmlspecialchars($row['rol']) ?></td>
+            <td><?= $row['activo'] ? 'Sí' : 'No' ?></td>
+            <td><?= ucfirst($row['tipo']) ?></td>
+            <td>
+                <?php if ($row['tipo'] == 'usuario'): ?>
+                    <a href="edit_user.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="delete_user.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar este usuario?')">Eliminar</a>
+                <?php else: ?>
+                    <a href="edit_student.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="delete_student.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar este estudiante?')">Eliminar</a>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="7" class="text-center">No hay usuarios ni estudiantes registrados.</td>
+        </tr>
+    <?php endif; ?>
+</tbody>
+
                                         </table>
                                     </div>
                                 </div>

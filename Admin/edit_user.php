@@ -14,7 +14,7 @@ $mensaje = '';
 $errores = [];
 
 // Obtener datos actuales
-$stmt = $conn->prepare('SELECT nombre, email, rol, activo FROM usuarios WHERE id = ?');
+$stmt = $conn->prepare('SELECT nombre, gmail_institucional, rol, activo FROM usuarios WHERE id_usuario = ?');
 $stmt->bind_param('i', $id_usuario);
 $stmt->execute();
 $stmt->store_result();
@@ -29,7 +29,7 @@ $stmt->close();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = trim($_POST['nombre'] ?? '');
-    $email = trim($_POST['email'] ?? '');
+    $email = trim($_POST['gmail_institucional'] ?? '');
     $rol = trim($_POST['rol'] ?? 'Usuario');
     $activo = isset($_POST['activo']) ? 1 : 0;
     $password = $_POST['password'] ?? '';
@@ -43,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errores)) {
         if ($password !== '') {
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $conn->prepare('UPDATE usuarios SET nombre=?, email=?, rol=?, activo=?, contrasena=? WHERE id=?');
+            $stmt = $conn->prepare('UPDATE usuarios SET nombre=?, gmail_institucional=?, rol=?, activo=?, contrasena=? WHERE id_usuario=?');
             $stmt->bind_param('sssisi', $nombre, $email, $rol, $activo, $hash, $id_usuario);
         } else {
-            $stmt = $conn->prepare('UPDATE usuarios SET nombre=?, email=?, rol=?, activo=? WHERE id=?');
+            $stmt = $conn->prepare('UPDATE usuarios SET nombre=?, gmail_institucional=?, rol=?, activo=? WHERE id_usuario=?');
             $stmt->bind_param('sssii', $nombre, $email, $rol, $activo, $id_usuario);
         }
         if ($stmt->execute()) {
