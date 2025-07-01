@@ -310,14 +310,15 @@ if (isset($_GET['carnet']) || isset($_GET['carnet_manual'])) {
 if ((isset($_GET['carnet']) || isset($_GET['carnet_manual'])) && isset($_GET['ajax'])) {
     $carnet = isset($_GET['carnet_manual']) ? trim($_GET['carnet_manual']) : trim($_GET['carnet']);
     header('Content-Type: application/json');
+
     if (preg_match('/^\d{8}$/', $carnet)) {
-        $stmt = $conn->prepare("SELECT id_usuario, nombre FROM usuarios WHERE carnet = ? AND rol = 'estudiante'");
+        $stmt = $conn->prepare("SELECT id, nombre FROM estudiantes WHERE carnet_e = ?");
         if ($stmt) {
             $stmt->bind_param('s', $carnet);
             $stmt->execute();
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {
-                echo json_encode(['success' => true, 'id' => $row['id_usuario']]);
+                echo json_encode(['success' => true, 'id' => $row['id']]);
             } else {
                 echo json_encode(['success' => false, 'error' => 'No se encontró estudiante con ese carnet.']);
             }
@@ -330,4 +331,5 @@ if ((isset($_GET['carnet']) || isset($_GET['carnet_manual'])) && isset($_GET['aj
     }
     exit;
 }
+
 ?>
