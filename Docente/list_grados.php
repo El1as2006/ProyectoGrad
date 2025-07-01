@@ -13,7 +13,6 @@ include '../conexion.php';
 // Cargar grados, secciones, especialidades
 $grados = $conn->query("SELECT DISTINCT grado FROM estudiantes ORDER BY grado");
 $secciones = $conn->query("SELECT DISTINCT seccion FROM estudiantes ORDER BY seccion");
-$especialidades = $conn->query("SELECT DISTINCT especialidad FROM estudiantes ORDER BY especialidad");
 
 // Filtros
 $grado = $_GET['grado'] ?? '';
@@ -47,16 +46,14 @@ if (!empty($params)) {
 $stmt->execute();
 $resultado = $stmt->get_result();
 
-// Agrupar estudiantes por grupos
+// Agrupar por grado y sección (ej: 5° B)
 $grupos = [];
 while ($row = $resultado->fetch_assoc()) {
-    $esp = strtolower(trim($row['especialidad']));
-    if ($esp == 'tc' || $esp == '') {
-        $grupo = "{$row['grado']}{$row['seccion']}";
-    } else {
-        $grupo = "{$row['grado']} " . strtoupper($row['especialidad']);
-    }
-    $grupos[$grupo][] = $row;
+    $grupoClave = "{$row['grado']}° {$row['seccion']}";
+    $claveLink = "{$row['grado']}|{$row['seccion']}";
+    $grupos[$grupoClave]['estudiantes'][] = $row;
+    $grupos[$grupoClave]['grado'] = $row['grado'];
+    $grupos[$grupoClave]['seccion'] = $row['seccion'];
 }
 ?>
 
@@ -71,7 +68,7 @@ while ($row = $resultado->fetch_assoc()) {
     <style>
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 25px;
             margin-top: 20px;
         }
@@ -82,10 +79,15 @@ while ($row = $resultado->fetch_assoc()) {
             padding: 20px;
             text-align: center;
             transition: transform .3s ease, box-shadow .3s ease;
+            cursor: pointer;
         }
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+        }
+        .card a {
+            text-decoration: none;
+            color: inherit;
         }
         .card-icon {
             font-size: 42px;
@@ -100,30 +102,6 @@ while ($row = $resultado->fetch_assoc()) {
         .card-sub {
             font-size: 14px;
             color: #666;
-            margin-bottom: 12px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 6px 14px;
-            background: #007bff;
-            color: #fff;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: background .3s;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background: #0056b3;
-        }
-        ul.estudiantes {
-            text-align: left;
-            margin-top: 10px;
-            padding-left: 20px;
-            font-size: 15px;
-            max-height: 200px;
-            overflow-y: auto;
         }
     </style>
 </head>
@@ -135,73 +113,24 @@ while ($row = $resultado->fetch_assoc()) {
         <div class="content">
             <div class="container-fluid pt-4">
                 <div class="row">
-
-                    <!-- Formulario de filtro -->
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Filtrar Estudiantes</h4>
-                                <form method="get">
-                                    <div class="mb-3">
-                                        <label for="grado" class="form-label">Grado</label>
-                                        <select class="form-control" id="grado" name="grado">
-                                            <option value="">Todos</option>
-                                            <?php while ($g = $grados->fetch_assoc()): ?>
-                                                <option value="<?= htmlspecialchars($g['grado']) ?>" <?= $grado == $g['grado'] ? 'selected' : '' ?>>
-                                                    <?= htmlspecialchars($g['grado']) ?>
-                                                </option>
-                                            <?php endwhile; ?>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="seccion" class="form-label">Sección</label>
-                                        <select class="form-control" id="seccion" name="seccion">
-                                            <option value="">Todas</option>
-                                            <?php while ($s = $secciones->fetch_assoc()): ?>
-                                                <option value="<?= htmlspecialchars($s['seccion']) ?>" <?= $seccion == $s['seccion'] ? 'selected' : '' ?>>
-                                                    <?= htmlspecialchars($s['seccion']) ?>
-                                                </option>
-                                            <?php endwhile; ?>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="especialidad" class="form-label">Especialidad</label>
-                                        <select class="form-control" id="especialidad" name="especialidad">
-                                            <option value="">Todas</option>
-                                            <?php while ($esp = $especialidades->fetch_assoc()): ?>
-                                                <option value="<?= htmlspecialchars($esp['especialidad']) ?>" <?= $especialidad == $esp['especialidad'] ? 'selected' : '' ?>>
-                                                    <?= htmlspecialchars($esp['especialidad']) ?>
-                                                </option>
-                                            <?php endwhile; ?>
-                                        </select>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Filtrar</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Grupos de estudiantes -->
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title text-center">Listado por Grupos</h4>
+                                <h4 class="card-title text-center">Listado por Grado y Sección</h4>
                                 <?php if (!empty($grupos)): ?>
                                     <div class="grid">
-                                        <?php foreach ($grupos as $grupoNombre => $estudiantes): ?>
-                                            <div class="card">
-                                                <div class="card-icon">👥</div>
-                                                <div class="card-title"><?= htmlspecialchars($grupoNombre) ?></div>
-                                                <div class="card-sub"><?= count($estudiantes) ?> estudiante(s)</div>
-                                                <a href="#" class="btn toggle-estudiantes" data-target="<?= md5($grupoNombre) ?>">Ver lista</a>
-                                                <div id="<?= md5($grupoNombre) ?>" class="estudiantes-lista" style="display:none;">
-                                                    <ul class="estudiantes">
-                                                        <?php foreach ($estudiantes as $est): ?>
-                                                            <li><?= htmlspecialchars($est['nombre']) ?> (<?= htmlspecialchars($est['grado']) ?><?= htmlspecialchars($est['seccion']) ?><?= $est['especialidad'] ? ', ' . htmlspecialchars($est['especialidad']) : '' ?>)</li>
-                                                        <?php endforeach; ?>
-                                                    </ul>
+                                        <?php foreach ($grupos as $nombreGrupo => $datos): ?>
+                                            <?php
+                                                $link = "listado.php?grado=" . urlencode($datos['grado']) . "&seccion=" . urlencode($datos['seccion']);
+                                                $total = count($datos['estudiantes']);
+                                            ?>
+                                            <a href="<?= $link ?>">
+                                                <div class="card">
+                                                    <div class="card-icon">👥</div>
+                                                    <div class="card-title"><?= htmlspecialchars($nombreGrupo) ?></div>
+                                                    <div class="card-sub"><?= $total ?> estudiante(s)</div>
                                                 </div>
-                                            </div>
+                                            </a>
                                         <?php endforeach; ?>
                                     </div>
                                 <?php else: ?>
@@ -210,7 +139,6 @@ while ($row = $resultado->fetch_assoc()) {
                             </div>
                         </div>
                     </div>
-
                 </div> <!-- row -->
             </div> <!-- container -->
         </div> <!-- content -->
@@ -219,15 +147,5 @@ while ($row = $resultado->fetch_assoc()) {
 
 <script src="../assets/js/vendor.min.js"></script>
 <script src="../assets/js/app.min.js"></script>
-<script>
-    document.querySelectorAll('.toggle-estudiantes').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('data-target');
-            const div = document.getElementById(targetId);
-            div.style.display = div.style.display === 'none' ? 'block' : 'none';
-        });
-    });
-</script>
 </body>
 </html>

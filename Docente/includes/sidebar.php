@@ -410,22 +410,7 @@ if (isset($conn)) {
                 </a>
             </li>
 
-            <li class="side-nav-item">
-                <div class="side-nav-link" style="display: flex; justify-content: space-between; align-items: center;">
-                    <a href="../Admin/categorias.php" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-                        <i class="mdi mdi-shape"></i>
-                        <span style="margin-left: 8px;">Categorías</span>
-                    </a>
-                    <span onclick="toggleSubcategorias()" style="cursor: pointer; padding: 0 10px;">&#9662;</span>
-                </div>
-                <ul class="side-nav-sub" id="subcategorias" style="display: none; padding-left: 20px;">
-                    <li class="side-nav-sub-item">
-                        <a href="../Admin/subcategorias.php" class="side-nav-link">
-                            Ver subcategorías
-                        </a>
-                    </li>
-                </ul>
-            </li>
+           
 
             <li class="side-nav-item">
                 <a href="../Admin/list_loans.php" class="side-nav-link">
