@@ -382,8 +382,7 @@ if (isset($conn)) {
         <div class="leftside-menu">
     <a href="../Admin/index.php" class="logo text-center">
         <span class="logo-lg">
-            <img src="../assets/images/logo.png" alt="logo" height="60"
-                onerror="this.onerror=null;this.src='../assets/images/logo-sm.png';">
+            <img src="../assets/images/Recurso_23.png">
         </span>
     </a>
     <div class="h-100" id="leftside-menu-container" data-simplebar>
@@ -398,9 +397,9 @@ if (isset($conn)) {
             </li>
 
             <li class="side-nav-item">
-                <a href="../Admin/list_students.php" class="side-nav-link">
+                <a href="../Docente/list_grados.php" class="side-nav-link">
                     <i class="mdi mdi-account-multiple"></i>
-                    <span> Estudiantes </span>
+                    <span> Grados </span>
                 </a>
             </li>
 

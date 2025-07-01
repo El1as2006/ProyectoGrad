@@ -379,11 +379,10 @@ if (isset($conn)) {
         <!-- ========== Topbar End ========== -->
 
        <!-- ========== Left Sidebar Start ========== -->
-<div class="leftside-menu">
-    <a href="index.php" class="logo text-center">
+       <div class="leftside-menu">
+    <a href="../Admin/index.php" class="logo text-center">
         <span class="logo-lg">
-            <img src="../assets/images/logo.png" alt="logo" height="60"
-                onerror="this.onerror=null;this.src='../assets/images/logo-sm.png';">
+            <img src="../assets/images/Recurso_23.png">
         </span>
     </a>
     <div class="h-100" id="leftside-menu-container" data-simplebar>

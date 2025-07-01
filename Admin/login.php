@@ -3,6 +3,7 @@ session_start();
 include_once '../conexion.php';
 
 $error = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gmail_institucional = trim($_POST['gmail_institucional'] ?? '');
     $contraseña = trim($_POST['contraseña'] ?? '');
@@ -10,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($gmail_institucional) || empty($contraseña)) {
         $error = 'Por favor, ingrese su correo institucional y contraseña.';
     } else {
-        // 1. Buscar en usuarios
+        // 1. Buscar en la tabla usuarios
         $stmt = $conn->prepare('SELECT id_usuario, nombre, contrasena, rol FROM usuarios WHERE gmail_institucional = ? LIMIT 1');
         if ($stmt) {
             $stmt->bind_param('s', $gmail_institucional);
@@ -21,24 +22,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (password_verify($contraseña, $row['contrasena'])) {
                     $_SESSION['user_id'] = $row['id_usuario'];
                     $_SESSION['user_name'] = $row['nombre'];
-                    $_SESSION['user_rol'] = $row['rol'];
+                    $_SESSION['user_rol'] = strtolower($row['rol']); // Asegura comparación consistente
 
-                    if ($row['rol'] === 'admin') {
-                        header('Location: index.php');
-                    } elseif ($row['rol'] === 'docente') {
-                        header('Location: ../Docente/index.php');  // <-- Redirección para docentes
-                    } elseif ($row['rol'] === 'estudiante') {
-                        header('Location: ../index.php');
-                    } else {
-                        $error = 'Rol de usuario no reconocido.';
+                    // Redirige según el rol
+                    switch ($_SESSION['user_rol']) {
+                        case 'admin':
+                            header('Location: index.php');
+                            exit;
+                        case 'docente':
+                            header('Location: ../Docente/index.php');
+                            exit;
+                        case 'estudiante':
+                            header('Location: ../index.php');
+                            exit;
+                        default:
+                            $error = 'Rol de usuario no reconocido.';
                     }
-                    exit;
                 } else {
                     $error = 'Contraseña incorrecta.';
                 }
             } else {
-                // 2. Buscar en estudiantes
-                $stmt2 = $conn->prepare('SELECT id, nombre, contrasena FROM estudiantes WHERE gmail_institucional = ? LIMIT 1'); // Asegúrate de que la columna se llame gmail
+                // 2. Buscar en la tabla estudiantes
+                $stmt2 = $conn->prepare('SELECT id, nombre, contrasena FROM estudiantes WHERE gmail_institucional = ? LIMIT 1');
                 if ($stmt2) {
                     $stmt2->bind_param('s', $gmail_institucional);
                     $stmt2->execute();
@@ -73,19 +78,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
-        body,
-        html {
+        body, html {
             height: 100%;
             margin: 0;
             background-color: #f8f9fa;
@@ -121,13 +123,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #db4a39;
             color: white;
             border-radius: 50px;
-            text-align: center;
             width: 100%;
         }
 
         .google.btn:hover {
             background-color: #c23321;
-            color: white;
         }
 
         .login-or {
@@ -138,7 +138,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .hr-or {
             height: 1px;
-            margin: 0;
             background-color: #ccc;
         }
 
@@ -154,7 +153,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
-
 <body>
     <div class="container login-container">
         <div class="myform text-center">
@@ -166,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </a>
             </div>
             <?php if ($error): ?>
-                <div class="alert alert-danger" role="alert"><?php echo $error; ?></div>
+                <div class="alert alert-danger" role="alert"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>
             <form action="" method="post" name="login" autocomplete="off">
                 <div class="form-group">
@@ -196,5 +194,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </body>
-
 </html>
