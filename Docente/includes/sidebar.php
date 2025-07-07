@@ -410,21 +410,6 @@ if (isset($conn)) {
                 </a>
             </li>
 
-           
-
-            <li class="side-nav-item">
-                <a href="../Admin/list_loans.php" class="side-nav-link">
-                    <i class="mdi mdi-bookmark-check"></i>
-                    <span> Préstamos </span>
-                </a>
-            </li>
-
-            <li class="side-nav-item">
-                <a href="../Admin/list_users.php" class="side-nav-link">
-                    <i class="mdi mdi-account-key"></i>
-                    <span> Usuarios </span>
-                </a>
-            </li>
 
             <li class="side-nav-item">
                 <a href="../Admin/notificaciones.php" class="side-nav-link">
