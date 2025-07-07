@@ -9,16 +9,15 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 include '../conexion.php';
-// Corrección: renombrar la variable del resultset
+
+// Cargar grados, secciones, especialidades
 $grados = $conn->query("SELECT DISTINCT grado FROM estudiantes ORDER BY grado");
 $secciones = $conn->query("SELECT DISTINCT seccion FROM estudiantes ORDER BY seccion");
-$especialidades = $conn->query("SELECT DISTINCT especialidad FROM estudiantes ORDER BY especialidad");
 
-// Obtener valores del filtro
+// Filtros
 $grado = $_GET['grado'] ?? '';
 $seccion = $_GET['seccion'] ?? '';
 $especialidad = $_GET['especialidad'] ?? '';
-
 
 $query = "SELECT id, nombre, grado, seccion, especialidad FROM estudiantes WHERE 1=1";
 $params = [];
@@ -29,13 +28,11 @@ if ($grado !== '') {
     $params[] = $grado;
     $types .= 's';
 }
-
 if ($seccion !== '') {
     $query .= " AND seccion = ?";
     $params[] = $seccion;
     $types .= 's';
 }
-
 if ($especialidad !== '') {
     $query .= " AND especialidad = ?";
     $params[] = $especialidad;
@@ -46,126 +43,109 @@ $stmt = $conn->prepare($query);
 if (!empty($params)) {
     $stmt->bind_param($types, ...$params);
 }
-
 $stmt->execute();
 $resultado = $stmt->get_result();
 
+// Agrupar por grado y sección (ej: 5° B)
+$grupos = [];
+while ($row = $resultado->fetch_assoc()) {
+    $grupoClave = "{$row['grado']}° {$row['seccion']}";
+    $claveLink = "{$row['grado']}|{$row['seccion']}";
+    $grupos[$grupoClave]['estudiantes'][] = $row;
+    $grupos[$grupoClave]['grado'] = $row['grado'];
+    $grupos[$grupoClave]['seccion'] = $row['seccion'];
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <title>Filtrar Estudiantes</title>
-    <link href="../assets/css/vendor.min.css" rel="stylesheet" />
-    <link href="../assets/css/app-saas.min.css" rel="stylesheet" />
-    <link href="../assets/css/icons.min.css" rel="stylesheet" />
+    <title>Estudiantes Agrupados</title>
+    <link rel="stylesheet" href="../assets/css/vendor.min.css">
+    <link rel="stylesheet" href="../assets/css/app-saas.min.css">
+    <link rel="stylesheet" href="../assets/css/icons.min.css">
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            text-align: center;
+            transition: transform .3s ease, box-shadow .3s ease;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+        }
+        .card a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .card-icon {
+            font-size: 42px;
+            color: #007bff;
+            margin-bottom: 12px;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .card-sub {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
 </head>
-
 <body>
-    <div class="wrapper">
-        <?php include __DIR__ . '/includes/sidebar.php'; ?>
+<div class="wrapper">
+    <?php include __DIR__ . '/includes/sidebar.php'; ?>
 
-        <div class="content-page">
-            <div class="content">
-                <div class="container-fluid pt-4">
-                    <div class="row">
-
-                        <!-- Formulario de filtro -->
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Filtrar Estudiantes</h4>
-                                    <form method="get">
-                                        <div class="mb-3">
-                                            <label for="grado" class="form-label">Grado</label>
-                                            <select class="form-control" id="grado" name="grado">
-                                                <option value="">Todos</option>
-                                                <?php while ($g = $grados->fetch_assoc()): ?>
-                                                    <option value="<?= $g['grado'] ?>" <?= $grado == $g['grado'] ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($g['grado']) ?>
-                                                    </option>
-                                                <?php endwhile; ?>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="seccion" class="form-label">Sección</label>
-                                            <select class="form-control" id="seccion" name="seccion">
-                                                <option value="">Todas</option>
-                                                <?php while ($s = $secciones->fetch_assoc()): ?>
-                                                    <option value="<?= $s['seccion'] ?>" <?= $seccion == $s['seccion'] ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($s['seccion']) ?>
-                                                    </option>
-                                                <?php endwhile; ?>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="especialidad" class="form-label">Especialidad</label>
-                                            <select class="form-control" id="especialidad" name="especialidad">
-                                                <option value="">Todas</option>
-                                                <?php while ($s = $especialidades->fetch_assoc()): ?>
-                                                    <option value="<?= $s['especialidad'] ?>"
-                                                        <?= $especialidad == $s['especialidad'] ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($s['especialidad']) ?>
-                                                    </option>
-                                                <?php endwhile; ?>
-                                            </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Filtrar</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tabla de estudiantes -->
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Listado de Estudiantes</h4>
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-hover" style="font-size: 19px;">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Nombre</th>
-                                                    <th>Grado</th>
-                                                    <th>Sección</th>
-                                                    <th>especialidad</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php if ($resultado && $resultado->num_rows > 0): ?>
-                                                    <?php while ($row = $resultado->fetch_assoc()): ?>
-                                                        <tr>
-                                                            <td><?= $row['id'] ?></td>
-                                                            <td><?= htmlspecialchars($row['nombre']) ?></td>
-                                                            <td><?= htmlspecialchars($row['grado']) ?></td>
-                                                            <td><?= htmlspecialchars($row['seccion']) ?></td>
-                                                            <td><?= htmlspecialchars($row['especialidad']) ?></td>
-                                                        </tr>
-                                                    <?php endwhile; ?>
-                                                <?php else: ?>
-                                                    <tr>
-                                                        <td colspan="4" class="text-center">No se encontraron estudiantes.
-                                                        </td>
-                                                    </tr>
-                                                <?php endif; ?>
-                                            </tbody>
-                                        </table>
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid pt-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title text-center">Listado por Grado y Sección</h4>
+                                <?php if (!empty($grupos)): ?>
+                                    <div class="grid">
+                                        <?php foreach ($grupos as $nombreGrupo => $datos): ?>
+                                            <?php
+                                                $link = "listado.php?grado=" . urlencode($datos['grado']) . "&seccion=" . urlencode($datos['seccion']);
+                                                $total = count($datos['estudiantes']);
+                                            ?>
+                                            <a href="<?= $link ?>">
+                                                <div class="card">
+                                                    <div class="card-icon">👥</div>
+                                                    <div class="card-title"><?= htmlspecialchars($nombreGrupo) ?></div>
+                                                    <div class="card-sub"><?= $total ?> estudiante(s)</div>
+                                                </div>
+                                            </a>
+                                        <?php endforeach; ?>
                                     </div>
-                                </div>
+                                <?php else: ?>
+                                    <p class="text-center">No se encontraron estudiantes.</p>
+                                <?php endif; ?>
                             </div>
                         </div>
+                    </div>
+                </div> <!-- row -->
+            </div> <!-- container -->
+        </div> <!-- content -->
+    </div> <!-- content-page -->
+</div> <!-- wrapper -->
 
-                    </div> <!-- row -->
-                </div> <!-- container -->
-            </div> <!-- content -->
-        </div> <!-- content-page -->
-    </div> <!-- wrapper -->
-
-    <script src="../assets/js/vendor.min.js"></script>
-    <script src="../assets/js/app.min.js"></script>
+<script src="../assets/js/vendor.min.js"></script>
+<script src="../assets/js/app.min.js"></script>
 </body>
-
 </html>
