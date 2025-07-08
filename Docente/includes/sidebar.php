@@ -404,7 +404,7 @@ if (isset($conn)) {
             </li>
 
             <li class="side-nav-item">
-                <a href="../Admin/list_books.php" class="side-nav-link">
+                <a href="../Docente/list_books.php" class="side-nav-link">
                     <i class="mdi mdi-book-open-page-variant"></i>
                     <span> Libros </span>
                 </a>
@@ -412,14 +412,14 @@ if (isset($conn)) {
 
 
             <li class="side-nav-item">
-                <a href="../Admin/notificaciones.php" class="side-nav-link">
+                <a href="../Docente/notificaciones.php" class="side-nav-link">
                     <i class="mdi mdi-bell-outline"></i>
                     <span> Notificaciones </span>
                 </a>
             </li>
 
             <li class="side-nav-item">
-                <a href="../Admin/logout.php" class="side-nav-link">
+                <a href="../Docente/logout.php" class="side-nav-link">
                     <i class="mdi mdi-logout"></i>
                     <span> Cerrar sesión </span>
                 </a>

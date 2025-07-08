@@ -28,10 +28,11 @@ if (!isset($_GET['id'])) {
 $libro_id = intval($_GET['id']);
 
 // Preparamos la consulta SQL para mayor seguridad (evita inyecciones SQL)
-$sql = "SELECT l.id, l.titulo, l.autor, l.descripcion, l.tipo_libro, l.archivo_pdf, l.stock, c.nombre AS categoria_nombre
+$sql = "SELECT l.id, l.titulo, l.autor, l.descripcion, l.tipo_libro, l.archivo_pdf, l.imagen, l.stock, c.nombre AS categoria_nombre
         FROM libros l
         LEFT JOIN categorias_libros c ON l.categoria_id = c.id
         WHERE l.id = ?";
+ 
 
 // Ejemplo para estudiante:
 $stmt = $conn->prepare("INSERT INTO prestamos (id_usuario, id_libro, fecha_prestamo, fecha_devolucion, status, origen_usuario)
@@ -121,7 +122,13 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
 
             <div class="book-content">
                 <div class="book-image-section">
-                    <img src="/placeholder.svg?height=500&width=400" alt="Portada del libro" class="main-image">
+                    <?php
+                    $imagen = htmlspecialchars($libro['imagen'] ?? '');
+                    $imagen = !empty($imagen) ? "/ProyectoGrad/assets/book/$imagen" : "/ProyectoGrad/assets/book/img_libros.jpg";
+                    ?>
+
+                    <img src="<?php echo $imagen; ?>" alt="Portada del libro" class="main-image">
+
                 </div>
 
                 <div class="book-info">

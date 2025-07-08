@@ -28,23 +28,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = trim($_POST['titulo'] ?? '');
     $autor = trim($_POST['autor'] ?? '');
     $genero = trim($_POST['genero'] ?? '');
-    $categoria_id = (int)($_POST['categoria_id'] ?? 0);
+    $categoria_id = (int) ($_POST['categoria_id'] ?? 0);
     $tipo_libro = trim($_POST['tipo_libro'] ?? '');
     $anio_publicacion = trim($_POST['año_publicacion'] ?? '');
     $isbn = trim($_POST['isbn'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
     $disponible = isset($_POST['disponible']) ? 1 : 0;
     $archivo_pdf = '';
+    $imagen = '';
 
-    if ($titulo === '') { $errores[] = 'El título es obligatorio.'; }
-    if ($autor === '') { $errores[] = 'El autor es obligatorio.'; }
-    if ($genero === '') { $errores[] = 'El género es obligatorio.'; }
-    if ($categoria_id === 0) { $errores[] = 'La categoría es obligatoria.'; }
-    if ($tipo_libro === '') { $errores[] = 'El tipo de libro es obligatorio.'; }
-    if (!preg_match('/^\d{4}$/', $anio_publicacion)) { $errores[] = 'Año inválido.'; }
-    if ($isbn === '') { $errores[] = 'El ISBN es obligatorio.'; }
-    if ($descripcion === '') { $errores[] = 'La descripción es obligatoria.'; }
+    if ($titulo === '') {
+        $errores[] = 'El título es obligatorio.';
+    }
+    if ($autor === '') {
+        $errores[] = 'El autor es obligatorio.';
+    }
+    if ($genero === '') {
+        $errores[] = 'El género es obligatorio.';
+    }
+    if ($categoria_id === 0) {
+        $errores[] = 'La categoría es obligatoria.';
+    }
+    if ($tipo_libro === '') {
+        $errores[] = 'El tipo de libro es obligatorio.';
+    }
+    if (!preg_match('/^\d{4}$/', $anio_publicacion)) {
+        $errores[] = 'Año inválido.';
+    }
+    if ($isbn === '') {
+        $errores[] = 'El ISBN es obligatorio.';
+    }
+    if ($descripcion === '') {
+        $errores[] = 'La descripción es obligatoria.';
+    }
 
+    //**********************************************Codigo para cargar PDF**********************************************
     if (isset($_FILES['archivo_pdf']) && $_FILES['archivo_pdf']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['archivo_pdf']['name'], PATHINFO_EXTENSION));
         if ($ext !== 'pdf') {
@@ -60,15 +78,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-        if (empty($errores)) {
-        $stmt = $conn->prepare('INSERT INTO libros (titulo, autor, genero, categoria_id, tipo_libro, año_publicacion, isbn, descripcion, disponible, archivo_pdf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('sssissssis', $titulo, $autor, $genero, $categoria_id, $tipo_libro, $anio_publicacion, $isbn, $descripcion, $disponible, $archivo_pdf);
+    //**********************************************Codigo para cargar Imagen********************************************
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+        $extensiones_permitidas = ['jpg', 'jpeg', 'png', 'webp'];
+        if (!in_array($ext, $extensiones_permitidas)) {
+            $errores[] = 'La imagen debe estar en formato JPG, JPEG, PNG o WEBP.';
+        } else {
+            $nombre_imagen = uniqid('img_', true) . '.' . $ext;
+            $ruta_imagen = '../assets/book/' . $nombre_imagen;
+            if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_imagen)) {
+                $imagen = $nombre_imagen;
+            } else {
+                $errores[] = 'Error al subir la imagen.';
+            }
+        }
+    } else {
+        // Imagen no obligatoria, se usará una por defecto si no se sube ninguna
+        $imagen = 'img_libros.png';
+    }
+
+    if (empty($errores)) {
+        $sql = "INSERT INTO libros (titulo, autor, genero, tipo_libro, anio_publicacion, isbn, descripcion, disponible, archivo_pdf, imagen, categoria_id, stock)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+        $stmt = $conn->prepare($sql);
+    
+        if (!$stmt) {
+            die("Error al preparar la consulta: " . $conexion->error);
+        }
+    
+        $stock = 1; // o lo que definas por defecto
+        $stmt->bind_param(
+            "ssssississii",
+            $titulo,
+            $autor,
+            $genero,
+            $tipo_libro,
+            $anio_publicacion,
+            $isbn,
+            $descripcion,
+            $disponible,
+            $archivo_pdf,
+            $imagen,
+            $categoria_id,
+            $stock
+        );
+    
         if ($stmt->execute()) {
             $id_libro = $stmt->insert_id;
+    
             // Generar QR
             require_once '../assets/phpqrcode/qrcode.php';
             $qr_dir = '../uploads/qr/';
-            if (!is_dir($qr_dir)) { mkdir($qr_dir, 0777, true); }
+            if (!is_dir($qr_dir)) {
+                mkdir($qr_dir, 0777, true);
+            }
             $qr_data = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/detalle_libro.php?id=" . $id_libro;
             $qr_file = $qr_dir . "libro_{$id_libro}.png";
             $qr = QRCode::getMinimumQRCode($qr_data, QR_ERROR_CORRECT_LEVEL_L);
@@ -80,14 +145,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $categoria_id = 0;
             $disponible = 1;
         } else {
-            $errores[] = 'Error al guardar en la base de datos.';
+            $errores[] = 'Error al guardar en la base de datos: ' . $stmt->error;
         }
+    
         $stmt->close();
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8" />
     <title>Añadir Libro | Admin Dashboard</title>
@@ -104,6 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 0.25rem;
             margin-bottom: 0.25rem;
         }
+
         .categoria-badge {
             display: inline-flex;
             align-items: center;
@@ -113,11 +181,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 0.875rem;
             margin-right: 0.5rem;
         }
+
         .categoria-badge i {
             margin-right: 0.25rem;
         }
     </style>
 </head>
+
 <body>
     <div class="wrapper">
         <?php include 'includes/session_check.php'; ?>
@@ -138,32 +208,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php if (!empty($errores)): ?>
                                         <div class="alert alert-danger">
                                             <ul class="mb-0">
-                                                <?php foreach ($errores as $e) { echo "<li>$e</li>"; } ?>
+                                                <?php foreach ($errores as $e) {
+                                                    echo "<li>$e</li>";
+                                                } ?>
                                             </ul>
                                         </div>
                                     <?php endif; ?>
                                     <form method="post" enctype="multipart/form-data" novalidate>
                                         <div class="mb-3">
                                             <label for="titulo" class="form-label">Título</label>
-                                            <input type="text" class="form-control" id="titulo" name="titulo" value="<?= htmlspecialchars($titulo) ?>" required>
+                                            <input type="text" class="form-control" id="titulo" name="titulo"
+                                                value="<?= htmlspecialchars($titulo) ?>" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="autor" class="form-label">Autor</label>
-                                            <input type="text" class="form-control" id="autor" name="autor" value="<?= htmlspecialchars($autor) ?>" required>
+                                            <input type="text" class="form-control" id="autor" name="autor"
+                                                value="<?= htmlspecialchars($autor) ?>" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="genero" class="form-label">Género</label>
-                                            <input type="text" class="form-control" id="genero" name="genero" value="<?= htmlspecialchars($genero) ?>" required>
+                                            <input type="text" class="form-control" id="genero" name="genero"
+                                                value="<?= htmlspecialchars($genero) ?>" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="categoria_id" class="form-label">Categoría *</label>
                                             <select class="form-control" id="categoria_id" name="categoria_id" required>
                                                 <option value="">Seleccione una categoría...</option>
                                                 <?php foreach ($categorias as $categoria): ?>
-                                                    <option value="<?= $categoria['id'] ?>" 
-                                                            <?= $categoria_id == $categoria['id'] ? 'selected' : '' ?>
-                                                            data-color="<?= $categoria['color'] ?>"
-                                                            data-icono="<?= $categoria['icono'] ?>">
+                                                    <option value="<?= $categoria['id'] ?>"
+                                                        <?= $categoria_id == $categoria['id'] ? 'selected' : '' ?>
+                                                        data-color="<?= $categoria['color'] ?>"
+                                                        data-icono="<?= $categoria['icono'] ?>">
                                                         <?= htmlspecialchars($categoria['nombre']) ?>
                                                     </option>
                                                 <?php endforeach; ?>
@@ -179,26 +254,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <label for="tipo_libro" class="form-label">Tipo de Libro</label>
                                             <select class="form-control" id="tipo_libro" name="tipo_libro" required>
                                                 <option value="">Seleccione...</option>
-                                                <option value="digital" <?= $tipo_libro === 'digital' ? 'selected' : '' ?>>Digital</option>
-                                                <option value="fisico" <?= $tipo_libro === 'fisico' ? 'selected' : '' ?>>Físico</option>
+                                                <option value="digital" <?= $tipo_libro === 'digital' ? 'selected' : '' ?>>
+                                                    Digital</option>
+                                                <option value="fisico" <?= $tipo_libro === 'fisico' ? 'selected' : '' ?>>
+                                                    Físico</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
                                             <label for="año_publicacion" class="form-label">Año de Publicación</label>
-                                            <input type="number" class="form-control" id="año_publicacion" name="año_publicacion" value="<?= htmlspecialchars($anio_publicacion) ?>" required min="1000" max="9999">
+                                            <input type="number" class="form-control" id="año_publicacion"
+                                                name="año_publicacion"
+                                                value="<?= htmlspecialchars($anio_publicacion) ?>" required min="1000"
+                                                max="9999">
                                         </div>
                                         <div class="mb-3">
                                             <label for="isbn" class="form-label">ISBN</label>
-                                            <input type="text" class="form-control" id="isbn" name="isbn" value="<?= htmlspecialchars($isbn) ?>" required>
+                                            <input type="text" class="form-control" id="isbn" name="isbn"
+                                                value="<?= htmlspecialchars($isbn) ?>" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="descripcion" class="form-label">Descripción</label>
-                                            <textarea class="form-control" id="descripcion" name="descripcion" required><?= htmlspecialchars($descripcion) ?></textarea>
+                                            <textarea class="form-control" id="descripcion" name="descripcion"
+                                                required><?= htmlspecialchars($descripcion) ?></textarea>
                                         </div>
                                         <div class="mb-3">
                                             <label for="archivo_pdf" class="form-label">Archivo PDF</label>
-                                            <input type="file" class="form-control" id="archivo_pdf" name="archivo_pdf" accept=".pdf">
+                                            <input type="file" class="form-control" id="archivo_pdf" name="archivo_pdf"
+                                                accept=".pdf">
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="imagen" class="form-label">Imagen de Portada</label>
+                                            <input type="file" class="form-control" id="imagen" name="imagen"
+                                                accept=".jpg,.jpeg,.png,.webp">
+                                        </div>
+
                                         <div class="mb-3">
                                             <label class="form-label">Código QR generado</label><br>
                                             <?php if (!empty($id_libro)) {
@@ -209,7 +298,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             } ?>
                                         </div>
                                         <div class="form-check mb-3">
-                                            <input class="form-check-input" type="checkbox" id="disponible" name="disponible" value="1" <?= $disponible ? 'checked' : '' ?>>
+                                            <input class="form-check-input" type="checkbox" id="disponible"
+                                                name="disponible" value="1" <?= $disponible ? 'checked' : '' ?>>
                                             <label class="form-check-label" for="disponible">Disponible</label>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -226,20 +316,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="../assets/js/vendor.min.js"></script>
     <script src="../assets/js/app.min.js"></script>
     <script src="includes/notifications.js"></script>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const categoriaSelect = document.getElementById('categoria_id');
             const categoriaPreview = document.getElementById('categoria-preview');
-            
-            categoriaSelect.addEventListener('change', function() {
+
+            categoriaSelect.addEventListener('change', function () {
                 const selectedOption = this.options[this.selectedIndex];
-                
+
                 if (selectedOption.value) {
                     const color = selectedOption.getAttribute('data-color');
                     const icono = selectedOption.getAttribute('data-icono');
                     const nombre = selectedOption.text;
-                    
+
                     categoriaPreview.style.display = 'block';
                     const badge = categoriaPreview.querySelector('.categoria-badge');
                     badge.style.backgroundColor = color;
@@ -249,7 +339,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     categoriaPreview.style.display = 'none';
                 }
             });
-            
+
             // Trigger change event if there's a pre-selected category
             if (categoriaSelect.value) {
                 categoriaSelect.dispatchEvent(new Event('change'));
@@ -257,4 +347,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 </body>
+
 </html>
