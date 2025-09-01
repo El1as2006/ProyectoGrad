@@ -1,7 +1,7 @@
 <?php
-// Mostrar errores para depuración
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// Configurar errores (no mostrar en producción)
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
 
 // Iniciar sesión si no está iniciada
@@ -36,21 +36,21 @@ function safe_count_query($conn, $sql) {
 
 // Consultas de estadísticas
 $total_prestados = safe_count_query($conn, "
-    SELECT COUNT(*) FROM prestamos 
-    WHERE id_usuario = $id_usuario 
-      AND status = 'prestado'
+    SELECT COUNT(*) FROM prestamos
+    WHERE id_usuario = $id_usuario
+        AND status = 'no entregado'
 ");
 
 $total_por_vencer = safe_count_query($conn, "
-    SELECT COUNT(*) FROM prestamos 
-    WHERE id_usuario = $id_usuario 
-      AND status = 'prestado' 
-      AND fecha_devolucion IS NOT NULL 
-      AND fecha_devolucion BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+    SELECT COUNT(*) FROM prestamos
+    WHERE id_usuario = $id_usuario
+        AND status = 'no entregado'
+        AND fecha_devolucion IS NOT NULL
+        AND fecha_devolucion BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)
 ");
 
 $total_historial = safe_count_query($conn, "
-    SELECT COUNT(*) FROM prestamos 
+    SELECT COUNT(*) FROM prestamos
     WHERE id_usuario = $id_usuario
 ");
 ?>
@@ -62,7 +62,7 @@ $total_historial = safe_count_query($conn, "
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookHive Library - Tu Centro Digital de Lectura</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/ProyectoGrad/assets/css/indexstyle.css">
+    <link rel="stylesheet" href="/ProyectoGrad-Logica-ProyectoGrad/assets/css/indexstyle.css">
 </head>
 <body>
 
@@ -78,10 +78,12 @@ $total_historial = safe_count_query($conn, "
     <div class="container hero-content">
         <h1>Descubre Tu Próxima <span>Gran Lectura</span></h1>
         <p>Accede a miles de libros, e-books, audiolibros y más. Tu viaje hacia el conocimiento y la imaginación comienza aquí.</p>
-        <div class="search-bar">
-            <input type="text" placeholder="Buscar por título, autor o ISBN...">
+        
+        <!-- Buscador funcional -->
+        <form action="buscadorindex.php" method="get" class="search-bar">
+            <input type="text" name="q" placeholder="Buscar por título, autor o ISBN..." required>
             <button type="submit"><i class="fas fa-search"></i> Buscar</button>
-        </div>
+        </form>
     </div>
 </section>
 
@@ -111,8 +113,6 @@ $total_historial = safe_count_query($conn, "
                 </div>
             </div>
         </section>
-
-        <!-- Aquí podrías continuar con más secciones como libros destacados, etc. -->
     </div>
 </main>
 

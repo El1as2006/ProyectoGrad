@@ -28,16 +28,11 @@ if (!isset($_GET['id'])) {
 $libro_id = intval($_GET['id']);
 
 // Preparamos la consulta SQL para mayor seguridad (evita inyecciones SQL)
-$sql = "SELECT l.id, l.titulo, l.autor, l.descripcion, l.tipo_libro, l.archivo_pdf, l.imagen, l.stock, c.nombre AS categoria_nombre
+$sql = "SELECT l.id, l.titulo, l.autor, l.descripcion, l.tipo_libro, l.archivo_pdf, l.stock, c.nombre AS categoria_nombre
         FROM libros l
         LEFT JOIN categorias_libros c ON l.categoria_id = c.id
         WHERE l.id = ?";
- 
 
-// Ejemplo para estudiante:
-$stmt = $conn->prepare("INSERT INTO prestamos (id_usuario, id_libro, fecha_prestamo, fecha_devolucion, status, origen_usuario)
-                        VALUES (?, ?, ?, ?, ?, 'estudiante')");
-$stmt->bind_param("iisss", $id_estudiante, $id_libro, $fecha_prestamo, $fecha_devolucion, $status);
 
 $stmt = $conexion->prepare($sql);
 if (!$stmt) {
@@ -65,15 +60,15 @@ $archivo_pdf = htmlspecialchars($libro['archivo_pdf'] ?? '');
 
 
 
-// --- CORRECCIÓN: Eliminamos prefijo 'uploads/' si existe para evitar ruta duplicada ---
-$archivo_pdf = preg_replace('#^uploads/#', '', $archivo_pdf);
+// --- CORRECCIÓN: Eliminamos prefijo 'uploads/' si existe para evitar ruta duplicada (casing agnóstico) ---
+$archivo_pdf = preg_replace('#^(?i)uploads/#', '', $archivo_pdf);
 
 $stock = intval($libro['stock'] ?? 0);
 
 // --- CONFIGURACIÓN DE RUTAS ---
 
-// Ruta URL base para la carpeta uploads (ajusta según tu estructura)
-$base_url_uploads = '/ProyectoGrad/uploads/';
+// Ruta URL base para la carpeta Uploads (ajusta según tu estructura)
+$base_url_uploads = '/ProyectoGrad-Logica-ProyectoGrad/Uploads/';
 
 // Ruta física absoluta para la carpeta uploads (servidor)
 $base_path_uploads = $_SERVER['DOCUMENT_ROOT'] . $base_url_uploads;
@@ -101,15 +96,15 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
     <meta charset="UTF-8">
     <title>Detalles del Libro - <?php echo $titulo; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/ProyectoGrad/assets/css/indexstyle.css">
-    <link rel="stylesheet" href="/ProyectoGrad/assets/css/librodetalles.css">
+    <link rel="stylesheet" href="/ProyectoGrad-Logica-ProyectoGrad/assets/css/indexstyle.css">
+    <link rel="stylesheet" href="/ProyectoGrad-Logica-ProyectoGrad/assets/css/librodetalles.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <header>
-        <?php include 'header.php'; ?>
+    <?php include_once 'header.php'; ?>
 
     </header>
 
@@ -123,8 +118,8 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             <div class="book-content">
                 <div class="book-image-section">
                     <?php
-                    $imagen = htmlspecialchars($libro['imagen'] ?? '');
-                    $imagen = !empty($imagen) ? "/ProyectoGrad/assets/book/$imagen" : "/ProyectoGrad/assets/book/img_libros.jpg";
+                    // Imagen de portada (DB no almacena columna 'imagen' en el esquema actual)
+                    $imagen = "/ProyectoGrad-Logica-ProyectoGrad/assets/book/img_libros.jpg";
                     ?>
 
                     <img src="<?php echo $imagen; ?>" alt="Portada del libro" class="main-image">
