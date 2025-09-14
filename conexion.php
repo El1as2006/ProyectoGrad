@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $password = ""; // o tu contraseña si la tienes
-$database = "bibliotecachaleca"; // Asegúrate de que este sea el nombre correcto
+$database = "biblioteca"; // Asegúrate de que este sea el nombre correcto
 
 $conn = mysqli_connect($host, $user, $password, $database);
 
