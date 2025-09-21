@@ -12,7 +12,8 @@ if (!isset($_SESSION['user_id'])) {
 $nombre = $_SESSION['user_name'] ?? '';
 $rol = $_SESSION['user_rol'] ?? 'admin';
 
-function safe_count_query($conn, $sql) {
+function safe_count_query($conn, $sql)
+{
     $res = $conn->query($sql);
     if ($res && $row = $res->fetch_row()) {
         return $row[0];
@@ -47,6 +48,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,7 +56,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
     <link href="../assets/css/vendor.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
     <link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
         * {
             margin: 0;
@@ -77,7 +79,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
             width: 100%;
             background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
             border-bottom: 3px solid #FFD700;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header-content {
@@ -129,7 +131,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
             padding: 12px 12px 12px 40px;
             border: none;
             border-radius: 25px;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             font-size: 14px;
             transition: all 0.3s ease;
         }
@@ -165,7 +167,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         }
 
         .icon-button:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .user-info {
@@ -203,8 +205,8 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         }
 
         .logout-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             padding: 8px 16px;
             border-radius: 6px;
@@ -217,7 +219,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         }
 
         .logout-btn:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         /* Layout */
@@ -252,7 +254,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         }
 
         .nav-button:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
         }
 
@@ -313,14 +315,14 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
             background: white;
             border-radius: 12px;
             padding: 24px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border-left: 4px solid #FFD700;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .stat-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
         .stat-title {
@@ -353,7 +355,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
             background: white;
             border-radius: 12px;
             padding: 24px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .card-header {
@@ -541,23 +543,24 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         <div class="header-content">
-             Logo 
+            Logo
             <div class="logo-section">
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Recurso%207-v9miyhZl7TVKTjoaZvWGS1aWqyWdk2.png" alt="Colegio Salesiano Santa Cecilia" class="logo">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Recurso%207-v9miyhZl7TVKTjoaZvWGS1aWqyWdk2.png"
+                    alt="Colegio Salesiano Santa Cecilia" class="logo">
                 <div class="logo-text">
                     <h1 class="logo-title">Colegio Salesiano</h1>
                     <p class="logo-subtitle">Santa Cecilia</p>
                 </div>
             </div>
-
-             Search Bar 
+            
             <div class="search-container">
                 <svg class="search-icon icon" viewBox="0 0 24 24">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.35-4.35"/>
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
                 </svg>
                 <input type="text" class="search-input" placeholder="Buscar por título, autor o ISBN...">
             </div>
@@ -566,8 +569,8 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
             <div class="user-actions">
                 <button class="icon-button">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
-                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
                     </svg>
                 </button>
                 <div class="user-info">
@@ -579,9 +582,9 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
                 </div>
                 <button class="logout-btn">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                        <polyline points="16,17 21,12 16,7"/>
-                        <line x1="21" y1="12" x2="9" y2="12"/>
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16,17 21,12 16,7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
                     </svg>
                     Cerrar Sesión
                 </button>
@@ -594,224 +597,232 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
             <nav>
                 <button class="nav-button active">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                        <polyline points="9,22 9,12 15,12 15,22"/>
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9,22 9,12 15,12 15,22" />
                     </svg>
                     Dashboard
                 </button>
                 <button class="nav-button">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                     </svg>
-                    Catálogo
+                    Catálogo de libros
                 </button>
-                <button class="nav-button">
+
+                <a href="list_loans.php" class="nav-button">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <polyline points="17,11 19,13 23,9" />
                     </svg>
                     Mis Préstamos
-                </button>
-                <button class="nav-button">
+                </a>
+                
+                <a href="list_students.php" class="nav-button">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <polyline points="17,11 19,13 23,9" />
                     </svg>
                     Estudiantes
-                </button>
-                <button class="nav-button">
+                </a>
+
+                <a href="list_users.php" class="nav-button">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="8.5" cy="7" r="4"/>
-                        <polyline points="17,11 19,13 23,9"/>
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <polyline points="17,11 19,13 23,9" />
                     </svg>
                     Usuarios
-                </button>
-                <button class="nav-button">
+                </a>
+
+                <!-- <a href="list_users.php" class="nav-button">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <polyline points="17,11 19,13 23,9" />
                     </svg>
                     Eventos
-                </button>
+                </a> -->
+
                 <button class="nav-button">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <line x1="12" y1="20" x2="12" y2="10"/>
-                        <line x1="18" y1="20" x2="18" y2="4"/>
-                        <line x1="6" y1="20" x2="6" y2="16"/>
+                        <line x1="12" y1="20" x2="12" y2="10" />
+                        <line x1="18" y1="20" x2="18" y2="4" />
+                        <line x1="6" y1="20" x2="6" y2="16" />
                     </svg>
                     Reportes
                 </button>
+
                 <button class="nav-button">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
                     </svg>
                     Configuración
                 </button>
+
                 <button class="nav-button">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                        <polyline points="22,6 12,13 2,6"/>
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
                     </svg>
                     Contacto
                 </button>
             </nav>
-        </aside> 
-       <main class="main-content">
-    <div class="welcome-section">
-        <div>
-            <h1 class="welcome-title">¡Bienvenido de nuevo, <?= htmlspecialchars($nombre) ?>!</h1>
-            <p class="member-since">Miembro desde: 2025</p>
-        </div>
-        <div class="welcome-avatar"><?= strtoupper(substr($nombre, 0, 2)) ?></div>
-    </div>
-
-    <!-- Estadísticas generales -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-title">Total Estudiantes</div>
-            <div class="stat-value"><?= $total_estudiantes ?></div>
-            <div class="stat-change">Registrados</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-title">Total Libros</div>
-            <div class="stat-value"><?= $total_libros ?></div>
-            <div class="stat-change">En biblioteca</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-title">Total Préstamos</div>
-            <div class="stat-value"><?= $total_prestamos ?></div>
-            <div class="stat-change">Acumulado</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-title">Préstamos Recientes</div>
-            <div class="stat-value"><?= count($ultimos_prestamos) ?></div>
-            <div class="stat-change">Últimos 5</div>
-        </div>
-    </div>
-
-    <div class="activity-grid">
-        <!-- Préstamos recientes -->
-        <div class="activity-card">
-            <div class="card-header">
-                <div class="card-title">Préstamos Recientes</div>
-                <div class="card-description">Últimos movimientos</div>
-            </div>
-            <?php foreach ($ultimos_prestamos as $p): ?>
-                <div class="activity-item">
-                    <div class="activity-avatar"><?= strtoupper(substr($p['nombre'], 0, 2)) ?></div>
-                    <div class="activity-content">
-                        <div class="activity-text"><?= htmlspecialchars($p['nombre']) ?> prestó "<strong><?= htmlspecialchars($p['titulo']) ?></strong>"</div>
-                        <div class="activity-time"><?= date('d/m/Y H:i', strtotime($p['fecha_prestamo'])) ?></div>
-                    </div>
-                    <div class="badge badge-primary">Préstamo</div>
+        </aside>
+        <main class="main-content">
+            <div class="welcome-section">
+                <div>
+                    <h1 class="welcome-title">¡Bienvenido de nuevo, <?= htmlspecialchars($nombre) ?>!</h1>
+                    <p class="member-since">Miembro desde: 2025</p>
                 </div>
-            <?php endforeach; ?>
-        </div>
-
-        <!-- Libros más prestados -->
-        <div class="activity-card">
-            <div class="card-header">
-                <div class="card-title">Top Libros</div>
-                <div class="card-description">Más solicitados</div>
+                <div class="welcome-avatar"><?= strtoupper(substr($nombre, 0, 2)) ?></div>
             </div>
-            <?php foreach ($libros_mas_prestados as $libro): ?>
-                <div class="activity-item">
-                    <div class="activity-content">
-                        <div class="activity-text"><?= htmlspecialchars($libro['titulo']) ?></div>
-                        <div class="activity-time"><?= $libro['total'] ?> préstamos</div>
-                    </div>
+
+            <!-- Estadísticas generales -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">Total Estudiantes</div>
+                    <div class="stat-value"><?= $total_estudiantes ?></div>
+                    <div class="stat-change">Registrados</div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-
-        <!-- Usuarios con más préstamos -->
-        <div class="activity-card">
-            <div class="card-header">
-                <div class="card-title">Usuarios más activos</div>
-                <div class="card-description">Top 5 por préstamos</div>
-            </div>
-            <?php foreach ($usuarios_mas_prestamos as $usuario): ?>
-                <div class="activity-item">
-                    <div class="activity-avatar"><?= strtoupper(substr($usuario['nombre'], 0, 2)) ?></div>
-                    <div class="activity-content">
-                        <div class="activity-text"><?= htmlspecialchars($usuario['nombre']) ?></div>
-                        <div class="activity-time"><?= $usuario['total'] ?> préstamos</div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-title">Total Libros</div>
+                    <div class="stat-value"><?= $total_libros ?></div>
+                    <div class="stat-change">En biblioteca</div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-
-        <!-- Libros por categoría -->
-        <div class="activity-card">
-            <div class="card-header">
-                <div class="card-title">Libros por Categoría</div>
-                <div class="card-description">Cantidad por categoría (ID)</div>
-            </div>
-            <?php foreach ($libros_por_categoria as $categoria): ?>
-                <div class="activity-item">
-                    <div class="activity-content">
-                        <div class="activity-text">Categoría ID <?= $categoria['categoria_id'] ?></div>
-                        <div class="activity-time"><?= $categoria['total'] ?> libros</div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-title">Total Préstamos</div>
+                    <div class="stat-value"><?= $total_prestamos ?></div>
+                    <div class="stat-change">Acumulado</div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-
-        <!-- Préstamos por mes (gráfico) -->
-        <div class="activity-card" style="grid-column: span 2;">
-            <div class="card-header">
-                <div class="card-title">Préstamos por Mes</div>
-                <div class="card-description">Últimos 12 meses</div>
+                <div class="stat-card">
+                    <div class="stat-title">Préstamos Recientes</div>
+                    <div class="stat-value"><?= count($ultimos_prestamos) ?></div>
+                    <div class="stat-change">Últimos 5</div>
+                </div>
             </div>
-            <canvas id="graficoPrestamos" height="100"></canvas>
-        </div>
-    </div>
-</main>
 
-<!-- Chart.js para mostrar los préstamos por mes -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const ctx = document.getElementById('graficoPrestamos').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: <?= json_encode(array_column($prestamos_por_mes, 'mes')) ?>,
-            datasets: [{
-                label: 'Préstamos por Mes',
-                data: <?= json_encode(array_column($prestamos_por_mes, 'total')) ?>,
-                borderWidth: 2,
-                fill: true,
-                tension: 0.3
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-</script>
+            <div class="activity-grid">
+                <!-- Préstamos recientes -->
+                <div class="activity-card">
+                    <div class="card-header">
+                        <div class="card-title">Préstamos Recientes</div>
+                        <div class="card-description">Últimos movimientos</div>
+                    </div>
+                    <?php foreach ($ultimos_prestamos as $p): ?>
+                        <div class="activity-item">
+                            <div class="activity-avatar"><?= strtoupper(substr($p['nombre'], 0, 2)) ?></div>
+                            <div class="activity-content">
+                                <div class="activity-text"><?= htmlspecialchars($p['nombre']) ?> prestó
+                                    "<strong><?= htmlspecialchars($p['titulo']) ?></strong>"</div>
+                                <div class="activity-time"><?= date('d/m/Y H:i', strtotime($p['fecha_prestamo'])) ?></div>
+                            </div>
+                            <div class="badge badge-primary">Préstamo</div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Libros más prestados -->
+                <div class="activity-card">
+                    <div class="card-header">
+                        <div class="card-title">Top Libros</div>
+                        <div class="card-description">Más solicitados</div>
+                    </div>
+                    <?php foreach ($libros_mas_prestados as $libro): ?>
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-text"><?= htmlspecialchars($libro['titulo']) ?></div>
+                                <div class="activity-time"><?= $libro['total'] ?> préstamos</div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Usuarios con más préstamos -->
+                <div class="activity-card">
+                    <div class="card-header">
+                        <div class="card-title">Usuarios más activos</div>
+                        <div class="card-description">Top 5 por préstamos</div>
+                    </div>
+                    <?php foreach ($usuarios_mas_prestamos as $usuario): ?>
+                        <div class="activity-item">
+                            <div class="activity-avatar"><?= strtoupper(substr($usuario['nombre'], 0, 2)) ?></div>
+                            <div class="activity-content">
+                                <div class="activity-text"><?= htmlspecialchars($usuario['nombre']) ?></div>
+                                <div class="activity-time"><?= $usuario['total'] ?> préstamos</div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Libros por categoría -->
+                <div class="activity-card">
+                    <div class="card-header">
+                        <div class="card-title">Libros por Categoría</div>
+                        <div class="card-description">Cantidad por categoría (ID)</div>
+                    </div>
+                    <?php foreach ($libros_por_categoria as $categoria): ?>
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-text">Categoría ID <?= $categoria['categoria_id'] ?></div>
+                                <div class="activity-time"><?= $categoria['total'] ?> libros</div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Préstamos por mes (gráfico) -->
+                <div class="activity-card" style="grid-column: span 2;">
+                    <div class="card-header">
+                        <div class="card-title">Préstamos por Mes</div>
+                        <div class="card-description">Últimos 12 meses</div>
+                    </div>
+                    <canvas id="graficoPrestamos" height="100"></canvas>
+                </div>
+            </div>
+        </main>
+
+        <!-- Chart.js para mostrar los préstamos por mes -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('graficoPrestamos').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: <?= json_encode(array_column($prestamos_por_mes, 'mes')) ?>,
+                    datasets: [{
+                        label: 'Préstamos por Mes',
+                        data: <?= json_encode(array_column($prestamos_por_mes, 'total')) ?>,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        </script>
 
     </div>
 
     <script>
         // Search functionality
-        document.querySelector('.search-input').addEventListener('input', function(e) {
+        document.querySelector('.search-input').addEventListener('input', function (e) {
             console.log('Searching for:', e.target.value);
             // Add search logic here
         });
 
         // Navigation functionality
         document.querySelectorAll('.nav-button').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 // Remove active class from all buttons
                 document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
                 // Add active class to clicked button
@@ -822,14 +833,14 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
 
         // Action buttons functionality
         document.querySelectorAll('.action-button').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 console.log('Action clicked:', this.textContent.trim());
                 // Add action logic here
             });
         });
 
         // Logout functionality
-        document.querySelector('.logout-btn').addEventListener('click', function() {
+        document.querySelector('.logout-btn').addEventListener('click', function () {
             if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
                 console.log('Logging out...');
                 // Add logout logic here
@@ -838,18 +849,11 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         });
 
         // Notification button
-        document.querySelector('.icon-button').addEventListener('click', function() {
+        document.querySelector('.icon-button').addEventListener('click', function () {
             console.log('Notifications clicked');
             // Add notification logic here
         });
     </script>
 </body>
+
 </html>
-
-
-
-
-
-
-
-
