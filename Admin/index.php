@@ -65,28 +65,46 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
+            margin: 0;
+            padding: 0;
         }
+
+        .main-content {
+            margin-left: 50px;
+            /* el contenido sí se corre para no tapar el sidebar */
+            margin-top: 65px;
+            /* para que no quede debajo del header */
+            padding: 20px;
+        }
+
 
         /* Header Styles */
         .header {
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 50;
+            left: 0;
             width: 100%;
-            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
-            border-bottom: 3px solid #FFD700;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* cubrir toda la franja */
+            height: 65px;
+            background: #000;
+            /* mismo color que sidebar */
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* separa logo/busqueda de perfil/botón */
+            padding: 0 20px;
+            z-index: 1000;
         }
+
+
 
         .header-content {
             display: flex;
             align-items: center;
             height: 64px;
-            padding: 0 24px;
+            padding: 0 0;
+            /* ← elimina el espacio lateral */
             gap: 24px;
         }
 
@@ -625,26 +643,26 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
                     </svg>
                 </button>
                 <div class="user-info">
-                    <div class="avatar">AP</div>
+                    <div class="avatar"><?= strtoupper(substr($nombre, 0, 2)) ?></div>
                     <div class="user-details">
-                        <p class="user-name">Admin Principal</p>
-                        <p class="user-role">Administrador</p>
+                        <p class="user-name"><?= htmlspecialchars($nombre) ?></p>
+                        <p class="user-role"><?= strtoupper(substr($nombre, 0, 2)) ?></p>
                     </div>
                 </div>
-                <button class="logout-btn">
+                <a href="logout.php" class="logout-btn">
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                         <polyline points="16,17 21,12 16,7" />
                         <line x1="21" y1="12" x2="9" y2="12" />
                     </svg>
                     Cerrar Sesión
-                </button>
+                </a>
             </div>
         </div>
     </header>
-
+    <?php include 'sidebar.php'; ?>
     <div class="main-layout">
-        <?php include "sidebar.php" ?> 
+
         <main class="main-content">
             <div class="welcome-section">
                 <div>
@@ -839,14 +857,6 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
             });
         });
 
-        // Logout functionality
-        document.querySelector('.logout-btn').addEventListener('click', function () {
-            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-                console.log('Logging out...');
-                // Add logout logic here
-                window.location.href = 'login.php';
-            }
-        });
 
         // Notification button
         document.querySelector('.icon-button').addEventListener('click', function () {
