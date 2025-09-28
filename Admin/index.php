@@ -541,6 +541,25 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
                 grid-template-columns: 1fr;
             }
         }
+
+        .results-box {
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #fff;
+            position: absolute;
+            width: 300px;
+            display: none;
+        }
+
+        .results-box div {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .results-box div:hover {
+            background: #f0f0f0;
+        }
     </style>
 </head>
 
@@ -562,8 +581,42 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                 </svg>
-                <input type="text" class="search-input" placeholder="Buscar por título, autor o ISBN...">
+                <input type="text" id="search-input" class="search-input"
+                    placeholder="Buscar por título, autor o ISBN...">
             </div>
+
+            <!-- Contenedor donde se mostrarán los resultados -->
+            <div id="search-results" class="results-box"></div>
+
+
+            <?php
+            header('Content-Type: application/json');
+            $conn = new mysqli("localhost", "usuario", "contraseña", "base_datos");
+
+            if ($conn->connect_error) {
+                die("Error de conexión: " . $conn->connect_error);
+            }
+
+            $q = $_GET['q'] ?? "";
+
+            if (strlen($q) > 0) {
+                $stmt = $conn->prepare("SELECT titulo, autor, isbn FROM libros WHERE titulo LIKE ? OR autor LIKE ? OR isbn LIKE ? LIMIT 10");
+                $like = "%" . $q . "%";
+                $stmt->bind_param("sss", $like, $like, $like);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                $data = [];
+                while ($row = $result->fetch_assoc()) {
+                    $data[] = $row;
+                }
+                echo json_encode($data);
+            } else {
+                echo json_encode([]);
+            }
+            $conn->close();
+            ?>
+
 
 
             <div class="user-actions">
@@ -628,7 +681,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
                     Categorías
                 </a>
 
-                 <a href="subcategorias.php" class="nav-button">
+                <a href="subcategorias.php" class="nav-button">
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
                         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
@@ -823,6 +876,34 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
     </div>
 
     <script>
+
+        document.getElementById("search-input").addEventListener("keyup", function () {
+            let query = this.value.trim();
+            if (query.length > 0) {
+                fetch("search.php?q=" + encodeURIComponent(query))
+                    .then(response => response.json())
+                    .then(data => {
+                        let resultsBox = document.getElementById("search-results");
+                        resultsBox.innerHTML = "";
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                let div = document.createElement("div");
+                                div.textContent = item.titulo + " - " + item.autor + " (ISBN: " + item.isbn + ")";
+                                resultsBox.appendChild(div);
+                            });
+                            resultsBox.style.display = "block";
+                        } else {
+                            resultsBox.style.display = "none";
+                        }
+                    });
+            } else {
+                document.getElementById("search-results").style.display = "none";
+            }
+        });
+
+
+
+
         // Search functionality
         document.querySelector('.search-input').addEventListener('input', function (e) {
             console.log('Searching for:', e.target.value);
@@ -864,4 +945,5 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         });
     </script>
 </body>
+
 </html>
