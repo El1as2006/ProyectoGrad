@@ -589,8 +589,7 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
 
 
             <?php
-            header('Content-Type: application/json');
-            $conn = new mysqli("localhost", "usuario", "contraseña", "base_datos");
+            $conn = new mysqli($host, $user, $password, $database);
 
             if ($conn->connect_error) {
                 die("Error de conexión: " . $conn->connect_error);
