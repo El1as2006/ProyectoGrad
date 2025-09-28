@@ -541,6 +541,25 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
                 grid-template-columns: 1fr;
             }
         }
+
+        .results-box {
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #fff;
+            position: absolute;
+            width: 300px;
+            display: none;
+        }
+
+        .results-box div {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .results-box div:hover {
+            background: #f0f0f0;
+        }
     </style>
 </head>
 
@@ -561,8 +580,42 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                 </svg>
-                <input type="text" class="search-input" placeholder="Buscar por título, autor o ISBN...">
+                <input type="text" id="search-input" class="search-input"
+                    placeholder="Buscar por título, autor o ISBN...">
             </div>
+
+            <!-- Contenedor donde se mostrarán los resultados -->
+            <div id="search-results" class="results-box"></div>
+
+
+            <?php
+            header('Content-Type: application/json');
+            $conn = new mysqli("localhost", "usuario", "contraseña", "base_datos");
+
+            if ($conn->connect_error) {
+                die("Error de conexión: " . $conn->connect_error);
+            }
+
+            $q = $_GET['q'] ?? "";
+
+            if (strlen($q) > 0) {
+                $stmt = $conn->prepare("SELECT titulo, autor, isbn FROM libros WHERE titulo LIKE ? OR autor LIKE ? OR isbn LIKE ? LIMIT 10");
+                $like = "%" . $q . "%";
+                $stmt->bind_param("sss", $like, $like, $like);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                $data = [];
+                while ($row = $result->fetch_assoc()) {
+                    $data[] = $row;
+                }
+                echo json_encode($data);
+            } else {
+                echo json_encode([]);
+            }
+            $conn->close();
+            ?>
+
 
 
             <div class="user-actions">
@@ -592,8 +645,95 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
     </header>
 
     <div class="main-layout">
-         <?php include 'sidebar.php'; ?>
+        <aside class="sidebar">
+            <nav>
+                <a href="index.php" class="nav-button active">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9,22 9,12 15,12 15,22" />
+                    </svg>
+                    Dashboard
+                </a>
 
+                <a href="list_books.php" class="nav-button">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                    Catálogo de libros
+                </a>
+
+                <a href="list_loans.php" class="nav-button">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <polyline points="17,11 19,13 23,9" />
+                    </svg>
+                    Préstamos
+                </a>
+
+                <a href="categorias.php" class="nav-button">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                    Categorías
+                </a>
+
+                 <a href="subcategorias.php" class="nav-button">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                    Subcategorías
+                </a>
+
+                <a href="list_students.php" class="nav-button">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <polyline points="17,11 19,13 23,9" />
+                    </svg>
+                    Estudiantes
+                </a>
+
+                <a href="list_users.php" class="nav-button">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <polyline points="17,11 19,13 23,9" />
+                    </svg>
+                    Usuarios
+                </a>
+
+                <a href="reports.php" class="nav-button">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <line x1="12" y1="20" x2="12" y2="10" />
+                        <line x1="18" y1="20" x2="18" y2="4" />
+                        <line x1="6" y1="20" x2="6" y2="16" />
+                    </svg>
+                    Reportes
+                </a>
+
+                <a href="settings.php" class="nav-button">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                    Configuración
+                </a>
+
+                <a href="contact.php" class="nav-button">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    Contacto
+                </a>
+            </nav>
+
+        </aside>
         <main class="main-content">
             <div class="welcome-section">
                 <div>
@@ -735,6 +875,34 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
     </div>
 
     <script>
+
+        document.getElementById("search-input").addEventListener("keyup", function () {
+            let query = this.value.trim();
+            if (query.length > 0) {
+                fetch("search.php?q=" + encodeURIComponent(query))
+                    .then(response => response.json())
+                    .then(data => {
+                        let resultsBox = document.getElementById("search-results");
+                        resultsBox.innerHTML = "";
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                let div = document.createElement("div");
+                                div.textContent = item.titulo + " - " + item.autor + " (ISBN: " + item.isbn + ")";
+                                resultsBox.appendChild(div);
+                            });
+                            resultsBox.style.display = "block";
+                        } else {
+                            resultsBox.style.display = "none";
+                        }
+                    });
+            } else {
+                document.getElementById("search-results").style.display = "none";
+            }
+        });
+
+
+
+
         // Search functionality
         document.querySelector('.search-input').addEventListener('input', function (e) {
             console.log('Searching for:', e.target.value);
@@ -776,4 +944,5 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         });
     </script>
 </body>
+
 </html>
