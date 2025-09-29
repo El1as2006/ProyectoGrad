@@ -17,8 +17,8 @@ if ($grado === '' || $seccion === '') {
     die("Grado y sección son obligatorios.");
 }
 
-// Consultar estudiantes del grupo
-$stmt = $conn->prepare("SELECT nombre, grado, seccion, especialidad FROM estudiantes WHERE grado = ? AND seccion = ?");
+// Consultar estudiantes del grupo (recomiendo traer también el id para asignar)
+$stmt = $conn->prepare("SELECT id, nombre, grado, seccion, especialidad FROM estudiantes WHERE grado = ? AND seccion = ?");
 $stmt->bind_param("ss", $grado, $seccion);
 $stmt->execute();
 $resultado = $stmt->get_result();
@@ -78,6 +78,18 @@ while ($row = $resultado->fetch_assoc()) {
         .btn-back:hover {
             background: #0056b3;
         }
+        .btn-assign {
+            background: #28a745;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .btn-assign:hover {
+            background: #218838;
+        }
     </style>
 </head>
 <body>
@@ -99,6 +111,7 @@ while ($row = $resultado->fetch_assoc()) {
                                 <th>Grado</th>
                                 <th>Sección</th>
                                 <th>Especialidad</th>
+                                <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,6 +122,11 @@ while ($row = $resultado->fetch_assoc()) {
                                     <td><?= htmlspecialchars($est['grado']) ?></td>
                                     <td><?= htmlspecialchars($est['seccion']) ?></td>
                                     <td><?= htmlspecialchars($est['especialidad']) ?: '-' ?></td>
+                                    <td>
+                                        <a href="asignar_libro.php?id=<?= urlencode($est['id']) ?>" class="btn-assign">
+                                            📚 Asignar
+                                        </a>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

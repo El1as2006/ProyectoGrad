@@ -65,28 +65,46 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
+            margin: 0;
+            padding: 0;
         }
+
+        .main-content {
+            margin-left: 50px;
+            /* el contenido sí se corre para no tapar el sidebar */
+            margin-top: 65px;
+            /* para que no quede debajo del header */
+            padding: 20px;
+        }
+
 
         /* Header Styles */
         .header {
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 50;
+            left: 0;
             width: 100%;
-            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
-            border-bottom: 3px solid #FFD700;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* cubrir toda la franja */
+            height: 65px;
+            background: #000;
+            /* mismo color que sidebar */
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* separa logo/busqueda de perfil/botón */
+            padding: 0 20px;
+            z-index: 1000;
         }
+
+
 
         .header-content {
             display: flex;
             align-items: center;
             height: 64px;
-            padding: 0 24px;
+            padding: 0 0;
+            /* ← elimina el espacio lateral */
             gap: 24px;
         }
 
@@ -625,114 +643,26 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
                     </svg>
                 </button>
                 <div class="user-info">
-                    <div class="avatar">AP</div>
+                    <div class="avatar"><?= strtoupper(substr($nombre, 0, 2)) ?></div>
                     <div class="user-details">
-                        <p class="user-name">Admin Principal</p>
-                        <p class="user-role">Administrador</p>
+                        <p class="user-name"><?= htmlspecialchars($nombre) ?></p>
+                        <p class="user-role"><?= strtoupper(substr($nombre, 0, 2)) ?></p>
                     </div>
                 </div>
-                <button class="logout-btn">
+                <a href="logout.php" class="logout-btn">
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                         <polyline points="16,17 21,12 16,7" />
                         <line x1="21" y1="12" x2="9" y2="12" />
                     </svg>
                     Cerrar Sesión
-                </button>
+                </a>
             </div>
         </div>
     </header>
-
+    <?php include 'sidebar.php'; ?>
     <div class="main-layout">
-        <aside class="sidebar">
-            <nav>
-                <a href="index.php" class="nav-button active">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                        <polyline points="9,22 9,12 15,12 15,22" />
-                    </svg>
-                    Dashboard
-                </a>
 
-                <a href="list_books.php" class="nav-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                    </svg>
-                    Catálogo de libros
-                </a>
-
-                <a href="list_loans.php" class="nav-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="8.5" cy="7" r="4" />
-                        <polyline points="17,11 19,13 23,9" />
-                    </svg>
-                    Préstamos
-                </a>
-
-                <a href="categorias.php" class="nav-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                    </svg>
-                    Categorías
-                </a>
-
-                 <a href="subcategorias.php" class="nav-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                    </svg>
-                    Subcategorías
-                </a>
-
-                <a href="list_students.php" class="nav-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="8.5" cy="7" r="4" />
-                        <polyline points="17,11 19,13 23,9" />
-                    </svg>
-                    Estudiantes
-                </a>
-
-                <a href="list_users.php" class="nav-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="8.5" cy="7" r="4" />
-                        <polyline points="17,11 19,13 23,9" />
-                    </svg>
-                    Usuarios
-                </a>
-
-                <a href="reports.php" class="nav-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <line x1="12" y1="20" x2="12" y2="10" />
-                        <line x1="18" y1="20" x2="18" y2="4" />
-                        <line x1="6" y1="20" x2="6" y2="16" />
-                    </svg>
-                    Reportes
-                </a>
-
-                <a href="settings.php" class="nav-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="3" />
-                        <path
-                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                    </svg>
-                    Configuración
-                </a>
-
-                <a href="contact.php" class="nav-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                        <polyline points="22,6 12,13 2,6" />
-                    </svg>
-                    Contacto
-                </a>
-            </nav>
-
-        </aside>
         <main class="main-content">
             <div class="welcome-section">
                 <div>
@@ -927,14 +857,6 @@ $usuarios_mas_prestamos = $top_usuarios ? $top_usuarios->fetch_all(MYSQLI_ASSOC)
             });
         });
 
-        // Logout functionality
-        document.querySelector('.logout-btn').addEventListener('click', function () {
-            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-                console.log('Logging out...');
-                // Add logout logic here
-                window.location.href = 'login.php';
-            }
-        });
 
         // Notification button
         document.querySelector('.icon-button').addEventListener('click', function () {
