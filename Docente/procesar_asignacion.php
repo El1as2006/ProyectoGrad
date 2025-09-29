@@ -34,11 +34,12 @@ if ($countUser == 0) {
 $fecha_prestamo = date('Y-m-d');
 $status = "prestado";
 $origen = "docente"; // opcional, para diferenciar
+$tipo_prestamo = "0"; // 1 = Asignación, 0 = Préstamo
 
 // Insertar en la tabla prestamos
-$stmt = $conn->prepare("INSERT INTO prestamos (id_libro, fecha_prestamo, status, origen_usuario, id_usuario) 
-                        VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("isssi", $libro_id, $fecha_prestamo, $status, $origen, $estudiante_id);
+$stmt = $conn->prepare("INSERT INTO prestamos (id_libro, fecha_prestamo, status, origen_usuario, id_usuario, tipo_prestamo) 
+                        VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("isssii", $libro_id, $fecha_prestamo, $status, $origen, $estudiante_id, $tipo_prestamo);
 
 if ($stmt->execute()) {
     // Reducir stock del libro
@@ -55,4 +56,3 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>

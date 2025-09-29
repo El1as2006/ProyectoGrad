@@ -59,6 +59,7 @@ while ($row = $resultado->fetch_assoc()) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Estudiantes Agrupados</title>
@@ -72,6 +73,7 @@ while ($row = $resultado->fetch_assoc()) {
             gap: 25px;
             margin-top: 20px;
         }
+
         .card {
             background: #fff;
             border-radius: 12px;
@@ -81,48 +83,53 @@ while ($row = $resultado->fetch_assoc()) {
             transition: transform .3s ease, box-shadow .3s ease;
             cursor: pointer;
         }
+
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
         }
+
         .card a {
             text-decoration: none;
             color: inherit;
         }
+
         .card-icon {
             font-size: 42px;
             color: #007bff;
             margin-bottom: 12px;
         }
+
         .card-title {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 8px;
         }
+
         .card-sub {
             font-size: 14px;
             color: #666;
         }
     </style>
 </head>
-<body>
-<div class="wrapper">
-    <?php include __DIR__ . '/includes/sidebar.php'; ?>
 
-    <div class="content-page">
-        <div class="content">
-            <div class="container-fluid pt-4">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
+<body>
+    <div class="wrapper">
+        <?php include __DIR__ . '/includes/sidebar.php'; ?>
+
+        <div class="content-page">
+            <div class="content">
+                <div class="container-fluid pt-4">
+                    <div class="row">
+                        <div class="col-md-12"> 
                             <div class="card-body">
                                 <h4 class="card-title text-center">Listado por Grado y Sección</h4>
                                 <?php if (!empty($grupos)): ?>
                                     <div class="grid">
                                         <?php foreach ($grupos as $nombreGrupo => $datos): ?>
                                             <?php
-                                                $link = "listado.php?grado=" . urlencode($datos['grado']) . "&seccion=" . urlencode($datos['seccion']);
-                                                $total = count($datos['estudiantes']);
+                                            $link = "listado.php?grado=" . urlencode($datos['grado']) . "&seccion=" . urlencode($datos['seccion']);
+                                            $total = count($datos['estudiantes']);
                                             ?>
                                             <a href="<?= $link ?>">
                                                 <div class="card">
@@ -138,14 +145,13 @@ while ($row = $resultado->fetch_assoc()) {
                                 <?php endif; ?>
                             </div>
                         </div>
-                    </div>
-                </div> <!-- row -->
-            </div> <!-- container -->
-        </div> <!-- content -->
-    </div> <!-- content-page -->
-</div> <!-- wrapper -->
+                    </div> <!-- row -->
+                </div> <!-- container -->
+            </div> <!-- content -->
+        </div> <!-- content-page -->
+    </div> <!-- wrapper -->
 
-<script src="../assets/js/vendor.min.js"></script>
-<script src="../assets/js/app.min.js"></script>
+    <script src="../assets/js/vendor.min.js"></script>
+    <script src="../assets/js/app.min.js"></script>
 </body>
 </html>

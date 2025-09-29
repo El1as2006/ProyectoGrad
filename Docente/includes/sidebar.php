@@ -380,7 +380,7 @@ if (isset($conn)) {
 
         <!-- ========== Left Sidebar Start ========== -->
         <div class="leftside-menu">
-    <a href="../Admin/index.php" class="logo text-center">
+    <a href="../Docente/index.php" class="logo text-center">
         <span class="logo-lg">
             <img src="../assets/images/Recurso_23.png">
         </span>
@@ -390,7 +390,7 @@ if (isset($conn)) {
             <li class="side-nav-title">Menú</li>
 
             <li class="side-nav-item">
-                <a href="../Admin/index.php" class="side-nav-link">
+                <a href="../Docente/index.php" class="side-nav-link">
                     <i class="mdi mdi-view-dashboard"></i>
                     <span> Dashboard </span>
                 </a>
