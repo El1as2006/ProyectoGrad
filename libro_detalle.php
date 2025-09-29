@@ -68,7 +68,7 @@ $stock = intval($libro['stock'] ?? 0);
 // --- CONFIGURACIÓN DE RUTAS ---
 
 // Ruta URL base para la carpeta Uploads (ajusta según tu estructura)
-$base_url_uploads = '/ProyectoGrad-Logica-ProyectoGrad/Uploads/';
+$base_url_uploads = '/ProyectoGrad/Uploads/';
 
 // Ruta física absoluta para la carpeta uploads (servidor)
 $base_path_uploads = $_SERVER['DOCUMENT_ROOT'] . $base_url_uploads;
@@ -104,7 +104,7 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
 
 <body>
     <header>
-    <?php include_once 'header.php'; ?>
+        <?php include_once 'header.php'; ?>
 
     </header>
 
@@ -138,7 +138,8 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
                     <div class="book-actions">
                         <?php if ($tipo_libro === 'digital'): ?>
                             <?php if ($pdf_exists): ?>
-                                <a href="<?php echo $pdf_url_browser; ?>" target="_blank" class="btn-primary">📖 Leer libro</a>
+                                <button type="button" class="btn-primary"
+                                    onclick="openPdfModal('<?php echo $pdf_url_browser; ?>')">📖 Leer libro</button>
                             <?php else: ?>
                                 <p style="color:red;">Archivo no disponible para este libro.</p>
                             <?php endif; ?>
@@ -179,6 +180,190 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             </div>
         </section>
     </main>
+
+
+    <!-- DISEÑO DE LEER LIBRO -->
+    <!-- Botón --> <button onclick="openPdfModal('tu-archivo.pdf')">📖 Leer libro</button> <!-- Modal -->
+
+    <div id="pdfModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closePdfModal()">✕</button>
+
+        <!-- Contenedor del libro -->
+        <div class="book-frame">
+            <button class="nav-btn left" onclick="prevPage()" aria-label="Página anterior">
+                ‹
+            </button>
+            <div id="book-container"></div>
+            <button class="nav-btn right" onclick="nextPage()" aria-label="Página siguiente">
+                ›
+            </button>
+        </div>
+    </div>
+</div>
+
+    <style>
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+/* Contenido */
+.modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 95vw;
+    height: 90vh;
+    background: #fefefe;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+/* Botón de cerrar */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 30px;
+    color: #333;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Marco del libro */
+.book-frame {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eae7dc;
+    padding: 20px;
+    border-radius: 10px;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Contenedor de las páginas */
+#book-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    height: 100%;
+    max-width: 90%;
+}
+
+/* Página del PDF */
+.pdf-page {
+    max-height: 100%;
+    max-width: 48%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}
+
+/* Botones navegación minimalistas */
+.nav-btn {
+    background: none;
+    border: none;
+    color: #444;
+    font-size: 40px;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s;
+    z-index: 5;
+}
+
+.nav-btn:hover {
+    color: #000;
+}
+    </style>
+
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+    <script>
+        let pdfDoc = null; let currentPage = 1; const container = document.getElementById("book-container"); async function openPdfModal(url) { document.getElementById("pdfModal").style.display = "flex"; pdfDoc = await pdfjsLib.getDocument(url).promise; currentPage = 1; renderBook(); } function closePdfModal() { document.getElementById("pdfModal").style.display = "none"; container.innerHTML = ""; } async function renderBook() {
+            container.innerHTML = ""; for (let i = 0; i < 2; i++) {
+                const pageNum = currentPage + i; if (pageNum <= pdfDoc.numPages) {
+                    const page = await pdfDoc.getPage(pageNum); const viewport = page.getViewport({ scale: 1.5 });
+                    const canvas = document.createElement("canvas"); canvas.classList.add("pdf-page"); const ctx = canvas.getContext("2d"); canvas.width = viewport.width; canvas.height = viewport.height; await page.render({ canvasContext: ctx, viewport: viewport }).promise; container.appendChild(canvas);
+                }
+            }
+        } function nextPage() { if (currentPage + 2 <= pdfDoc.numPages) { currentPage += 2; renderBook(); } } function prevPage() { if (currentPage - 2 >= 1) { currentPage -= 2; renderBook(); } }
+
+    </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+<script>
+    let pdfDoc = null;
+    let currentPage = 1;
+    const container = document.getElementById("book-container");
+
+    async function openPdfModal(url) {
+        document.getElementById("pdfModal").style.display = "flex";
+        pdfDoc = await pdfjsLib.getDocument(url).promise;
+        currentPage = 1;
+        renderBook();
+    }
+
+    function closePdfModal() {
+        document.getElementById("pdfModal").style.display = "none";
+        container.innerHTML = "";
+    }
+
+    async function renderBook() {
+        container.innerHTML = "";
+        for (let i = 0; i < 2; i++) {
+            const pageNum = currentPage + i;
+            if (pageNum <= pdfDoc.numPages) {
+                const page = await pdfDoc.getPage(pageNum);
+                const viewport = page.getViewport({ scale: 1.2 });
+                const canvas = document.createElement("canvas");
+                canvas.classList.add("pdf-page");
+                const ctx = canvas.getContext("2d");
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                container.appendChild(canvas);
+            }
+        }
+    }
+
+    function nextPage() {
+        if (currentPage + 2 <= pdfDoc.numPages) {
+            currentPage += 2;
+            renderBook();
+        }
+    }
+
+    function prevPage() {
+        if (currentPage - 2 >= 1) {
+            currentPage -= 2;
+            renderBook();
+        }
+    }
+</script>
+
+    <!-- DISEÑO DE LEER LIBRO -->
+
 
     <script>
         document.querySelector('.mobile-menu-btn').addEventListener('click', function () {

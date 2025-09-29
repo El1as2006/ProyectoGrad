@@ -98,36 +98,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $imagen = 'img_libros.png';
     }
 
-    if (empty($errores)) {
-        $sql = "INSERT INTO libros (titulo, autor, genero, tipo_libro, anio_publicacion, isbn, descripcion, disponible, archivo_pdf, imagen, categoria_id, stock)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
-        $stmt = $conn->prepare($sql);
-    
-        if (!$stmt) {
-            die("Error al preparar la consulta: " . $conexion->error);
-        }
-    
-        $stock = 1; // o lo que definas por defecto
-        $stmt->bind_param(
-            "ssssississii",
-            $titulo,
-            $autor,
-            $genero,
-            $tipo_libro,
-            $anio_publicacion,
-            $isbn,
-            $descripcion,
-            $disponible,
-            $archivo_pdf,
-            $imagen,
-            $categoria_id,
-            $stock
-        );
-    
+   if (empty($errores)) {
+    $sql = "INSERT INTO libros 
+            (titulo, autor, genero, tipo_libro, anio_publicacion, isbn, descripcion, disponible, archivo_pdf, imagen, categoria_id, stock)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        die("Error al preparar la consulta: " . $conn->error);
+    }
+
+    $stock = 1; // valor por defecto
+    $stmt->bind_param(
+        "ssssississii",
+        $titulo,
+        $autor,
+        $genero,
+        $tipo_libro,
+        $anio_publicacion,
+        $isbn,
+        $descripcion,
+        $disponible,
+        $archivo_pdf,
+        $imagen,
+        $categoria_id,
+        $stock
+    );
+
         if ($stmt->execute()) {
-            $id_libro = $stmt->insert_id;
-    
+        $id_libro = $stmt->insert_id;
+
             // Generar QR
             require_once '../assets/phpqrcode/qrcode.php';
             $qr_dir = '../uploads/qr/';
@@ -144,12 +145,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $titulo = $autor = $genero = $tipo_libro = $anio_publicacion = $isbn = $descripcion = '';
             $categoria_id = 0;
             $disponible = 1;
-        } else {
-            $errores[] = 'Error al guardar en la base de datos: ' . $stmt->error;
-        }
-    
-        $stmt->close();
+          } else {
+        $errores[] = 'Error al guardar en la base de datos: ' . $stmt->error;
     }
+
+    $stmt->close();
+}
 }
 ?>
 <!DOCTYPE html>
