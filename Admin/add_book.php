@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores[] = 'La descripción es obligatoria.';
     }
 
-    //**********************************************Codigo para cargar PDF**********************************************
+    // Subida de PDF
     if (isset($_FILES['archivo_pdf']) && $_FILES['archivo_pdf']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['archivo_pdf']['name'], PATHINFO_EXTENSION));
         if ($ext !== 'pdf') {
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    //**********************************************Codigo para cargar Imagen********************************************
+    // Subida de Imagen
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
         $extensiones_permitidas = ['jpg', 'jpeg', 'png', 'webp'];
@@ -94,42 +94,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } else {
-        // Imagen no obligatoria, se usará una por defecto si no se sube ninguna
-        $imagen = 'img_libros.png';
+        $imagen = 'img_libros.png'; // Imagen por defecto
     }
 
-   if (empty($errores)) {
-    $sql = "INSERT INTO libros 
-            (titulo, autor, genero, tipo_libro, anio_publicacion, isbn, descripcion, disponible, archivo_pdf, imagen, categoria_id, stock)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    if (empty($errores)) {
+        $sql = "INSERT INTO libros 
+                (titulo, autor, genero, tipo_libro, anio_publicacion, isbn, descripcion, disponible, archivo_pdf, imagen, categoria_id, stock)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    $stmt = $conn->prepare($sql);
+        $stmt = $conn->prepare($sql);
 
-    if (!$stmt) {
-        die("Error al preparar la consulta: " . $conn->error);
-    }
+        if (!$stmt) {
+            die("Error al preparar la consulta: " . $conn->error);
+        }
 
-    $stock = 1; // valor por defecto
-    $stmt->bind_param(
-        "ssssississii",
-        $titulo,
-        $autor,
-        $genero,
-        $tipo_libro,
-        $anio_publicacion,
-        $isbn,
-        $descripcion,
-        $disponible,
-        $archivo_pdf,
-        $imagen,
-        $categoria_id,
-        $stock
-    );
+        $stock = 1; // valor por defecto
+        $stmt->bind_param(
+            "ssssississii",
+            $titulo,
+            $autor,
+            $genero,
+            $tipo_libro,
+            $anio_publicacion,
+            $isbn,
+            $descripcion,
+            $disponible,
+            $archivo_pdf,
+            $imagen,
+            $categoria_id,
+            $stock
+        );
 
         if ($stmt->execute()) {
-        $id_libro = $stmt->insert_id;
+            $id_libro = $stmt->insert_id;
 
-            // Generar QR
+            // ======= BLOQUE DE QR COMENTADO =======
+            /*
             require_once '../assets/phpqrcode/qrcode.php';
             $qr_dir = '../uploads/qr/';
             if (!is_dir($qr_dir)) {
@@ -142,15 +142,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             imagepng($img, $qr_file);
             imagedestroy($img);
             $mensaje = 'Libro añadido correctamente. Código QR generado.';
+            */
+            // ======= FIN BLOQUE QR =======
+
+            $mensaje = 'Libro añadido correctamente.';
             $titulo = $autor = $genero = $tipo_libro = $anio_publicacion = $isbn = $descripcion = '';
             $categoria_id = 0;
             $disponible = 1;
-          } else {
-        $errores[] = 'Error al guardar en la base de datos: ' . $stmt->error;
-    }
+        } else {
+            $errores[] = 'Error al guardar en la base de datos: ' . $stmt->error;
+        }
 
-    $stmt->close();
-}
+        $stmt->close();
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -289,6 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 accept=".jpg,.jpeg,.png,.webp">
                                         </div>
 
+                                        <!-- ======= BLOQUE QR COMENTADO =======
                                         <div class="mb-3">
                                             <label class="form-label">Código QR generado</label><br>
                                             <?php if (!empty($id_libro)) {
@@ -298,6 +303,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 }
                                             } ?>
                                         </div>
+                                        ======= FIN BLOQUE QR ======= -->
+
                                         <div class="form-check mb-3">
                                             <input class="form-check-input" type="checkbox" id="disponible"
                                                 name="disponible" value="1" <?= $disponible ? 'checked' : '' ?>>
@@ -341,12 +348,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             });
 
-            // Trigger change event if there's a pre-selected category
+            // Trigger change event si ya hay categoría seleccionada
             if (categoriaSelect.value) {
                 categoriaSelect.dispatchEvent(new Event('change'));
             }
         });
     </script>
 </body>
-
 </html>
