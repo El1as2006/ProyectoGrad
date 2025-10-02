@@ -183,184 +183,240 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
 
 
     <!-- DISEÑO DE LEER LIBRO -->
-    <!-- Botón --> <button onclick="openPdfModal('tu-archivo.pdf')">📖 Leer libro</button> <!-- Modal -->
+    <button onclick="openPdfModal('tu-archivo.pdf')">📖 Leer libro</button> <!-- Modal -->
 
     <div id="pdfModal" class="modal">
-    <div class="modal-content">
-        <button class="close-btn" onclick="closePdfModal()">✕</button>
+        <div class="modal-content">
+            <button class="close-btn" onclick="closePdfModal()">✕</button>
 
-        <!-- Contenedor del libro -->
-        <div class="book-frame">
-            <button class="nav-btn left" onclick="prevPage()" aria-label="Página anterior">
-                ‹
-            </button>
-            <div id="book-container"></div>
-            <button class="nav-btn right" onclick="nextPage()" aria-label="Página siguiente">
-                ›
-            </button>
+            <!-- Contenedor del libro -->
+            <div class="book-frame">
+                <div id="book-container"></div>
+            </div>
+
+            <!-- Controles de navegación -->
+            <div class="nav-controls">
+                <button class="nav-btn" onclick="prevPage()" aria-label="Página anterior">‹</button>
+                <span id="page-info">Página 0 de 0</span>
+                <button class="nav-btn" onclick="nextPage()" aria-label="Página siguiente">›</button>
+            </div>
         </div>
     </div>
-</div>
 
     <style>
         .modal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.85);
-    align-items: center;
-    justify-content: center;
-    padding: 0 20px;
-}
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+        }
 
-/* Contenido */
-.modal-content {
-    position: relative;
-    width: 100%;
-    max-width: 95vw;
-    height: 90vh;
-    background: #fefefe;
-    border-radius: 12px;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-}
+        /* Contenido */
+        .modal-content {
+            position: relative;
+            width: 100%;
+            max-width: 95vw;
+            height: 90vh;
+            background: #fefefe;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
 
-/* Botón de cerrar */
-.close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    background: transparent;
-    border: none;
-    font-size: 30px;
-    color: #333;
-    cursor: pointer;
-    z-index: 10;
-}
+        /* Botón de cerrar */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            font-size: 30px;
+            color: #333;
+            cursor: pointer;
+            z-index: 10;
+        }
 
-/* Marco del libro */
-.book-frame {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #eae7dc;
-    padding: 20px;
-    border-radius: 10px;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-}
+        /* Marco del libro */
+        .book-frame {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eae7dc;
+            padding: 20px;
+            border-radius: 10px;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
 
-/* Contenedor de las páginas */
-#book-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: nowrap;
-    overflow: hidden;
-    height: 100%;
-    max-width: 90%;
-}
+        /* Contenedor de las páginas */
+        #book-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: nowrap;
+            overflow: hidden;
+            height: 100%;
+            max-width: 90%;
+        }
 
-/* Página del PDF */
-.pdf-page {
-    max-height: 100%;
-    max-width: 48%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    border-radius: 5px;
-}
+        /* Página del PDF */
+        .pdf-page {
+            max-height: 100%;
+            max-width: 48%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            border-radius: 5px;
+        }
 
-/* Botones navegación minimalistas */
-.nav-btn {
-    background: none;
-    border: none;
-    color: #444;
-    font-size: 40px;
-    padding: 10px;
-    cursor: pointer;
-    user-select: none;
-    transition: color 0.3s;
-    z-index: 5;
-}
+        .nav-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin-top: 15px;
+        }
 
-.nav-btn:hover {
-    color: #000;
-}
+        #page-info {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #444;
+            font-size: 28px;
+            padding: 8px 14px;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.3s;
+        }
+
+        .nav-btn:hover {
+            color: #000;
+        }
+
+        /* Ajuste cuando solo hay una página */
+        .single-page {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            display: block;
+            margin: 0 auto;
+        }
     </style>
 
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 
     <script>
-        let pdfDoc = null; let currentPage = 1; const container = document.getElementById("book-container"); async function openPdfModal(url) { document.getElementById("pdfModal").style.display = "flex"; pdfDoc = await pdfjsLib.getDocument(url).promise; currentPage = 1; renderBook(); } function closePdfModal() { document.getElementById("pdfModal").style.display = "none"; container.innerHTML = ""; } async function renderBook() {
-            container.innerHTML = ""; for (let i = 0; i < 2; i++) {
-                const pageNum = currentPage + i; if (pageNum <= pdfDoc.numPages) {
-                    const page = await pdfDoc.getPage(pageNum); const viewport = page.getViewport({ scale: 1.5 });
-                    const canvas = document.createElement("canvas"); canvas.classList.add("pdf-page"); const ctx = canvas.getContext("2d"); canvas.width = viewport.width; canvas.height = viewport.height; await page.render({ canvasContext: ctx, viewport: viewport }).promise; container.appendChild(canvas);
+        let pdfDoc = null;
+        let currentPage = 1;
+        const container = document.getElementById("book-container");
+        const pageInfo = document.getElementById("page-info");
+
+        async function openPdfModal(url) {
+            document.getElementById("pdfModal").style.display = "flex";
+            pdfDoc = await pdfjsLib.getDocument(url).promise;
+            currentPage = 1;
+            renderBook();
+        }
+
+        function closePdfModal() {
+            document.getElementById("pdfModal").style.display = "none";
+            container.innerHTML = "";
+            pageInfo.textContent = "Página 0 de 0";
+        }
+
+        async function renderBook() {
+            container.innerHTML = "";
+
+            // Detectar si es página única (última o único pdf)
+            const isSingle = (pdfDoc.numPages === 1 || currentPage === pdfDoc.numPages);
+
+            const pagesToRender = isSingle ? 1 : 2;
+
+            for (let i = 0; i < pagesToRender; i++) {
+                const pageNum = currentPage + i;
+                if (pageNum <= pdfDoc.numPages) {
+                    const page = await pdfDoc.getPage(pageNum);
+                    const viewport = page.getViewport({ scale: isSingle ? 1.5 : 1.2 });
+                    const canvas = document.createElement("canvas");
+                    canvas.classList.add("pdf-page");
+                    if (isSingle) canvas.classList.add("single-page");
+
+                    const ctx = canvas.getContext("2d");
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+
+                    // Renderizamos la página primero
+                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+                    // Luego cargamos la marca de agua y la dibujamos
+                    const watermark = new Image();
+                    watermark.src = "/ProyectoGrad/assets/images/Recurso_23.png"; // ✅ tu logo o marca de agua
+
+                    watermark.onload = () => {
+                        // Mantener proporción de la imagen original
+                        const originalWidth = watermark.naturalWidth;
+                        const originalHeight = watermark.naturalHeight;
+                        const aspectRatio = originalWidth / originalHeight;
+
+                        // Tamaño final (ajustable)
+                        const wmWidth = 210;  // ancho deseado
+                        const wmHeight = wmWidth / aspectRatio; // altura proporcional
+
+                        // Posición en la esquina inferior derecha
+                        const x = canvas.width - wmWidth - 3;
+                        const y = canvas.height - wmHeight - 3;
+
+                        ctx.save();
+                        ctx.globalAlpha = 0.3; // transparencia
+                        ctx.filter = "grayscale(100%) brightness(0%)"; // 🔥 convierte a negro
+                        ctx.drawImage(watermark, x, y, wmWidth, wmHeight);
+                        ctx.restore();
+                    };
+
+                    container.appendChild(canvas);
                 }
             }
-        } function nextPage() { if (currentPage + 2 <= pdfDoc.numPages) { currentPage += 2; renderBook(); } } function prevPage() { if (currentPage - 2 >= 1) { currentPage -= 2; renderBook(); } }
 
-    </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-
-<script>
-    let pdfDoc = null;
-    let currentPage = 1;
-    const container = document.getElementById("book-container");
-
-    async function openPdfModal(url) {
-        document.getElementById("pdfModal").style.display = "flex";
-        pdfDoc = await pdfjsLib.getDocument(url).promise;
-        currentPage = 1;
-        renderBook();
-    }
-
-    function closePdfModal() {
-        document.getElementById("pdfModal").style.display = "none";
-        container.innerHTML = "";
-    }
-
-    async function renderBook() {
-        container.innerHTML = "";
-        for (let i = 0; i < 2; i++) {
-            const pageNum = currentPage + i;
-            if (pageNum <= pdfDoc.numPages) {
-                const page = await pdfDoc.getPage(pageNum);
-                const viewport = page.getViewport({ scale: 1.2 });
-                const canvas = document.createElement("canvas");
-                canvas.classList.add("pdf-page");
-                const ctx = canvas.getContext("2d");
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-                container.appendChild(canvas);
+            // Actualizar info de página
+            if (isSingle) {
+                pageInfo.textContent = `Página ${currentPage} de ${pdfDoc.numPages}`;
+            } else {
+                pageInfo.textContent = `Página ${currentPage}-${Math.min(currentPage + 1, pdfDoc.numPages)} de ${pdfDoc.numPages}`;
             }
         }
-    }
 
-    function nextPage() {
-        if (currentPage + 2 <= pdfDoc.numPages) {
-            currentPage += 2;
-            renderBook();
-        }
-    }
 
-    function prevPage() {
-        if (currentPage - 2 >= 1) {
-            currentPage -= 2;
-            renderBook();
+
+        function nextPage() {
+            if (currentPage + 2 <= pdfDoc.numPages) {
+                currentPage += 2;
+                renderBook();
+            }
         }
-    }
-</script>
+
+        function prevPage() {
+            if (currentPage - 2 >= 1) {
+                currentPage -= 2;
+                renderBook();
+            }
+        }
+    </script>
+
 
     <!-- DISEÑO DE LEER LIBRO -->
 
