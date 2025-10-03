@@ -90,7 +90,7 @@ $prestamos = $resultado->fetch_all(MYSQLI_ASSOC);
                     <tr>
                         <th>Título</th>
                         <th>Autor</th>
-                        <th>Fecha Préstamo</th>
+                        <th>Fecha de Asignacion</th>
                         <th>Fecha Devolución</th>
                         <th>Estado</th>
                         <th>QR</th>
