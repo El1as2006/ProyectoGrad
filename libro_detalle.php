@@ -215,7 +215,7 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             background: rgba(0, 0, 0, 0.85);
             align-items: center;
             justify-content: center;
-            padding: 0 20px;
+            padding: 0 10px;
         }
 
         /* Contenido */
@@ -226,10 +226,9 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             height: 90vh;
             background: #fefefe;
             border-radius: 12px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            padding: 15px;
+            padding: 10px;
         }
 
         /* Botón de cerrar */
@@ -252,9 +251,8 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             align-items: center;
             justify-content: center;
             background: #eae7dc;
-            padding: 20px;
+            padding: 10px;
             border-radius: 10px;
-            height: 100%;
             overflow: hidden;
             position: relative;
         }
@@ -264,31 +262,31 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: nowrap;
             overflow: hidden;
+            width: 100%;
             height: 100%;
-            max-width: 90%;
         }
 
         /* Página del PDF */
         .pdf-page {
+            width: 48%;
+            height: auto;
             max-height: 100%;
-            max-width: 48%;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
             border-radius: 5px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
 
         .nav-controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 25px;
-            margin-top: 15px;
+            gap: 20px;
+            margin-top: 10px;
         }
 
         #page-info {
-            font-size: 16px;
             font-weight: bold;
             color: #333;
         }
@@ -298,10 +296,7 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             border: none;
             color: #444;
             font-size: 28px;
-            padding: 8px 14px;
             cursor: pointer;
-            user-select: none;
-            transition: color 0.3s;
         }
 
         .nav-btn:hover {
@@ -310,10 +305,82 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
 
         /* Ajuste cuando solo hay una página */
         .single-page {
-            max-width: 100% !important;
+            width: 100% !important;
+            height: auto !important;
             max-height: 100% !important;
-            display: block;
-            margin: 0 auto;
+        }
+
+        /* --- Responsive para móviles/tablets --- */
+        @media (max-width: 768px) {
+            .pdf-page {
+                width: 100% !important;
+                /* ocupar todo el ancho */
+                max-height: none;
+            }
+
+            #book-container {
+                flex-direction: column;
+                gap: 10px;
+                overflow-y: auto;
+                height: 100%;
+            }
+
+            .book-frame {
+                padding: 5px;
+            }
+
+            .modal-content {
+                padding: 5px;
+            }
+
+            .nav-controls {
+                gap: 10px;
+            }
+
+            #page-info {
+                font-size: 14px;
+            }
+        }
+
+
+        /* Móviles largos tipo iPhone */
+        @media (max-width: 414px) and (max-height: 896px),
+        (max-width: 390px) and (max-height: 844px),
+        (max-width: 375px) and (max-height: 812px) {
+            .pdf-page {
+                width: 100% !important;
+                /* ocupa todo el ancho */
+                height: 90vh !important;
+                /* ocupa casi toda la altura de la pantalla */
+                object-fit: contain;
+                /* mantiene proporciones */
+            }
+
+            #book-container {
+                flex-direction: column;
+                gap: 10px;
+                overflow-y: auto;
+                /* permite scroll vertical */
+                height: 100%;
+            }
+
+            .book-frame {
+                padding: 5px;
+            }
+
+            .modal-content {
+                padding: 5px;
+                height: 95vh;
+                /* casi toda la ventana del modal */
+            }
+
+            .nav-controls {
+                gap: 10px;
+            }
+
+            #page-info {
+                font-size: 14px;
+            }
         }
     </style>
 
@@ -340,81 +407,80 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
         }
 
         async function renderBook() {
-            container.innerHTML = "";
+    container.innerHTML = "";
 
-            // Detectar si es página única (última o único pdf)
-            const isSingle = (pdfDoc.numPages === 1 || currentPage === pdfDoc.numPages);
+    const isMobile = window.innerWidth < 768;
+    const isLongMobile = 
+        (window.innerWidth <= 414 && window.innerHeight <= 896) || 
+        (window.innerWidth <= 390 && window.innerHeight <= 844) ||
+        (window.innerWidth <= 375 && window.innerHeight <= 812);
 
-            const pagesToRender = isSingle ? 1 : 2;
+    const pagesToRender = isMobile ? 1 : 2;
+    container.classList.toggle("two-pages", !isMobile);
 
-            for (let i = 0; i < pagesToRender; i++) {
-                const pageNum = currentPage + i;
-                if (pageNum <= pdfDoc.numPages) {
-                    const page = await pdfDoc.getPage(pageNum);
-                    const viewport = page.getViewport({ scale: isSingle ? 1.5 : 1.2 });
-                    const canvas = document.createElement("canvas");
-                    canvas.classList.add("pdf-page");
-                    if (isSingle) canvas.classList.add("single-page");
+    for (let i = 0; i < pagesToRender; i++) {
+        const pageNum = currentPage + i;
+        if (pageNum <= pdfDoc.numPages) {
+            const page = await pdfDoc.getPage(pageNum);
 
-                    const ctx = canvas.getContext("2d");
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
+            let scale = 1.2; // desktop por defecto
+            if (isMobile) scale = 2.5;         // móvil normal
+            if (isLongMobile) scale = 3.0;     // móvil largo tipo iPhone
 
-                    // Renderizamos la página primero
-                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+            const viewport = page.getViewport({ scale: scale });
 
-                    // Luego cargamos la marca de agua y la dibujamos
-                    const watermark = new Image();
-                    watermark.src = "/ProyectoGrad/assets/images/Recurso_23.png"; // ✅ tu logo o marca de agua
+            const canvas = document.createElement("canvas");
+            canvas.classList.add("pdf-page");
+            if (isMobile) canvas.classList.add("single-page");
 
-                    watermark.onload = () => {
-                        // Mantener proporción de la imagen original
-                        const originalWidth = watermark.naturalWidth;
-                        const originalHeight = watermark.naturalHeight;
-                        const aspectRatio = originalWidth / originalHeight;
+            const ctx = canvas.getContext("2d");
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
 
-                        // Tamaño final (ajustable)
-                        const wmWidth = 210;  // ancho deseado
-                        const wmHeight = wmWidth / aspectRatio; // altura proporcional
-
-                        // Posición en la esquina inferior derecha
-                        const x = canvas.width - wmWidth - 3;
-                        const y = canvas.height - wmHeight - 3;
-
-                        ctx.save();
-                        ctx.globalAlpha = 0.3; // transparencia
-                        ctx.filter = "grayscale(100%) brightness(0%)"; // 🔥 convierte a negro
-                        ctx.drawImage(watermark, x, y, wmWidth, wmHeight);
-                        ctx.restore();
-                    };
-
-                    container.appendChild(canvas);
-                }
-            }
-
-            // Actualizar info de página
-            if (isSingle) {
-                pageInfo.textContent = `Página ${currentPage} de ${pdfDoc.numPages}`;
-            } else {
-                pageInfo.textContent = `Página ${currentPage}-${Math.min(currentPage + 1, pdfDoc.numPages)} de ${pdfDoc.numPages}`;
-            }
+            await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+            container.appendChild(canvas);
         }
+    }
+
+    // Actualizar info de página
+    if (pagesToRender === 1) {
+        pageInfo.textContent = `Página ${currentPage} de ${pdfDoc.numPages}`;
+    } else {
+        pageInfo.textContent = `Página ${currentPage}-${Math.min(currentPage + 1, pdfDoc.numPages)} de ${pdfDoc.numPages}`;
+    }
+}
 
 
-
-        function nextPage() {
-            if (currentPage + 2 <= pdfDoc.numPages) {
-                currentPage += 2;
-                renderBook();
+function nextPage() {
+            const isMobile = window.innerWidth <= 769;
+            if (isMobile) {
+                if (currentPage + 1 <= pdfDoc.numPages) {
+                    currentPage += 1;
+                    renderBook();
+                }
+            } else {
+                if (currentPage + 2 <= pdfDoc.numPages) {
+                    currentPage += 2;
+                    renderBook();
+                }
             }
         }
 
         function prevPage() {
-            if (currentPage - 2 >= 1) {
-                currentPage -= 2;
-                renderBook();
+            const isMobile = window.innerWidth <= 769;
+            if (isMobile) {
+                if (currentPage - 1 >= 1) {
+                    currentPage -= 1;
+                    renderBook();
+                }
+            } else {
+                if (currentPage - 2 >= 1) {
+                    currentPage -= 2;
+                    renderBook();
+                }
             }
         }
+
     </script>
 
 
