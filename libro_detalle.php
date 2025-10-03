@@ -406,7 +406,7 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             pageInfo.textContent = "Página 0 de 0";
         }
 
-        async function renderBook() {
+       async function renderBook() {
     container.innerHTML = "";
 
     const isMobile = window.innerWidth < 768;
@@ -416,7 +416,6 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
         (window.innerWidth <= 375 && window.innerHeight <= 812);
 
     const pagesToRender = isMobile ? 1 : 2;
-    container.classList.toggle("two-pages", !isMobile);
 
     for (let i = 0; i < pagesToRender; i++) {
         const pageNum = currentPage + i;
@@ -424,8 +423,8 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             const page = await pdfDoc.getPage(pageNum);
 
             let scale = 1.2; // desktop por defecto
-            if (isMobile) scale = 2.5;         // móvil normal
-            if (isLongMobile) scale = 3.0;     // móvil largo tipo iPhone
+            if (isMobile) scale = 2.5;
+            if (isLongMobile) scale = 3.0;
 
             const viewport = page.getViewport({ scale: scale });
 
@@ -437,7 +436,32 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
             canvas.width = viewport.width;
             canvas.height = viewport.height;
 
+            // --- Renderizamos la página ---
             await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+            // --- Marca de agua ---
+            const watermark = new Image();
+            watermark.src = "/ProyectoGrad/assets/images/Recurso_23.png";
+
+            // Dibujar la marca de agua después de que cargue
+            watermark.onload = () => {
+                const originalWidth = watermark.naturalWidth;
+                const originalHeight = watermark.naturalHeight;
+                const aspectRatio = originalWidth / originalHeight;
+
+                const wmWidth = 210; 
+                const wmHeight = wmWidth / aspectRatio;
+
+                const x = canvas.width - wmWidth - 3;
+                const y = canvas.height - wmHeight - 3;
+
+                ctx.save();
+                ctx.globalAlpha = 0.3; // transparencia
+                ctx.filter = "grayscale(100%) brightness(0%)";
+                ctx.drawImage(watermark, x, y, wmWidth, wmHeight);
+                ctx.restore();
+            };
+
             container.appendChild(canvas);
         }
     }
@@ -449,7 +473,6 @@ $pdf_exists = ($tipo_libro === 'digital' && !empty($archivo_pdf) && file_exists(
         pageInfo.textContent = `Página ${currentPage}-${Math.min(currentPage + 1, pdfDoc.numPages)} de ${pdfDoc.numPages}`;
     }
 }
-
 
 function nextPage() {
             const isMobile = window.innerWidth <= 769;
