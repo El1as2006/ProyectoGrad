@@ -10,8 +10,8 @@ if (!isset($_SESSION['user_id'])) {
 
 include '../conexion.php';
 
-$grado = $_GET['grado'] ?? '';
-$seccion = $_GET['seccion'] ?? '';
+$grado = $_POST['grado'] ?? '';
+$seccion = $_POST['seccion'] ?? '';
 
 if ($grado === '' || $seccion === '') {
     die("Grado y sección no proporcionados.");
@@ -87,3 +87,4 @@ $libros = $conn->query("SELECT id, titulo, autor, stock FROM libros WHERE dispon
 </div>
 </body>
 </html>
+                        

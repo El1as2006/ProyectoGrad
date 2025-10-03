@@ -34,8 +34,9 @@ $prestamos = [];
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $id_usuario_prestamo = $row['id_usuario'];
+    $id_usuario_prestamo = (int)($row['id_usuario'] ?? 0);
 
+    if ($id_usuario_prestamo > 0) {
         // Primero busca en estudiantes
         $estudiante_query = $conn->query("SELECT nombre, gmail_institucional FROM estudiantes WHERE id = $id_usuario_prestamo LIMIT 1");
         if ($estudiante_query && $estudiante_query->num_rows > 0) {
@@ -50,13 +51,18 @@ if ($result && $result->num_rows > 0) {
                 $row['nombre'] = $usuario['nombre'];
                 $row['gmail_institucional'] = $usuario['gmail_institucional'];
             } else {
-                // Si no está en ninguna tabla
                 $row['nombre'] = 'Desconocido';
                 $row['gmail_institucional'] = 'Desconocido';
             }
         }
-        $prestamos[] = $row;
+    } else {
+        $row['nombre'] = 'Desconocido';
+        $row['gmail_institucional'] = 'Desconocido';
     }
+
+    $prestamos[] = $row;
+}
+
 } else {
     echo '<div class="alert alert-warning">No se encontraron préstamos.</div>';
 }

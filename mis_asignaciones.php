@@ -1,154 +1,123 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 session_start();
+$conexion = include_once 'conexion.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header("Location: Admin/login.php");
     exit;
 }
 
-include 'conexion.php';
+$user_id = $_SESSION['user_id'];
+$nombre = $_SESSION['user_name'] ?? '';
+$rol = $_SESSION['user_rol'] ?? 'estudiante';
 
-$grado = $_GET['grado'] ?? '';
-$seccion = $_GET['seccion'] ?? '';
-
-if ($grado === '' || $seccion === '') {
-    die("Grado y sección no proporcionados.");
-}
-
-// Contar estudiantes del grupo
-$stmt = $conn->prepare("SELECT COUNT(*) as total FROM estudiantes WHERE grado = ? AND seccion = ?");
-$stmt->bind_param("ss", $grado, $seccion);
+// Obtener préstamos del usuario con status = 'asignacion'
+$query = "SELECT p.*, l.titulo, l.autor 
+          FROM prestamos p
+          JOIN libros l ON p.id_libro = l.id
+          WHERE p.id_usuario = ? 
+          AND p.status = 'asignacion'
+          ORDER BY p.fecha_prestamo DESC";
+$stmt = $conexion->prepare($query);
+$stmt->bind_param('i', $user_id);
 $stmt->execute();
-$total_estudiantes = $stmt->get_result()->fetch_assoc()['total'];
-
-// Obtener libros disponibles
-$libros = $conn->query("SELECT id, titulo, autor, stock FROM libros WHERE disponible = 1 AND stock > 0");
+$resultado = $stmt->get_result();
+$prestamos = $resultado->fetch_all(MYSQLI_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <title>Asignar Libro a <?= htmlspecialchars($grado) ?>° <?= htmlspecialchars($seccion) ?></title>
-    <link rel="stylesheet" href="../assets/css/vendor.min.css">
-    <link rel="stylesheet" href="../assets/css/app-saas.min.css">
-    <link rel="stylesheet" href="../assets/css/icons.min.css">
+    <title>Libros Asignados – Biblioteca Chaleca</title>
+    <link rel="stylesheet" href="/ProyectoGrad/assets/css/indexstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        .container {
-            padding: 30px;
-            max-width: 700px;
-            margin: auto;
+        main.container {
+            padding: 20px;
         }
 
-        .title {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .card {
-            background: #fff;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        label {
-            font-weight: 600;
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        select,
-        button {
+        .prestamo-lista {
             width: 100%;
-            padding: 12px;
-            margin-top: 8px;
-            border-radius: 6px;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .prestamo-lista th,
+        .prestamo-lista td {
+            padding: 12px 10px;
             border: 1px solid #ddd;
-            font-size: 15px;
+            text-align: center;
         }
 
-        button {
-            background: #28a745;
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
+        .prestamo-lista th {
+            background-color: #f2f2f2;
         }
 
-        button:hover {
-            background: #218838;
+        .qr-img {
+            width: 60px;
+            height: 60px;
         }
 
-        .btn-back {
-            display: inline-block;
+        h2.section-title {
+            text-align: center;
+            font-size: 26px;
             margin-bottom: 20px;
-            background: #007bff;
-            color: #fff;
-            padding: 8px 14px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
         }
 
-        .btn-back:hover {
-            background: #0056b3;
+        .status-pendiente {
+            color: orange;
         }
 
-        .info-box {
-            margin-bottom: 20px;
-            padding: 12px;
-            border-left: 4px solid #007bff;
-            background: #f1f5ff;
-            border-radius: 6px;
+        .status-devuelto {
+            color: green;
         }
     </style>
 </head>
 
 <body>
-    <div class="wrapper">
-        <?php include __DIR__ . '/includes/sidebar.php'; ?>
-        <div class="content-page">
-            <div class="content">
-                <div class="container">
-                    <a href="javascript:history.back()" class="btn-back">← Volver</a>
-                    <h2 class="title">Asignar libro a <?= htmlspecialchars($grado) ?>° <?= htmlspecialchars($seccion) ?>
-                    </h2>
+    <?php include 'header.php'; // si tienes header separado ?>
+    <main class="container">
+        <h2 class="section-title">Libros Asignados</h2>
 
-                    <div class="card">
-                        <div class="info-box">
-                            <strong>Grado:</strong> <?= htmlspecialchars($grado) ?>°
-                            <?= htmlspecialchars($seccion) ?><br>
-                            <strong>Total estudiantes:</strong> <?= $total_estudiantes ?>
-                        </div>
-
-                        <?php if ($total_estudiantes > 0): ?>
-                            <form action="procesar_asignacion_grado.php" method="POST">
-                                <input type="hidden" name="grado" value="<?= htmlspecialchars($grado) ?>">
-                                <input type="hidden" name="seccion" value="<?= htmlspecialchars($seccion) ?>">
-
-                                <label for="libro">Selecciona un libro:</label>
-                                <select name="libro_id" id="libro" required>
-                                    <option value="">-- Selecciona un libro --</option>
-                                    <?php while ($libro = $libros->fetch_assoc()): ?>
-                                        <option value="<?= $libro['id'] ?>">
-                                            <?= htmlspecialchars($libro['titulo']) ?> - <?= htmlspecialchars($libro['autor']) ?>
-                                            (Stock: <?= $libro['stock'] ?>)
-                                        </option>
-                                    <?php endwhile; ?>
-                                </select>
-
-                                <button type="submit">📚 Asignar a todos</button>
-                            </form>
-                        <?php else: ?>
-                            <p>No hay estudiantes en este grupo.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        <?php if (empty($prestamos)): ?>
+            <p>No tienes libros asignados.</p>
+        <?php else: ?>
+            <table class="prestamo-lista">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Fecha Préstamo</th>
+                        <th>Fecha Devolución</th>
+                        <th>Estado</th>
+                        <th>QR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($prestamos as $p): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($p['titulo']) ?></td>
+                            <td><?= htmlspecialchars($p['autor']) ?></td>
+                            <td><?= htmlspecialchars($p['fecha_prestamo']) ?></td>
+                            <td><?= $p['fecha_devolucion'] ? htmlspecialchars($p['fecha_devolucion']) : '—' ?></td>
+                            <td class="<?= $p['status'] === 'devuelto' ? 'status-devuelto' : 'status-pendiente' ?>">
+                                <?= ucfirst($p['status']) ?>
+                            </td>
+                            <td>
+                                <?php if (!empty($p['qr_prestamo'])): ?>
+                                    <img src="<?= htmlspecialchars($p['qr_prestamo']) ?>" alt="QR" class="qr-img">
+                                <?php else: ?>
+                                    —
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </main>
 </body>
 </html>
