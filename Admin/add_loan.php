@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 include '../conexion.php';
 
-// Endpoint AJAX para búsqueda de estudiante por carnet - DEBE IR ANTES DE CUALQUIER SALIDA HTML
+// Endpoint AJAX para búsqueda de estudiante por carnet -
 if ((isset($_GET['carnet']) || isset($_GET['carnet_manual'])) && isset($_GET['ajax'])) {
     $carnet = isset($_GET['carnet_manual']) ? trim($_GET['carnet_manual']) : trim($_GET['carnet']);
     header('Content-Type: application/json');
