@@ -11,11 +11,12 @@ $user_id = $_SESSION['user_id'];
 $nombre = $_SESSION['user_name'] ?? '';
 $rol = $_SESSION['user_rol'] ?? 'estudiante';
 
-// Obtener préstamos del usuario
+// Obtener préstamos del usuario con status = 'prestado' o 'devuelto'
 $query = "SELECT p.*, l.titulo, l.autor 
           FROM prestamos p
           JOIN libros l ON p.id_libro = l.id
           WHERE p.id_usuario = ? 
+          AND p.status IN ('prestado', 'devuelto')
           ORDER BY p.fecha_prestamo DESC";
 $stmt = $conexion->prepare($query);
 $stmt->bind_param('i', $user_id);
@@ -23,6 +24,7 @@ $stmt->execute();
 $resultado = $stmt->get_result();
 $prestamos = $resultado->fetch_all(MYSQLI_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">

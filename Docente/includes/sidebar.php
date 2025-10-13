@@ -410,6 +410,13 @@ if (isset($conn)) {
                 </a>
             </li>
 
+             <li class="side-nav-item">
+                <a href="../Docente/list_asignaciones.php" class="side-nav-link">
+                    <i class="mdi mdi-book-open-page-variant"></i>
+                    <span> Asignaciones </span>
+                </a>
+            </li>
+
 
             <li class="side-nav-item">
                 <a href="../Docente/notificaciones.php" class="side-nav-link">
