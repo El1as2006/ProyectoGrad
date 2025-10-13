@@ -1,3 +1,13 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1221,7 +1231,7 @@
             <div class="content">
 
                 <!-- Start Content-->
-                <div class="container-fluid">
+                <div class="container-fluid pt-4">
 
                     <div class="row">
                         <div class="col-12">
@@ -1758,7 +1768,7 @@
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-6">
+                                               <div class="col-md-6">
                             <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
                         </div>
                         <div class="col-md-6">
@@ -2066,7 +2076,7 @@
                                         </span>
                                     </div>
 
-                                    <div id="topnav-color">
+                                    <div id="topnav-color" class="bg-white rounded-2 h-100">
                                         <span class="d-flex h-100 flex-column">
                                             <span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
                                                 <span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
@@ -2108,14 +2118,14 @@
 
                                     <div id="topnav-color">
                                         <span class="d-flex h-100 flex-column">
-                                            <span class="bg-dark d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
+                                            <span class="bg-dark-lighten d-flex p-1 align-items-center border-bottom border-opacity-25 border-primary border-opacity-25">
                                                 <span class="d-block p-1 bg-primary-lighten rounded me-1"></span>
                                                 <span class="d-block border border-primary border-opacity-25 border-3 rounded ms-auto"></span>
                                                 <span class="d-block border border-primary border-opacity-25 border-3 rounded ms-1"></span>
                                                 <span class="d-block border border-primary border-opacity-25 border-3 rounded ms-1"></span>
                                                 <span class="d-block border border-primary border-opacity-25 border-3 rounded ms-1"></span>
                                             </span>
-                                            <span class="bg-light d-block p-1"></span>
+                                            <span class="bg-light-lighten d-block p-1"></span>
                                         </span>
                                     </div>
                                 </label>
@@ -2130,17 +2140,17 @@
                                     <div id="sidebar-size">
                                         <span class="d-flex h-100">
                                             <span class="flex-shrink-0">
-                                                <span class="bg-light d-flex h-100 border-end  flex-column p-1 px-2">
-                                                    <span class="d-block p-1 bg-dark-lighten rounded mb-1"></span>
-                                                    <span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
-                                                    <span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
-                                                    <span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
-                                                    <span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+                                                <span class="bg-primary bg-gradient d-flex h-100 flex-column p-1 px-2">
+                                                    <span class="d-block p-1 bg-light-lighten rounded mb-1"></span>
+                                                    <span class="d-block border opacity-25 rounded border-3 w-100 mb-1"></span>
+                                                    <span class="d-block border opacity-25 rounded border-3 w-100 mb-1"></span>
+                                                    <span class="d-block border opacity-25 rounded border-3 w-100 mb-1"></span>
+                                                    <span class="d-block border opacity-25 rounded border-3 w-100 mb-1"></span>
                                                 </span>
                                             </span>
                                             <span class="flex-grow-1">
                                                 <span class="d-flex h-100 flex-column">
-                                                    <span class="bg-primary bg-gradient d-block p-1"></span>
+                                                    <span class="bg-light d-block p-1"></span>
                                                 </span>
                                             </span>
                                         </span>
@@ -2148,14 +2158,14 @@
 
                                     <div id="topnav-color">
                                         <span class="d-flex h-100 flex-column">
-                                            <span class="bg-primary bg-gradient d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
-                                                <span class="d-block p-1 bg-light opacity-25 rounded me-1"></span>
-                                                <span class="d-block border border-3 border opacity-25 rounded ms-auto"></span>
-                                                <span class="d-block border border-3 border opacity-25 rounded ms-1"></span>
-                                                <span class="d-block border border-3 border opacity-25 rounded ms-1"></span>
-                                                <span class="d-block border border-3 border opacity-25 rounded ms-1"></span>
+                                            <span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary">
+                                                <span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
+                                                <span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-auto"></span>
+                                                <span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+                                                <span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+                                                <span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
                                             </span>
-                                            <span class="bg-light d-block p-1"></span>
+                                            <span class="bg-primary bg-gradient d-block p-1"></span>
                                         </span>
                                     </div>
                                 </label>
@@ -2191,7 +2201,7 @@
                                             </span>
                                         </div>
 
-                                        <div id="topnav-color">
+                                        <div id="topnav-color" class="bg-white rounded-2 h-100">
                                             <span class="d-flex h-100 flex-column">
                                                 <span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
                                                     <span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
@@ -2282,7 +2292,6 @@
                                                 <span class="bg-primary bg-gradient d-block p-1"></span>
                                             </span>
                                         </div>
-
                                     </label>
                                 </div>
                                 <h5 class="font-14 text-center text-muted mt-2">Brand</h5>

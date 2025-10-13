@@ -1,14 +1,14 @@
 <?php
+$host = "localhost";
+$user = "root";
+$password = ""; // o tu contraseña si la tienes
+$database = "biblioteca"; // Asegúrate de que este sea el nombre correcto
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bibliotecachaleca";
+$conn = mysqli_connect($host, $user, $password, $database);
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+// Verificación de conexión
+if (!$conn) {
+    die("Error de conexión: " . mysqli_connect_error());
 }
-
-return $conn; 
+return $conn;
+?>
